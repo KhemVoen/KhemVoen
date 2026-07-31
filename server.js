@@ -7,12 +7,18 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 8090;
+const PORT = process.env.PORT || 8090;
 
-// Ensure directories exist
+// Ensure directories exist safely
 ['data', 'uploads/images', 'uploads/videos'].forEach(dir => {
-  const p = path.join(__dirname, dir);
-  if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
+  try {
+    const p = path.join('/tmp', dir);
+    if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
+  } catch (e) {}
+  try {
+    const p = path.join(__dirname, dir);
+    if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
+  } catch (e) {}
 });
 
 // ===== DATA HELPERS =====
@@ -20,42 +26,78 @@ const USERS_FILE = path.join(__dirname, 'data', 'users.json');
 const CONTENT_FILE = path.join(__dirname, 'data', 'content.json');
 
 function readJSON(file) {
-  try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
-  catch { return file.includes('users') ? [] : { history: {}, gallery: [], videos: [], events: [] }; }
+  const baseName = path.basename(file);
+  const tmpFile = path.join('/tmp', 'data', baseName);
+  
+  // 1. Try reading from /tmp (most recent writes on Vercel)
+  try {
+    if (fs.existsSync(tmpFile)) {
+      return JSON.parse(fs.readFileSync(tmpFile, 'utf8'));
+    }
+  } catch (e) {}
+  
+  // 2. Try reading from original repository path
+  try {
+    if (fs.existsSync(file)) {
+      return JSON.parse(fs.readFileSync(file, 'utf8'));
+    }
+  } catch (e) {}
+
+  return baseName.includes('users') ? [] : { history: {}, gallery: [], videos: [], events: [] };
 }
 
 function writeJSON(file, data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
+  const baseName = path.basename(file);
+  // First try writing to local directory (works locally)
+  try {
+    const dir = path.dirname(file);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
+    return;
+  } catch (e) {}
+
+  // If local write fails (e.g. Vercel read-only filesystem), write to /tmp
+  try {
+    const tmpDir = path.join('/tmp', 'data');
+    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+    fs.writeFileSync(path.join(tmpDir, baseName), JSON.stringify(data, null, 2), 'utf8');
+  } catch (e) {
+    console.error('Failed to write JSON:', e);
+  }
 }
 
 // ===== INIT DEFAULT USERS =====
 (async () => {
-  let users = [];
-  try { users = readJSON(USERS_FILE); } catch {}
-  const defaults = [
-    { username: 'owner', email: 'thonvisal12@gmail.com', password: 'owner123', displayName: 'ម្ចាស់វត្ត', role: 'owner' },
-    { username: 'admin', email: 'admin@khemvoen.org', password: 'admin123', displayName: 'អ្នកគ្រប់គ្រង', role: 'admin' }
-  ];
-  let changed = false;
-  for (const def of defaults) {
-    let userIdx = users.findIndex(u => u.username === def.username);
-    if (userIdx === -1) {
-      const hash = await bcrypt.hash(def.password, 10);
-      users.push({ id: uuidv4(), username: def.username, email: def.email, password: hash, displayName: def.displayName, role: def.role, createdAt: new Date().toISOString() });
-      changed = true;
-    } else {
-      if (!users[userIdx].email) {
-        users[userIdx].email = def.email;
+  try {
+    let users = [];
+    try { users = readJSON(USERS_FILE); } catch {}
+    const defaults = [
+      { username: 'owner', email: 'thonvisal12@gmail.com', password: 'owner123', displayName: 'ម្ចាស់វត្ត', role: 'owner' },
+      { username: 'admin', email: 'admin@khemvoen.org', password: 'admin123', displayName: 'អ្នកគ្រប់គ្រង', role: 'admin' }
+    ];
+    let changed = false;
+    for (const def of defaults) {
+      let userIdx = users.findIndex(u => u.username === def.username);
+      if (userIdx === -1) {
+        const hash = await bcrypt.hash(def.password, 10);
+        users.push({ id: uuidv4(), username: def.username, email: def.email, password: hash, displayName: def.displayName, role: def.role, createdAt: new Date().toISOString() });
         changed = true;
-      }
-      const matches = await bcrypt.compare(def.password, users[userIdx].password);
-      if (!matches && !users[userIdx].password.startsWith('$2a$10$valid')) {
-        users[userIdx].password = await bcrypt.hash(def.password, 10);
-        changed = true;
+      } else {
+        if (!users[userIdx].email) {
+          users[userIdx].email = def.email;
+          changed = true;
+        }
+        const matches = await bcrypt.compare(def.password, users[userIdx].password);
+        if (!matches && !users[userIdx].password.startsWith('$2a$10$valid')) {
+          users[userIdx].password = await bcrypt.hash(def.password, 10);
+          changed = true;
+        }
       }
     }
+    if (changed || users.length === 0) writeJSON(USERS_FILE, users);
+  } catch (e) {
+    console.error('Default user initialization error:', e);
   }
-  if (changed || users.length === 0) writeJSON(USERS_FILE, users);
 })();
 
 // ===== MIDDLEWARE & STATIC =====
@@ -69,7 +111,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-  secret: 'khemvoen-secret-key-2026',
+  secret: process.env.SESSION_SECRET || 'khemvoen-secret-key-2026',
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 24 * 60 * 60 * 1000 }
@@ -77,8 +119,10 @@ app.use(session({
 
 app.use(express.static(__dirname));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static('/tmp/uploads'));
 app.use('/khemvoen', express.static(__dirname));
 app.use('/khemvoen/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/khemvoen/uploads', express.static('/tmp/uploads'));
 
 app.get('/khemvoen', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -89,8 +133,21 @@ app.get(['/khemvoen/admin', '/khemvoen/admin.html'], (req, res) => {
 });
 
 // ===== FILE UPLOAD CONFIG =====
+function getUploadDir(subfolder) {
+  const localDir = path.join(__dirname, 'uploads', subfolder);
+  try {
+    if (!fs.existsSync(localDir)) fs.mkdirSync(localDir, { recursive: true });
+    fs.accessSync(localDir, fs.constants.W_OK);
+    return localDir;
+  } catch {
+    const tmpDir = path.join('/tmp', 'uploads', subfolder);
+    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+    return tmpDir;
+  }
+}
+
 const imageStorage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, 'uploads', 'images')),
+  destination: (req, file, cb) => cb(null, getUploadDir('images')),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     cb(null, `img-${Date.now()}-${uuidv4().slice(0, 8)}${ext}`);
@@ -98,7 +155,7 @@ const imageStorage = multer.diskStorage({
 });
 
 const videoStorage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, 'uploads', 'videos')),
+  destination: (req, file, cb) => cb(null, getUploadDir('videos')),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     cb(null, `vid-${Date.now()}-${uuidv4().slice(0, 8)}${ext}`);
@@ -126,7 +183,6 @@ const uploadVideo = multer({
 });
 
 function requireAuth(req, res, next) {
-
   if (!req.session.user) return res.status(401).json({ error: 'មិនទាន់ចូលគណនី' });
   next();
 }
@@ -151,7 +207,6 @@ function requireOwner(req, res, next) {
 app.post('/api/auth/login', async (req, res) => {
   const { username, password } = req.body;
   const users = readJSON(USERS_FILE);
-  // Match by username OR email
   const user = users.find(u =>
     (u.username && u.username.toLowerCase() === username.toLowerCase()) ||
     (u.email && u.email.toLowerCase() === username.toLowerCase())
@@ -218,7 +273,9 @@ app.delete('/api/gallery/:id', requireAdmin, (req, res) => {
   if (idx === -1) return res.status(404).json({ error: 'Not found' });
   const item = content.gallery[idx];
   const filepath = path.join(__dirname, 'uploads', 'images', item.filename);
-  if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
+  if (fs.existsSync(filepath)) {
+    try { fs.unlinkSync(filepath); } catch (e) {}
+  }
   content.gallery.splice(idx, 1);
   writeJSON(CONTENT_FILE, content);
   res.json({ success: true });
@@ -248,7 +305,9 @@ app.delete('/api/videos/:id', requireAdmin, (req, res) => {
   if (idx === -1) return res.status(404).json({ error: 'Not found' });
   const item = content.videos[idx];
   const filepath = path.join(__dirname, 'uploads', 'videos', item.filename);
-  if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
+  if (fs.existsSync(filepath)) {
+    try { fs.unlinkSync(filepath); } catch (e) {}
+  }
   content.videos.splice(idx, 1);
   writeJSON(CONTENT_FILE, content);
   res.json({ success: true });
@@ -311,7 +370,6 @@ app.post('/api/users', requireOwner, async (req, res) => {
   res.json({ success: true, user: { id: newUser.id, username: newUser.username, email: newUser.email, displayName: newUser.displayName, role: newUser.role } });
 });
 
-
 app.delete('/api/users/:id', requireOwner, (req, res) => {
   let users = readJSON(USERS_FILE);
   const user = users.find(u => u.id === req.params.id);
@@ -338,13 +396,11 @@ app.get(['/users.html', '/users'], (req, res) => {
   res.redirect('/admin.html');
 });
 
-// ===== START =====
-app.listen(PORT, () => {
-  console.log(`\n🪷  វត្តខេមវ័ន(បឹងស្នាយ) Server`);
-  console.log(`   Local Host:http://khemvoen:${PORT}`);
-  console.log(`   Local Path:http://localhost:${PORT}/khemvoen`);
-  console.log(`   Domain:    https://khemvoen.org`);
-  console.log(`   Admin:     http://khemvoen:${PORT}/admin.html`);
-  console.log(`   Owner:     owner or thonvisal12@gmail.com (pass: owner123)`);
-  console.log(`   Admin:     admin or admin@khemvoen.org (pass: admin123)\n`);
-});
+// ===== START / EXPORT =====
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n🪷  វត្តខេមវ័ន(បឹងស្នាយ) Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
