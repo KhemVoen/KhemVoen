@@ -1,0 +1,65 @@
+{
+  "history": {
+    "title": "Sokha Admin Updated Title",
+    "content": "Wat Khemvoen is a historical pagoda located in Kampong Cham Province, Cambodia. It has a long history and plays an important role in the local community.",
+    "updatedAt": "2026-07-31T11:41:28.573Z"
+  },
+  "heroSlides": [
+    {
+      "id": "slide-1",
+      "imageUrl": "images/hero.png",
+      "showText": true,
+      "title": "សូមស្វាគមន៍មកកាន់វត្តខេមវ័ន(បឹងស្នាយ)",
+      "description": "វត្តខេមវ័នជាស្ថានបូជនីយដ្ឋានដ៏ពិសិដ្ឋ ដែលស្ថិតនៅក្នុងសង្គាត់បូរមាស ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម។ សូមអញ្ជើញមកថ្វាយបង្គំព្រះ និងចូលរួមសកម្មភាពធម៌។",
+      "buttonText": "ស្វែងយល់បន្ថែម →",
+      "buttonLink": "#about"
+    },
+    {
+      "id": "slide-2",
+      "imageUrl": "images/ceremony.png",
+      "showText": true,
+      "title": "ពិធីបុណ្យ និងសកម្មភាពសាសនា",
+      "description": "ចូលរួមក្នុងពិធីបុណ្យសាសនាផ្សេងៗ ដើម្បីកសាងកុសល និងស្ដាប់ធម៌ទេសនា។",
+      "buttonText": "មើលព្រឹត្តិការណ៍ →",
+      "buttonLink": "#events"
+    },
+    {
+      "id": "slide-3",
+      "imageUrl": "images/garden.png",
+      "showText": true,
+      "title": "បរិយាកាសស្ងប់ស្ងាត់នៃវត្ត",
+      "description": "ទីកន្លែងសម្រាប់ធ្វើសមាធិ សម្រាកកាយចិត្ត និងសិក្សាព្រះធម៌។",
+      "buttonText": "ទំនាក់ទំនងយើង →",
+      "buttonLink": "#contact"
+    }
+  ],
+  "gallery": [],
+  "videos": [],
+  "events": [
+    {
+      "id": "evt-001",
+      "day": "១៥",
+      "month": "សីហា",
+      "title": "ពិធីបុណ្យភ្ជុំបិណ្ឌ",
+      "description": "ពិធីបុណ្យភ្ជុំបិណ្ឌ ប្រចាំឆ្នាំ នៅវត្តខេមវ័ន សូមអញ្ជើញមកចូលរួមយ៉ាងអស់ពីចិត្ត។",
+      "time": "ម៉ោង ៧:០០ ព្រឹក"
+    },
+    {
+      "id": "evt-002",
+      "day": "២០",
+      "month": "សីហា",
+      "title": "សម្តែងធម៌ទេសនា",
+      "description": "ព្រះគ្រូសម្តែងធម៌ទេសនា ស្ដីអំពីការរស់នៅក្នុងសង្គមដោយសុខសាន្ត។",
+      "time": "ម៉ោង ៨:០០ ព្រឹក"
+    },
+    {
+      "id": "03335893-ff7b-402d-ac92-a4745f10345b",
+      "day": "25",
+      "month": "September",
+      "title": "Test Festival",
+      "description": "Test description of the festival.",
+      "time": "8:00 AM",
+      "createdAt": "2026-07-31T11:27:34.651Z"
+    }
+  ]
+}

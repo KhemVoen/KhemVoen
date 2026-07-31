@@ -1,0 +1,29 @@
+[
+  {
+    "id": "91eca222-9bd3-4114-b982-8392f4738f0a",
+    "username": "owner",
+    "password": "$2a$10$4H3OF/EvK4YdGEgld537Je75s98Pkjy6ysIizZCMQ.VoCCGubLCDm",
+    "displayName": "ម្ចាស់វត្ត",
+    "role": "owner",
+    "createdAt": "2026-07-31T08:17:46.764Z",
+    "email": "thonvisal12@gmail.com"
+  },
+  {
+    "id": "2729808a-b9c5-42b0-aaf5-d3c7f1188027",
+    "username": "admin",
+    "password": "$2a$10$rrxXf26VGd9AxaEbZbqVyupPh/n4xAFjpOQqJi9TpVSMPjd7Zswcm",
+    "displayName": "អ្នកគ្រប់គ្រង",
+    "role": "admin",
+    "createdAt": "2026-07-31T08:17:46.864Z",
+    "email": "admin@khemvoen.org"
+  },
+  {
+    "id": "b04b579e-5197-4d1f-aa73-136efda07939",
+    "username": "sokha",
+    "email": "sokha@khemvoen.org",
+    "password": "$2a$10$fBf9AtAC37Z8VS7c.JNabedq.g3ZwBlstTECQ7Jp6EECWzHSW9y1y",
+    "displayName": "Sokha",
+    "role": "admin",
+    "createdAt": "2026-07-31T11:34:30.850Z"
+  }
+]
