@@ -599,26 +599,31 @@
       });
     });
 
-    // Counter Animation
+    // Counter Animation Helper
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.count) || 0;
+      let current = 0;
+      const increment = Math.max(1, Math.ceil(target / 60));
+      if (el._countTimer) clearInterval(el._countTimer);
+      el._countTimer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(el._countTimer);
+        }
+        el.textContent = current.toLocaleString();
+      }, 30);
+    }
+
     const counters = document.querySelectorAll('.number[data-count]');
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const target = parseInt(entry.target.dataset.count);
-          let current = 0;
-          const increment = Math.ceil(target / 60);
-          const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-              current = target;
-              clearInterval(timer);
-            }
-            entry.target.textContent = current.toLocaleString();
-          }, 30);
+          animateCounter(entry.target);
           counterObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.2 });
 
     counters.forEach(c => counterObserver.observe(c));
 
@@ -651,7 +656,7 @@
               const labelSpan = statItems[idx].querySelector('.label');
               if (numSpan) {
                 numSpan.dataset.count = st.count;
-                numSpan.textContent = parseInt(st.count).toLocaleString();
+                animateCounter(numSpan);
               }
               if (labelSpan && st.label) labelSpan.textContent = st.label;
             }

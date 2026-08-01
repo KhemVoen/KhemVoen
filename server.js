@@ -230,7 +230,24 @@ app.get('/api/auth/me', (req, res) => {
 
 // ===== CONTENT ROUTES =====
 app.get('/api/content', (req, res) => {
-  res.json(readJSON(CONTENT_FILE));
+  const content = readJSON(CONTENT_FILE);
+  if (!content.stats || !Array.isArray(content.stats)) {
+    content.stats = [
+      { id: 'stat-1', count: 50, label: 'ឆ្នាំប្រវត្តិ' },
+      { id: 'stat-2', count: 15, label: 'ព្រះសង្ឃ' },
+      { id: 'stat-3', count: 1000, label: 'ប្រជាពលរដ្ឋ' }
+    ];
+  }
+  if (!content.contact) {
+    content.contact = {
+      phone: '012 345 678',
+      email: 'info@khemvoen.org',
+      location: 'សង្កាត់បូរមាស ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម',
+      facebook: 'https://facebook.com',
+      telegram: 'https://t.me'
+    };
+  }
+  res.json(content);
 });
 
 app.put('/api/content/history', requireAdmin, (req, res) => {
