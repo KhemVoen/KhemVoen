@@ -61,5 +61,17 @@
       "time": "8:00 AM",
       "createdAt": "2026-07-31T11:27:34.651Z"
     }
-  ]
+  ],
+  "stats": [
+    { "id": "stat-1", "count": 50, "label": "ឆ្នាំប្រវត្តិ" },
+    { "id": "stat-2", "count": 15, "label": "ព្រះសង្ឃ" },
+    { "id": "stat-3", "count": 1000, "label": "ប្រជាពលរដ្ឋ" }
+  ],
+  "contact": {
+    "phone": "012 345 678",
+    "email": "info@khemvoen.org",
+    "location": "សង្កាត់បូរមាស ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម",
+    "facebook": "https://facebook.com",
+    "telegram": "https://t.me"
+  }
 }

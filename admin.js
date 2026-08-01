@@ -81,6 +81,8 @@ function setupEventListeners() {
 
   // History save
   $('saveHistoryBtn').addEventListener('click', saveHistory);
+  $('saveStatsBtn')?.addEventListener('click', saveStats);
+  $('saveContactBtn')?.addEventListener('click', saveContact);
 
   // Hero slides save & add slide
   $('addHeroSlideBtn')?.addEventListener('click', addHeroSlide);
@@ -186,6 +188,7 @@ async function loadContent() {
     contentData = await res.json();
     renderStats();
     renderHistory();
+    renderContact();
     renderHeroSlides();
     renderGallery();
     renderVideos();
@@ -202,11 +205,25 @@ function renderStats() {
   $('statEvents').textContent = contentData.events?.length || 0;
 }
 
-// ===== HISTORY =====
+// ===== HISTORY & STATS =====
 function renderHistory() {
   if (contentData.history) {
     $('historyTitle').value = contentData.history.title || '';
     $('historyContent').value = contentData.history.content || '';
+  }
+  if (contentData.stats && Array.isArray(contentData.stats)) {
+    if (contentData.stats[0] && $('stat1Value')) {
+      $('stat1Value').value = contentData.stats[0].count ?? 50;
+      $('stat1Label').value = contentData.stats[0].label || '';
+    }
+    if (contentData.stats[1] && $('stat2Value')) {
+      $('stat2Value').value = contentData.stats[1].count ?? 15;
+      $('stat2Label').value = contentData.stats[1].label || '';
+    }
+    if (contentData.stats[2] && $('stat3Value')) {
+      $('stat3Value').value = contentData.stats[2].count ?? 1000;
+      $('stat3Label').value = contentData.stats[2].label || '';
+    }
   }
 }
 
@@ -228,6 +245,67 @@ async function saveHistory() {
     }
   } catch (err) {
     showToast('កំហុស', 'error');
+  }
+}
+
+async function saveStats() {
+  try {
+    const stats = [
+      { id: 'stat-1', count: parseInt($('stat1Value').value) || 0, label: $('stat1Label').value },
+      { id: 'stat-2', count: parseInt($('stat2Value').value) || 0, label: $('stat2Label').value },
+      { id: 'stat-3', count: parseInt($('stat3Value').value) || 0, label: $('stat3Label').value }
+    ];
+    const res = await fetch('/api/content/stats', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stats })
+    });
+    if (res.ok) {
+      showToast('រក្សាទុកស្ថិតិបានជោគជ័យ!', 'success');
+      contentData.stats = stats;
+    } else {
+      const data = await res.json();
+      showToast(data.error || 'កំហុស', 'error');
+    }
+  } catch (err) {
+    showToast('កំហុសក្នុងការរក្សាទុក', 'error');
+  }
+}
+
+// ===== CONTACT & SETTINGS =====
+function renderContact() {
+  if (contentData.contact) {
+    if ($('contactPhone')) $('contactPhone').value = contentData.contact.phone || '';
+    if ($('contactEmail')) $('contactEmail').value = contentData.contact.email || '';
+    if ($('contactLocation')) $('contactLocation').value = contentData.contact.location || '';
+    if ($('contactFacebook')) $('contactFacebook').value = contentData.contact.facebook || '';
+    if ($('contactTelegram')) $('contactTelegram').value = contentData.contact.telegram || '';
+  }
+}
+
+async function saveContact() {
+  try {
+    const contactData = {
+      phone: $('contactPhone').value,
+      email: $('contactEmail').value,
+      location: $('contactLocation').value,
+      facebook: $('contactFacebook').value,
+      telegram: $('contactTelegram').value
+    };
+    const res = await fetch('/api/content/contact', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(contactData)
+    });
+    if (res.ok) {
+      showToast('រក្សាទុកព័ត៌មានទំនាក់ទំនងបានជោគជ័យ!', 'success');
+      contentData.contact = contactData;
+    } else {
+      const data = await res.json();
+      showToast(data.error || 'កំហុស', 'error');
+    }
+  } catch (err) {
+    showToast('កំហុសក្នុងការរក្សាទុក', 'error');
   }
 }
 

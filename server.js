@@ -250,6 +250,23 @@ app.put('/api/hero-slides', requireAdmin, (req, res) => {
   res.json({ success: true, heroSlides: content.heroSlides });
 });
 
+app.put('/api/content/stats', requireAdmin, (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(req.body.stats)) {
+    return res.status(400).json({ error: 'Invalid stats data' });
+  }
+  content.stats = req.body.stats;
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, stats: content.stats });
+});
+
+app.put('/api/content/contact', requireAdmin, (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  content.contact = { ...content.contact, ...req.body };
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, contact: content.contact });
+});
+
 // ===== GALLERY ROUTES =====
 app.post('/api/gallery', requireAdmin, uploadImage.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No image uploaded' });

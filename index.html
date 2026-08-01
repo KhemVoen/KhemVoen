@@ -642,6 +642,46 @@
           if (aboutTitle && data.history.title) aboutTitle.textContent = data.history.title;
         }
 
+        // Dynamic Stats Counters
+        if (data.stats && Array.isArray(data.stats)) {
+          const statItems = document.querySelectorAll('.about-stats .stat-item');
+          data.stats.forEach((st, idx) => {
+            if (statItems[idx]) {
+              const numSpan = statItems[idx].querySelector('.number');
+              const labelSpan = statItems[idx].querySelector('.label');
+              if (numSpan) {
+                numSpan.dataset.count = st.count;
+                numSpan.textContent = parseInt(st.count).toLocaleString();
+              }
+              if (labelSpan && st.label) labelSpan.textContent = st.label;
+            }
+          });
+        }
+
+        // Dynamic Contact Details
+        if (data.contact) {
+          if (data.contact.phone) {
+            const headerPhone = document.querySelector('.phone-info strong');
+            if (headerPhone) headerPhone.textContent = data.contact.phone;
+            const footerPhone = document.querySelector('a[href^="tel:"]');
+            if (footerPhone) {
+              footerPhone.textContent = '📞 ' + data.contact.phone;
+              footerPhone.href = 'tel:' + data.contact.phone.replace(/\s+/g, '');
+            }
+          }
+          if (data.contact.email) {
+            const footerEmail = document.querySelector('a[href^="mailto:"]');
+            if (footerEmail) {
+              footerEmail.textContent = '✉️ ' + data.contact.email;
+              footerEmail.href = 'mailto:' + data.contact.email;
+            }
+          }
+          if (data.contact.location) {
+            const footerLocation = document.querySelector('.footer-links li:first-child a');
+            if (footerLocation) footerLocation.textContent = '📍 ' + data.contact.location;
+          }
+        }
+
         // Dynamic Gallery
         if (data.gallery && data.gallery.length > 0) {
           const galleryGrid = document.getElementById('dynamicGalleryGrid');
