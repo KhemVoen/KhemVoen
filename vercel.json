@@ -1,16 +1,30 @@
 {
-  "functions": {
-    "server.js": {
-      "includeFiles": [
-        "data/**",
-        "images/**"
-      ]
-    }
-  },
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/server.js"
+      "src": "server.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "style.css",
+          "admin.css",
+          "admin.js",
+          "logo.png",
+          "index.html",
+          "admin.html",
+          "data/**",
+          "images/**"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
     }
   ]
 }
