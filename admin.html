@@ -76,7 +76,7 @@
         </a></li>
         <li><a href="#" data-tab="contact">
           <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          ទំនាក់ទំនង និងការកំណត់
+          ទំនាក់ទំនង និង គណនីធនាគារ
         </a></li>
         <div class="divider"></div>
         <li id="usersNavItem" style="display:none;"><a href="#" data-tab="users">
@@ -272,6 +272,8 @@
           <p style="color:var(--text-light);margin-bottom:20px;">គ្រប់គ្រងរូបភាពស្លាយនៅលើទំព័រដើម។ អ្នកអាចបន្ថែមស្លាយថ្មី បង្ហោះរូបភាពផ្ទាល់ខ្លួន លុប ឬជ្រើសរើសបង្ហាញ/លាក់អត្ថបទនៅលើស្លាយនីមួយៗបាន។</p>
           <div id="heroSlidesContainer"></div>
         </div>
+      </div>
+
       <!-- CONTACT & SETTINGS TAB -->
       <div class="tab-panel" id="tab-contact">
         <div class="page-header">
@@ -300,6 +302,27 @@
             <input type="url" id="contactTelegram" placeholder="https://t.me/khemvoen">
           </div>
           <button class="btn btn-gold" id="saveContactBtn">💾 រក្សាទុកព័ត៌មានទំនាក់ទំនង</button>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+          <div class="card-header"><h3>កែសម្រួលគណនីធនាគារ (Bank Accounts / Donation Info)</h3></div>
+          <div class="form-group">
+            <label>ឈ្មោះធនាគារ (Bank Name)</label>
+            <input type="text" id="bankName" placeholder="ABA Bank / ACLEDA / Wing">
+          </div>
+          <div class="form-group">
+            <label>ឈ្មោះគណនី (Account Name)</label>
+            <input type="text" id="bankAccountName" placeholder="WAT KHEMVOEN">
+          </div>
+          <div class="form-group">
+            <label>លេខគណនី (Account Number)</label>
+            <input type="text" id="bankAccountNumber" placeholder="000 123 456">
+          </div>
+          <div class="form-group">
+            <label>រូបភាព QR Code / រូបភាពធនាគារ (QR Image URL)</label>
+            <input type="text" id="bankQrUrl" placeholder="images/aba_qr.png">
+          </div>
+          <button class="btn btn-gold" id="saveBankBtn">💾 រក្សាទុកព័ត៌មានធនាគារ</button>
         </div>
       </div>
 

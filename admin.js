@@ -83,6 +83,7 @@ function setupEventListeners() {
   $('saveHistoryBtn').addEventListener('click', saveHistory);
   $('saveStatsBtn')?.addEventListener('click', saveStats);
   $('saveContactBtn')?.addEventListener('click', saveContact);
+  $('saveBankBtn')?.addEventListener('click', saveBank);
 
   // Hero slides save & add slide
   $('addHeroSlideBtn')?.addEventListener('click', addHeroSlide);
@@ -280,12 +281,17 @@ function renderContact() {
     if ($('contactLocation')) $('contactLocation').value = contentData.contact.location || '';
     if ($('contactFacebook')) $('contactFacebook').value = contentData.contact.facebook || '';
     if ($('contactTelegram')) $('contactTelegram').value = contentData.contact.telegram || '';
+    if ($('bankName')) $('bankName').value = contentData.contact.bankName || '';
+    if ($('bankAccountName')) $('bankAccountName').value = contentData.contact.bankAccountName || '';
+    if ($('bankAccountNumber')) $('bankAccountNumber').value = contentData.contact.bankAccountNumber || '';
+    if ($('bankQrUrl')) $('bankQrUrl').value = contentData.contact.bankQrUrl || '';
   }
 }
 
 async function saveContact() {
   try {
     const contactData = {
+      ...contentData.contact,
       phone: $('contactPhone').value,
       email: $('contactEmail').value,
       location: $('contactLocation').value,
@@ -299,6 +305,32 @@ async function saveContact() {
     });
     if (res.ok) {
       showToast('រក្សាទុកព័ត៌មានទំនាក់ទំនងបានជោគជ័យ!', 'success');
+      contentData.contact = contactData;
+    } else {
+      const data = await res.json();
+      showToast(data.error || 'កំហុស', 'error');
+    }
+  } catch (err) {
+    showToast('កំហុសក្នុងការរក្សាទុក', 'error');
+  }
+}
+
+async function saveBank() {
+  try {
+    const contactData = {
+      ...contentData.contact,
+      bankName: $('bankName').value,
+      bankAccountName: $('bankAccountName').value,
+      bankAccountNumber: $('bankAccountNumber').value,
+      bankQrUrl: $('bankQrUrl').value
+    };
+    const res = await fetch('/api/content/contact', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(contactData)
+    });
+    if (res.ok) {
+      showToast('រក្សាទុកព័ត៌មានធនាគារបានជោគជ័យ!', 'success');
       contentData.contact = contactData;
     } else {
       const data = await res.json();
