@@ -87,6 +87,10 @@
           <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
           គណៈគ្រប់គ្រង (Monks & Laypeople)
         </a></li>
+        <li><a href="#" data-tab="orgtree">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          រចនាសម្ព័ន្ធគ្រប់គ្រង (Org Chart)
+        </a></li>
         <li><a href="#" data-tab="contact">
           <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
           ទំនាក់ទំនង និង គណនីធនាគារ
@@ -396,7 +400,10 @@
       <div class="tab-panel" id="tab-committee">
         <div class="page-header">
           <div><h2>គ្រប់គ្រងគណៈគ្រប់គ្រងវត្ត (Monks & Laypeople)</h2><p class="breadcrumb">ផ្ទាំងគ្រប់គ្រង / គណៈគ្រប់គ្រង</p></div>
-          <button class="btn btn-gold btn-sm" id="addCommitteeBtn">+ បន្ថែមសមាជិកថ្មី</button>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a href="#" class="btn btn-outline btn-sm" onclick="switchTab('orgtree');return false;">☸️ មើលរចនាសម្ព័ន្ធ (Org Chart)</a>
+            <button class="btn btn-gold btn-sm" id="addCommitteeBtn">+ បន្ថែមសមាជិកថ្មី</button>
+          </div>
         </div>
 
         <div class="card" style="margin-bottom:20px;">
@@ -412,6 +419,21 @@
 
         <div id="committeeList"></div>
         <p id="noCommittee" style="color:var(--text-light);text-align:center;padding:30px;">មិនទាន់មានសមាជិកគណៈគ្រប់គ្រងទេ។ ចុចប៊ូតុង "+" ខាងលើដើម្បីបន្ថែម។</p>
+      </div>
+
+      <!-- ORG TREE TAB (4-Tier Hierarchy Chart) -->
+      <div class="tab-panel" id="tab-orgtree">
+        <div class="page-header">
+          <div>
+            <h2>រចនាសម្ព័ន្ធគ្រប់គ្រង (4-Tier Org Chart)</h2>
+            <p class="breadcrumb">ផ្ទាំងគ្រប់គ្រង / រចនាសម្ព័ន្ធគ្រប់គ្រង</p>
+          </div>
+          <a href="org-chart-demo.html" target="_blank" class="btn btn-outline btn-sm">🔗 បើកក្នុងផ្ទាំងថ្មី (Full Screen)</a>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden;border:none;box-shadow:0 8px 30px rgba(0,0,0,0.08);border-radius:20px;">
+          <iframe src="org-chart-demo.html" style="width:100%;height:1000px;border:none;border-radius:20px;display:block;" title="4-Tier Org Chart"></iframe>
+        </div>
       </div>
 
       <!-- USERS TAB (Owner Only) -->
