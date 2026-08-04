@@ -858,13 +858,239 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════════
+       ADD ROLE MODAL
+    ═══════════════════════════════════════════════════════════════════ */
+    function AddRoleModal({ onAdd, onClose }) {
+      const [tier, setTier] = useState('3');
+      const [name, setName] = useState('');
+      const [role, setRole] = useState('');
+      const [roleEn, setRoleEn] = useState('');
+      const [phone, setPhone] = useState('');
+      const [carrier, setCarrier] = useState('CELLCARD');
+      const [position, setPosition] = useState('center');
+      const [avatar, setAvatar] = useState('');
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!name.trim()) return;
+
+        const newNode = {
+          id: `t${tier}-${Date.now().toString(36)}`,
+          name: name.trim(),
+          role: role.trim() || name.trim(),
+          roleEn: roleEn.trim() || 'Member',
+          avatar: avatar.trim(),
+          phone: phone.trim(),
+          carrier: carrier,
+          position: tier === '3' ? position : undefined,
+          fb: '#',
+        };
+
+        onAdd(tier, newNode);
+      };
+
+      return (
+        <div
+          className="oc-modal-backdrop"
+          onClick={onClose}
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.55)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 9999, padding: 20,
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: '#fff',
+              borderRadius: 22,
+              padding: '28px 24px',
+              width: '100%', maxWidth: 460,
+              border: '2px solid rgba(212,168,67,0.3)',
+              boxShadow: '0 24px 64px rgba(0,0,0,0.22)',
+              maxHeight: '90vh', overflowY: 'auto',
+            }}
+          >
+            <h3 style={{ fontWeight: 800, color: '#1a3a5c', marginBottom: 16, fontSize: '1.15rem' }}>
+              ➕ បន្ថែមតួនាទី / សមាជិកថ្មី
+            </h3>
+
+            <form onSubmit={handleSubmit}>
+              <div style={{ marginBottom: 12 }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
+                  ជ្រើសរើសជួរ/ឋានានុក្រម (Tier / Level)
+                </label>
+                <select
+                  value={tier}
+                  onChange={e => setTier(e.target.value)}
+                  style={{
+                    width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
+                    borderRadius: 10, padding: '9px 12px',
+                    fontSize: '0.85rem', outline: 'none',
+                    fontFamily: 'inherit', color: '#1a3a5c',
+                  }}
+                >
+                  <option value="2">Tier 2 — ព្រះគ្រូសូត្រ (Recitation Master)</option>
+                  <option value="3">Tier 3 — មន្ត្រី/លេខា/គ្រប់គ្រង (Officer Level)</option>
+                  <option value="4">Tier 4 — មេកុដិ (Mequisi Level)</option>
+                </select>
+              </div>
+
+              <div style={{ marginBottom: 12 }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
+                  ឈ្មោះសមាជិក (Khmer Name) *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="ឧ. ព្រះ សីលធម៌"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  style={{
+                    width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
+                    borderRadius: 10, padding: '8px 12px',
+                    fontSize: '0.85rem', outline: 'none',
+                    fontFamily: 'inherit', color: '#1a3a5c',
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: 12 }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
+                  តួនាទី (Khmer Role Title)
+                </label>
+                <input
+                  type="text"
+                  placeholder="ឧ. ព្រះវិន័យធរ / មេកុដិទី៦"
+                  value={role}
+                  onChange={e => setRole(e.target.value)}
+                  style={{
+                    width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
+                    borderRadius: 10, padding: '8px 12px',
+                    fontSize: '0.85rem', outline: 'none',
+                    fontFamily: 'inherit', color: '#1a3a5c',
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: 12 }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
+                  Role Title (English)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Officer / Mequisi 6"
+                  value={roleEn}
+                  onChange={e => setRoleEn(e.target.value)}
+                  style={{
+                    width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
+                    borderRadius: 10, padding: '8px 12px',
+                    fontSize: '0.85rem', outline: 'none',
+                    fontFamily: 'inherit', color: '#1a3a5c',
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: 10, marginBottom: 12 }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
+                    លេខទូរស័ព្ទ (Phone)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="012 345 678"
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    style={{
+                      width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
+                      borderRadius: 10, padding: '8px 12px',
+                      fontSize: '0.85rem', outline: 'none',
+                      fontFamily: 'inherit', color: '#1a3a5c',
+                    }}
+                  />
+                </div>
+                <div style={{ width: 140 }}>
+                  <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
+                    ប្រព័ន្ធ (Carrier)
+                  </label>
+                  <select
+                    value={carrier}
+                    onChange={e => setCarrier(e.target.value)}
+                    style={{
+                      width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
+                      borderRadius: 10, padding: '8px 10px',
+                      fontSize: '0.85rem', outline: 'none',
+                      fontFamily: 'inherit', color: '#1a3a5c',
+                    }}
+                  >
+                    <option value="CELLCARD">CELLCARD</option>
+                    <option value="SMART">SMART</option>
+                    <option value="METFONE">METFONE</option>
+                  </select>
+                </div>
+              </div>
+
+              {tier === '3' && (
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
+                    ទីតាំងក្នុង Tier 3 (Position)
+                  </label>
+                  <select
+                    value={position}
+                    onChange={e => setPosition(e.target.value)}
+                    style={{
+                      width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
+                      borderRadius: 10, padding: '8px 10px',
+                      fontSize: '0.85rem', outline: 'none',
+                      fontFamily: 'inherit', color: '#1a3a5c',
+                    }}
+                  >
+                    <option value="center">កណ្តាល (Center)</option>
+                    <option value="left">ឆ្វេង (Left)</option>
+                    <option value="right">ស្តាំ (Right)</option>
+                  </select>
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+                <button
+                  type="submit"
+                  style={{
+                    flex: 1,
+                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                    border: 'none', borderRadius: 12,
+                    color: '#fff', padding: '11px 0',
+                    fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(16,185,129,0.35)',
+                  }}
+                >➕ បន្ថែម (Add Role)</button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  style={{
+                    flex: 1,
+                    background: '#f1f5f9', border: '1.5px solid #e2e8f0',
+                    borderRadius: 12, color: '#374151',
+                    padding: '11px 0', fontWeight: 600, cursor: 'pointer',
+                  }}
+                >បោះបង់ / Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
        APP — Main Application with Authorization
     ═══════════════════════════════════════════════════════════════════ */
     function App() {
-      const [data,     setData]     = useState(INITIAL_DATA);
-      const [editing,  setEditing]  = useState(null);
-      const [toast,    setToast]    = useState({ msg: '', type: 'info' });
-      const [userRole, setUserRole] = useState('admin'); // 'admin' | 'owner' | 'viewer'
+      const [data,       setData]       = useState(INITIAL_DATA);
+      const [editing,    setEditing]    = useState(null);
+      const [addingRole, setAddingRole] = useState(false);
+      const [toast,      setToast]      = useState({ msg: '', type: 'info' });
+      const [userRole,   setUserRole]   = useState('admin'); // 'admin' | 'owner' | 'viewer'
 
       const showToast = (msg, type = 'info') => {
         setToast({ msg, type });
@@ -872,6 +1098,41 @@
       };
 
       const handleEdit = (node) => setEditing(node);
+
+      const handleAddRole = (tier, newNode) => {
+        if (userRole !== 'admin' && userRole !== 'owner') {
+          showToast('អ្នកគ្មានសិទ្ធិបន្ថែមតួនាទីទេ។ មានតែ Admin ឬ Owner ប៉ុណ្ណោះដែលអាចបន្ថែមបាន។', 'deny');
+          return;
+        }
+        setData(prev => {
+          const next = { ...prev };
+          const key = `tier${tier}`;
+          if (Array.isArray(next[key])) {
+            next[key] = [...next[key], newNode];
+          }
+          return next;
+        });
+        showToast(`✅ បានបន្ថែមតួនាទី: ${newNode.name}`, 'success');
+        setAddingRole(false);
+      };
+
+      const handleSaveTree = async () => {
+        if (userRole !== 'admin' && userRole !== 'owner') {
+          showToast('អ្នកគ្មានសិទ្ធិរក្សាទុកទេ។ មានតែ Admin ឬ Owner ប៉ុណ្ណោះដែលអាចរក្សាទុកបាន។', 'deny');
+          return;
+        }
+        try {
+          localStorage.setItem('khemvoen_orgtree', JSON.stringify(data));
+          await fetch('/api/content/orgtree', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orgTree: data }),
+          });
+          showToast('💾 បានរក្សាទុករចនាសម្ព័ន្ធជោគជ័យ! (Saved Successfully)', 'success');
+        } catch (e) {
+          showToast('💾 បានរក្សាទុកក្នុង Local Storage!', 'info');
+        }
+      };
 
       const handleDelete = (node) => {
         // === Authorization Check ===
@@ -970,7 +1231,41 @@
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+              {/* Add Role Button */}
+              <button
+                onClick={() => setAddingRole(true)}
+                style={{
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  border: 'none',
+                  borderRadius: 10, color: '#fff',
+                  padding: '7px 16px', fontSize: '0.82rem', fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(16,185,129,0.3)',
+                  display: 'flex', alignItems: 'center', gap: 5,
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                ➕ បន្ថែមតួនាទី
+              </button>
+
+              {/* Save Button */}
+              <button
+                onClick={handleSaveTree}
+                style={{
+                  background: 'linear-gradient(135deg, #d4a843, #b88429)',
+                  border: 'none',
+                  borderRadius: 10, color: '#fff',
+                  padding: '7px 16px', fontSize: '0.82rem', fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(212,168,67,0.3)',
+                  display: 'flex', alignItems: 'center', gap: 5,
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                💾 រក្សាទុក
+              </button>
+
               {/* Role Toggle */}
               <div className="role-toggle" onClick={cycleRole}>
                 <div style={{
@@ -1123,6 +1418,14 @@ After deleting ព្រះគ្រូវិន័យធរ (center):
               </div>
             </details>
           </main>
+
+          {/* ── Add Role Modal ── */}
+          {addingRole && (
+            <AddRoleModal
+              onAdd={handleAddRole}
+              onClose={() => setAddingRole(false)}
+            />
+          )}
 
           {/* ── Edit Modal ── */}
           {editing && (

@@ -421,6 +421,13 @@ app.put('/api/content/contact', requireAdmin, (req, res) => {
   res.json({ success: true, contact: content.contact });
 });
 
+app.put('/api/content/orgtree', requireAdmin, (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  content.orgTree = req.body.orgTree;
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, orgTree: content.orgTree });
+});
+
 // ===== GALLERY ROUTES =====
 app.post('/api/gallery', requireAdmin, uploadImage.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
