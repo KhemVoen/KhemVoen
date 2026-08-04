@@ -3,27 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Org Chart — Hierarchy Tree Component</title>
+  <title>រចនាសម្ព័ន្ធគ្រប់គ្រង — វត្តខេមវ័ន(បឹងស្នាយ)</title>
+  <meta name="description" content="Organizational Chart for Wat Khemvoen - 4-Tier Hierarchy with Authorization Control">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Tailwind (config extended inside script) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            gold: { DEFAULT:'#d4a843', light:'#f0d48a', dark:'#b88429', muted:'rgba(212,168,67,0.35)' },
-            cream: '#fdf8f0',
-            navy: { DEFAULT:'#1a3a5c', dark:'#0f2640', light:'#2c5282' },
-          }
-        }
-      }
-    };
-  </script>
 
   <!-- React 18 + ReactDOM + Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -35,50 +20,36 @@
 
     body {
       font-family: 'Inter', 'Noto Sans Khmer', sans-serif;
-      background: #fdf8f0;
+      background: linear-gradient(135deg, #f5f0e8 0%, #fdf8f0 50%, #f0ebe0 100%);
       min-height: 100vh;
       color: #2c3e50;
     }
 
     /* ── Card hover lift ── */
     .oc-card {
-      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1),
-                  box-shadow 0.25s cubic-bezier(0.4,0,0.2,1),
-                  border-color 0.25s ease;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1),
+                  box-shadow 0.3s cubic-bezier(0.4,0,0.2,1),
+                  border-color 0.3s ease;
     }
     .oc-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-6px);
       box-shadow:
-        0 16px 40px rgba(0,0,0,0.1),
-        0 0 0 2px rgba(212,168,67,0.45) !important;
+        0 18px 48px rgba(0,0,0,0.12),
+        0 0 0 2.5px rgba(212,168,67,0.5) !important;
     }
     .oc-card:hover .oc-avatar-ring {
-      border-color: #c49530;
-      box-shadow: 0 6px 20px rgba(212,168,67,0.35);
-    }
-
-    /* ── Avatar ring ── */
-    .oc-avatar-ring {
-      border-radius: 50%;
-      border: 3px solid #d4a843;
-      outline: 2.5px solid rgba(212,168,67,0.28);
-      outline-offset: 3px;
-      overflow: hidden;
-      background: #f1f5f9;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.10);
-      transition: border-color 0.25s, box-shadow 0.25s;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      border-color: #b88429;
+      box-shadow: 0 8px 24px rgba(212,168,67,0.4);
     }
 
     /* ── Action buttons ── */
     .oc-btn {
       border: none; cursor: pointer; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      transition: transform 0.18s ease, filter 0.18s ease;
+      transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
       font-size: 12px; font-weight: 700;
     }
-    .oc-btn:hover { transform: scale(1.15); filter: brightness(1.1); }
+    .oc-btn:hover { transform: scale(1.18); filter: brightness(1.12); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
     /* ── Scrollable chart wrapper ── */
     .oc-scroll {
@@ -88,9 +59,9 @@
       scrollbar-width: thin;
       scrollbar-color: rgba(212,168,67,0.45) transparent;
     }
-    .oc-scroll::-webkit-scrollbar { height: 5px; }
+    .oc-scroll::-webkit-scrollbar { height: 6px; }
     .oc-scroll::-webkit-scrollbar-track { background: rgba(212,168,67,0.08); border-radius: 3px; }
-    .oc-scroll::-webkit-scrollbar-thumb { background: rgba(212,168,67,0.45); border-radius: 3px; }
+    .oc-scroll::-webkit-scrollbar-thumb { background: rgba(212,168,67,0.5); border-radius: 3px; }
 
     /* ── SVG line draw animation ── */
     @keyframes ocLineDraw {
@@ -99,27 +70,52 @@
     }
     .oc-line {
       stroke-dasharray: 800;
-      animation: ocLineDraw 0.55s cubic-bezier(0.4,0,0.2,1) both;
+      animation: ocLineDraw 0.6s cubic-bezier(0.4,0,0.2,1) both;
     }
 
-    /* ── Toast ── */
-    @keyframes toastIn {
-      from { opacity: 0; transform: translate(-50%, 14px); }
+    /* ── Toast animations ── */
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translate(-50%, 16px); }
       to   { opacity: 1; transform: translate(-50%, 0); }
     }
 
     /* ── Modal backdrop ── */
     .oc-modal-backdrop {
-      animation: fadeIn 0.2s ease both;
+      animation: fadeIn 0.25s ease both;
     }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* ── Pulsing glow on junction dots ── */
     @keyframes ocPulse {
-      0%, 100% { r: 4.5; opacity: 0.9; }
-      50%       { r: 6;   opacity: 1;   }
+      0%, 100% { r: 4.5; opacity: 0.85; }
+      50%       { r: 6.5; opacity: 1; }
     }
     .oc-joint { animation: ocPulse 3s ease-in-out infinite; }
+
+    /* ── Role toggle switch ── */
+    .role-toggle {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1.5px solid rgba(212,168,67,0.5);
+      border-radius: 12px;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .role-toggle:hover {
+      background: rgba(212,168,67,0.15);
+      border-color: #d4a843;
+    }
+
+    /* ── Denial shake animation ── */
+    @keyframes denyShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
   </style>
 </head>
 
@@ -130,77 +126,135 @@
     const { useState, useRef, useEffect, useCallback } = React;
 
     /* ═══════════════════════════════════════════════════════════════════
-       SAMPLE DATA  — 3-tier Monk Organizational Hierarchy (Image 2 structure)
+       4-TIER DATA MODEL
     ═══════════════════════════════════════════════════════════════════ */
     const INITIAL_DATA = {
-      id: 'root',
-      name: 'ព្រះគ្រូចៅអធិការវត្ត',
-      role: 'ព្រះគ្រូចៅអធិការវត្ត',
-      roleEn: 'Venerable Chief Abbot / Abbot',
-      avatar: 'https://images.unsplash.com/photo-1548625361-186a82d02a00?auto=format&fit=crop&w=400&q=80',
-      phone: '011 880 999',
-      carrier: 'CELLCARD',
-      fb: '#', ig: '#',
-      deputies: [
+      tier1: {
+        id: 't1-head',
+        name: 'ព្រះគ្រូចៅអធិការ',
+        role: 'ព្រះគ្រូចៅអធិការ',
+        roleEn: 'Owner / Head',
+        avatar: '',
+        phone: '097 111 222',
+        carrier: 'CELLCARD',
+        fb: '#', ig: '#',
+      },
+      tier2: [
         {
-          id: 'dep1',
-          name: 'ព្រះគ្រូសូត្រស្ដាំ',
-          role: 'ព្រះគ្រូសូត្រស្ដាំ',
-          roleEn: 'Right-Side Recitation Master',
-          avatar: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80',
-          phone: '097 111 222',
+          id: 't2-left',
+          name: 'គ្រូសូត្រឆ្វេង',
+          role: 'គ្រូសូត្រឆ្វេង',
+          roleEn: 'Recitation Master',
+          avatar: '',
+          phone: '097 117 231',
           carrier: 'CELLCARD',
-          fb: '#', ig: '#',
+          fb: '#',
+          position: 'left',
         },
         {
-          id: 'dep2',
-          name: 'ព្រះគ្រូសូត្រឆ្វេង',
-          role: 'ព្រះគ្រូសូត្រឆ្វេង',
-          roleEn: 'Left-Side Recitation Master',
-          avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
-          phone: '915 777 888',
+          id: 't2-right',
+          name: 'គ្រូសូត្រស្ដាំ',
+          role: 'គ្រូសូត្រស្ដាំ',
+          roleEn: 'Recitation Master',
+          avatar: '',
+          phone: '012 117 609',
           carrier: 'SMART',
-          fb: '#', ig: '#',
+          fb: '#',
+          position: 'right',
         },
       ],
-      officers: [
+      tier3: [
         {
-          id: 'off1',
-          name: 'ព្រះវិន័យធរ',
-          role: 'ព្រះវិន័យធរ',
-          roleEn: 'Venerable Discipline Master',
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-          phone: '097 111 366',
+          id: 't3-left',
+          name: 'គ្រូលេខាធិការ',
+          role: 'គ្រូលេខាធិការ',
+          roleEn: 'Chief Secretary',
+          avatar: '',
+          phone: '097 111 272',
           carrier: 'CELLCARD',
-          carrier2: 'METFONE',
           fb: '#',
+          position: 'left',
         },
         {
-          id: 'off2',
-          name: 'ព្រះលេខា',
-          role: 'ព្រះលេខា',
-          roleEn: 'Venerable Secretary',
-          avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
-          phone: '099 111 234',
-          carrier: 'SMART',
-          fb: '#',
-        },
-        {
-          id: 'off3',
-          name: 'ភត្តទ្ទេសក៍',
-          role: 'ភត្តទ្ទេសក៍',
-          roleEn: 'Venerable Meal Master / Bhaktaddeshaka',
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80',
-          phone: '013 777 444',
-          carrier: 'SMART',
-          carrier2: 'CELLCARD',
+          id: 't3-center',
+          name: 'ព្រះគ្រូវិន័យធរ',
+          role: 'ព្រះគ្រូវិន័យធរ',
+          roleEn: 'Head Discipline Master',
+          avatar: '',
+          phone: '097 117 122',
+          carrier: 'CELLCARD',
           fb: '#', ig: '#',
+          position: 'center',
+        },
+        {
+          id: 't3-right',
+          name: 'គ្រូគ្រប់គ្រង',
+          role: 'គ្រូគ្រប់គ្រង',
+          roleEn: 'Lead Manager',
+          avatar: '',
+          phone: '065 117 221',
+          carrier: 'SMART',
+          fb: '#',
+          position: 'right',
+          highlighted: true,
+        },
+      ],
+      tier4: [
+        {
+          id: 't4-1',
+          name: 'មេកុដិទី១',
+          role: 'មេកុដិទី១',
+          roleEn: 'Mequisi 1',
+          avatar: '',
+          phone: '097 111 222',
+          carrier: 'CELLCARD',
+          fb: '#',
+        },
+        {
+          id: 't4-2',
+          name: 'មេកុដិទី២',
+          role: 'មេកុដិទី២',
+          roleEn: 'Mequisi 2',
+          avatar: '',
+          phone: '097 117 231',
+          carrier: 'METFONE',
+          fb: '#',
+        },
+        {
+          id: 't4-3',
+          name: 'មេកុដិទី៣',
+          role: 'មេកុដិទី៣',
+          roleEn: 'Mequisi 3',
+          avatar: '',
+          phone: '097 117 222',
+          carrier: 'CELLCARD',
+          fb: '#',
+        },
+        {
+          id: 't4-4',
+          name: 'មេកុដិទី៤',
+          role: 'មេកុដិទី៤',
+          roleEn: 'Mequisi 4',
+          avatar: '',
+          phone: '097 117 222',
+          carrier: 'SMART',
+          fb: '#',
+        },
+        {
+          id: 't4-5',
+          name: 'មេកុដិទី៥',
+          role: 'មេកុដិទី៥',
+          roleEn: 'Mequisi 5',
+          avatar: '',
+          phone: '019 117 222',
+          carrier: 'METFONE',
+          fb: '#',
         },
       ],
     };
 
     /* ═══════════════════════════════════════════════════════════════════
-       CONSTANTS & STYLING HELPER
+       CARRIER COLOR MAP
     ═══════════════════════════════════════════════════════════════════ */
     const CARRIER = {
       CELLCARD: { bg: '#fff0e6', fg: '#c85a00', border: '#ffb380' },
@@ -210,47 +264,60 @@
     const carrierStyle = (c) => CARRIER[String(c).toUpperCase()] ?? { bg: '#f3f4f6', fg: '#374151', border: '#d1d5db' };
 
     /* ═══════════════════════════════════════════════════════════════════
-       NODE CARD  — Parchment Ornate Style (Matching Image 2)
+       NODE CARD COMPONENT — Matching Image 2
     ═══════════════════════════════════════════════════════════════════ */
-    function NodeCard({ node, tier = 1, onEdit, onDelete }) {
+    function NodeCard({ node, tier = 1, onEdit, onDelete, isHighlighted }) {
       const cs1 = node.carrier ? carrierStyle(node.carrier) : null;
       const cs2 = node.carrier2 ? carrierStyle(node.carrier2) : null;
-      const cardW = tier === 1 ? 240 : (tier === 2 ? 220 : 215);
+
+      // Card sizing per tier
+      const sizing = {
+        1: { cardW: 240, avatarSz: 100, nameSz: '1.1rem', roleSz: '0.74rem' },
+        2: { cardW: 200, avatarSz: 80,  nameSz: '0.95rem', roleSz: '0.7rem' },
+        3: { cardW: 210, avatarSz: 85,  nameSz: '0.95rem', roleSz: '0.7rem' },
+        4: { cardW: 170, avatarSz: 52,  nameSz: '0.82rem', roleSz: '0.65rem' },
+      };
+      const s = sizing[tier] || sizing[3];
+
+      const borderColor = isHighlighted ? '#c85a00' : '#d4a843';
+      const borderWidth = isHighlighted ? '3.5px' : '2px';
 
       return (
         <div
           className="oc-card"
           style={{
-            width: cardW,
+            width: s.cardW,
             background: 'linear-gradient(180deg, #fffdf8 0%, #faf3e6 100%)',
-            borderRadius: 20,
-            border: '2px solid #d4a843',
-            boxShadow: '0 8px 24px rgba(44,24,16,0.08), inset 0 0 0 3px rgba(212,168,67,0.18)',
-            padding: '18px 14px 14px',
+            borderRadius: tier === 4 ? 14 : 20,
+            border: `${borderWidth} solid ${borderColor}`,
+            boxShadow: `0 8px 24px rgba(44,24,16,0.08), inset 0 0 0 3px rgba(212,168,67,0.15)`,
+            padding: tier === 4 ? '14px 10px 10px' : '18px 14px 14px',
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: tier === 4 ? 'row' : 'column',
             alignItems: 'center',
-            gap: 10,
+            gap: tier === 4 ? 10 : 8,
             position: 'relative',
           }}
         >
-          {/* Top Decorative Arch Notch Accent */}
-          <div style={{
-            position: 'absolute', top: -1, left: '50%', transform: 'translateX(-50%)',
-            width: 42, height: 4, background: '#d4a843', borderRadius: '0 0 4px 4px',
-          }} />
+          {/* Top Decorative Notch */}
+          {tier !== 4 && (
+            <div style={{
+              position: 'absolute', top: -1, left: '50%', transform: 'translateX(-50%)',
+              width: 40, height: 3.5, background: borderColor, borderRadius: '0 0 4px 4px',
+            }} />
+          )}
 
-          {/* ── Avatar Container with Lotus Emblem ── */}
-          <div style={{ position: 'relative', width: 92, height: 92 }}>
+          {/* ── Avatar ── */}
+          <div style={{ position: 'relative', width: s.avatarSz, height: s.avatarSz, flexShrink: 0 }}>
             <div style={{
               width: '100%', height: '100%',
               borderRadius: '50%',
-              border: '3.5px solid #c49a45',
-              outline: '2px solid rgba(212,168,67,0.3)',
-              outlineOffset: 2,
+              border: `${tier === 4 ? '2.5px' : '3.5px'} solid ${borderColor}`,
+              outline: tier !== 4 ? `2px solid rgba(212,168,67,0.28)` : 'none',
+              outlineOffset: tier !== 4 ? 2 : 0,
               overflow: 'hidden',
               background: '#fef3c7',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+              boxShadow: `0 4px 14px rgba(0,0,0,0.1)`,
             }}>
               {node.avatar ? (
                 <img
@@ -260,145 +327,155 @@
                   onError={e => { e.currentTarget.style.display = 'none'; }}
                 />
               ) : (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '2.2rem', color: '#b88429' }}>
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  height: '100%', fontSize: tier === 4 ? '1.2rem' : '2rem', color: '#b88429',
+                }}>
                   ☸
                 </div>
               )}
             </div>
 
-            {/* Top-Right Lotus Ornament Badge */}
-            <div style={{
-              position: 'absolute', top: -2, right: -2,
-              width: 24, height: 24, borderRadius: '50%',
-              background: 'linear-gradient(135deg, #d4a843, #b88429)',
-              border: '2px solid #ffffff',
-              color: '#fff', fontSize: 11, fontWeight: 700,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-            }}>
-              ☸
-            </div>
+            {/* Lotus Ornament Badge */}
+            {tier !== 4 && (
+              <div style={{
+                position: 'absolute', top: -2, right: -2,
+                width: 22, height: 22, borderRadius: '50%',
+                background: `linear-gradient(135deg, ${borderColor}, #b88429)`,
+                border: '2px solid #ffffff',
+                color: '#fff', fontSize: 10, fontWeight: 700,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+              }}>
+                ☸
+              </div>
+            )}
           </div>
 
-          {/* ── Name (Khmer Title) ── */}
-          <h3 style={{
-            fontWeight: 800, color: '#2c1810', fontSize: '1.02rem',
-            textAlign: 'center', lineHeight: 1.25, margin: 0,
-            fontFamily: "'Noto Sans Khmer', sans-serif",
+          {/* ── Info Section ── */}
+          <div style={{
+            display: 'flex', flexDirection: 'column', alignItems: tier === 4 ? 'flex-start' : 'center',
+            gap: tier === 4 ? 3 : 7, flex: tier === 4 ? 1 : 'unset',
           }}>
-            {node.name}
-          </h3>
-
-          {/* ── English Subtitle Pill ── */}
-          {node.roleEn && (
-            <div style={{
-              background: 'rgba(212, 168, 67, 0.20)',
-              border: '1px solid rgba(212, 168, 67, 0.35)',
-              borderRadius: 14,
-              padding: '3px 12px',
-              fontSize: '0.72rem',
-              fontWeight: 700,
-              color: '#4a3625',
-              textAlign: 'center',
-              lineHeight: 1.3,
+            {/* Name */}
+            <h3 style={{
+              fontWeight: 800, color: '#2c1810', fontSize: s.nameSz,
+              textAlign: tier === 4 ? 'left' : 'center', lineHeight: 1.25, margin: 0,
+              fontFamily: "'Noto Sans Khmer', sans-serif",
             }}>
-              {node.roleEn}
-            </div>
-          )}
+              {node.name}
+            </h3>
 
-          {/* ── Phone & Carrier Pill ── */}
-          {node.phone && (
-            <div style={{
-              background: '#ffffff',
-              border: '1.5px solid rgba(212, 168, 67, 0.45)',
-              borderRadius: 18,
-              padding: '4px 12px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              color: '#2c1810',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
-            }}>
-              <span style={{ fontSize: '0.8rem', color: '#b88429' }}>📞</span>
-              <span>{node.phone}</span>
-              {cs1 && (
-                <span style={{
-                  background: cs1.bg, color: cs1.fg, border: `1px solid ${cs1.border}`,
-                  fontSize: '0.62rem', fontWeight: 800, padding: '1px 6px', borderRadius: 10,
-                  textTransform: 'lowercase',
-                }}>
-                  {node.carrier.toLowerCase()}
-                </span>
-              )}
-              {cs2 && (
-                <span style={{
-                  background: cs2.bg, color: cs2.fg, border: `1px solid ${cs2.border}`,
-                  fontSize: '0.62rem', fontWeight: 800, padding: '1px 6px', borderRadius: 10,
-                  textTransform: 'lowercase',
-                }}>
-                  {node.carrier2.toLowerCase()}
-                </span>
-              )}
-            </div>
-          )}
+            {/* English Role */}
+            {node.roleEn && (
+              <div style={{
+                background: 'rgba(212,168,67,0.18)',
+                border: '1px solid rgba(212,168,67,0.3)',
+                borderRadius: 12,
+                padding: tier === 4 ? '1px 8px' : '3px 12px',
+                fontSize: s.roleSz,
+                fontWeight: 700,
+                color: '#4a3625',
+                textAlign: 'center',
+                lineHeight: 1.35,
+              }}>
+                {node.roleEn}
+              </div>
+            )}
 
-          {/* ── Social Footer Buttons ── */}
-          {(node.fb || node.ig) && (
-            <div style={{ display: 'flex', gap: 10, marginTop: 2 }}>
+            {/* Phone + Carrier */}
+            {node.phone && (
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 5,
+                fontSize: tier === 4 ? '0.68rem' : '0.75rem',
+                fontWeight: 700, color: '#2c1810',
+              }}>
+                <span style={{ fontSize: '0.78rem', color: '#b88429' }}>📞</span>
+                <span>{node.phone}</span>
+                {cs1 && (
+                  <span style={{
+                    background: cs1.bg, color: cs1.fg, border: `1px solid ${cs1.border}`,
+                    fontSize: '0.58rem', fontWeight: 800, padding: '1px 5px', borderRadius: 8,
+                    textTransform: 'lowercase',
+                  }}>
+                    {node.carrier.toLowerCase()}
+                  </span>
+                )}
+                {cs2 && (
+                  <span style={{
+                    background: cs2.bg, color: cs2.fg, border: `1px solid ${cs2.border}`,
+                    fontSize: '0.58rem', fontWeight: 800, padding: '1px 5px', borderRadius: 8,
+                    textTransform: 'lowercase',
+                  }}>
+                    {node.carrier2.toLowerCase()}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* ── Social Links (non-tier4) ── */}
+          {tier !== 4 && (node.fb || node.ig) && (
+            <div style={{ display: 'flex', gap: 8, marginTop: 2 }}>
               {node.fb && (
                 <a href={node.fb} target="_blank" rel="noopener noreferrer" style={{
                   width: 24, height: 24, borderRadius: '50%',
-                  border: '1.5px solid rgba(44, 24, 16, 0.4)',
+                  border: '1.5px solid rgba(44,24,16,0.35)',
                   color: '#2c1810', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 11, textDecoration: 'none', fontWeight: 800,
+                  transition: 'all 0.2s ease',
                 }}>f</a>
               )}
               {node.ig && (
                 <a href={node.ig} target="_blank" rel="noopener noreferrer" style={{
                   width: 24, height: 24, borderRadius: '50%',
-                  border: '1.5px solid rgba(44, 24, 16, 0.4)',
+                  border: '1.5px solid rgba(44,24,16,0.35)',
                   color: '#2c1810', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 10, textDecoration: 'none',
+                  transition: 'all 0.2s ease',
                 }}>📷</a>
               )}
             </div>
           )}
 
-          {/* ── Edit / Delete Action Hover ── */}
-          <div style={{ display: 'flex', gap: 6, marginTop: 2 }}>
-            <button
-              className="oc-btn"
-              onClick={() => onEdit?.(node)}
-              title="Edit"
-              style={{
-                width: 24, height: 24,
-                background: 'linear-gradient(135deg, #d4a843, #b88429)',
-                color: '#fff', fontSize: 10,
-              }}
-            >✏</button>
-            <button
-              className="oc-btn"
-              onClick={() => onDelete?.(node)}
-              title="Delete"
-              style={{
-                width: 24, height: 24,
-                background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                color: '#fff', fontSize: 10,
-              }}
-            >✕</button>
-          </div>
+          {/* ── Edit / Delete ── */}
+          {tier !== 4 && (
+            <div style={{ display: 'flex', gap: 6, marginTop: 2 }}>
+              <button
+                className="oc-btn"
+                onClick={() => onEdit?.(node)}
+                title="Edit"
+                style={{
+                  width: 24, height: 24,
+                  background: 'linear-gradient(135deg, #d4a843, #b88429)',
+                  color: '#fff', fontSize: 10,
+                }}
+              >✏</button>
+              <button
+                className="oc-btn"
+                onClick={() => onDelete?.(node)}
+                title="Delete"
+                style={{
+                  width: 24, height: 24,
+                  background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                  color: '#fff', fontSize: 10,
+                }}
+              >✕</button>
+            </div>
+          )}
         </div>
       );
     }
 
     /* ═══════════════════════════════════════════════════════════════════
-       ORG CHART  — 3-Tier Dynamic Layout matching Image 2
+       ORG CHART — 4-Tier Dynamic SVG Layout
     ═══════════════════════════════════════════════════════════════════ */
-    function OrgChart({ data = INITIAL_DATA, onEdit, onDelete }) {
+    function OrgChart({ data, onEdit, onDelete }) {
       const containerRef = useRef(null);
       const [lines, setLines] = useState([]);
+      const [joints, setJoints] = useState([]);
+
+      const hasCenterT3 = data.tier3.some(n => n.position === 'center');
 
       const recalc = useCallback(() => {
         const container = containerRef.current;
@@ -413,59 +490,163 @@
             cx: r.left - cRect.left + r.width / 2,
             ty: r.top - cRect.top,
             by: r.bottom - cRect.top,
+            lx: r.left - cRect.left,
+            rx: r.right - cRect.left,
           };
         };
 
-        const rootP = getCoord(data.id);
-        const dep1P = getCoord(data.deputies?.[0]?.id);
-        const dep2P = getCoord(data.deputies?.[1]?.id);
-        const off1P = getCoord(data.officers?.[0]?.id);
-        const off2P = getCoord(data.officers?.[1]?.id);
-        const off3P = getCoord(data.officers?.[2]?.id);
+        const t1 = getCoord(data.tier1.id);
+        if (!t1) return;
 
-        if (!rootP) return;
+        const t2Coords = data.tier2.map(n => getCoord(n.id)).filter(Boolean);
+        const t3Coords = data.tier3.map(n => ({ ...getCoord(n.id), pos: n.position, id: n.id })).filter(c => c.cx != null);
+        const t4Coords = data.tier4.map(n => getCoord(n.id)).filter(Boolean);
 
-        const calculatedLines = [];
+        const newLines = [];
+        const newJoints = [];
 
-        /* 1. Upper Connector: Root -> Deputies */
-        if (dep1P && dep2P) {
-          const upperY = rootP.by + (dep1P.ty - rootP.by) / 2;
-          // Stem down from Root
-          calculatedLines.push({ x1: rootP.cx, y1: rootP.by, x2: rootP.cx, y2: upperY });
-          // Horizontal bar spanning Left & Right Deputies
-          calculatedLines.push({ x1: dep1P.cx, y1: upperY, x2: dep2P.cx, y2: upperY });
-          // Vertical drops into Deputy 1 & Deputy 2
-          calculatedLines.push({ x1: dep1P.cx, y1: upperY, x2: dep1P.cx, y2: dep1P.ty });
-          calculatedLines.push({ x1: dep2P.cx, y1: upperY, x2: dep2P.cx, y2: dep2P.ty });
+        if (hasCenterT3) {
+          /* ══════════════════════════════════════════
+             NORMAL STATE: All 3 Tier-3 nodes present
+             ══════════════════════════════════════════ */
 
-          /* 2. Central Trunk: Straight down from Root through middle gap to Officers */
-          if (off1P && off3P) {
-            const lowerY = dep1P.by + (off1P.ty - dep1P.by) / 2;
-            // Trunk line from upperY straight down to lowerY
-            calculatedLines.push({ x1: rootP.cx, y1: upperY, x2: rootP.cx, y2: lowerY });
-            // Lower horizontal bar spanning all 3 Officer cards
-            calculatedLines.push({ x1: off1P.cx, y1: lowerY, x2: off3P.cx, y2: lowerY });
-            // 3 vertical drops into top of each Officer card
-            calculatedLines.push({ x1: off1P.cx, y1: lowerY, x2: off1P.cx, y2: off1P.ty });
-            if (off2P) calculatedLines.push({ x1: off2P.cx, y1: lowerY, x2: off2P.cx, y2: off2P.ty });
-            calculatedLines.push({ x1: off3P.cx, y1: lowerY, x2: off3P.cx, y2: off3P.ty });
+          // --- Tier 1 → Tier 2 ---
+          if (t2Coords.length >= 2) {
+            const upperMidY = t1.by + (t2Coords[0].ty - t1.by) / 2;
+            // Stem down from T1
+            newLines.push({ x1: t1.cx, y1: t1.by, x2: t1.cx, y2: upperMidY });
+            newJoints.push({ cx: t1.cx, cy: upperMidY });
+            // Horizontal bar
+            const leftX = Math.min(...t2Coords.map(c => c.cx));
+            const rightX = Math.max(...t2Coords.map(c => c.cx));
+            newLines.push({ x1: leftX, y1: upperMidY, x2: rightX, y2: upperMidY });
+            // Drops into each T2 node
+            t2Coords.forEach(c => {
+              newLines.push({ x1: c.cx, y1: upperMidY, x2: c.cx, y2: c.ty });
+              newJoints.push({ cx: c.cx, cy: upperMidY });
+            });
+          }
+
+          // --- Tier 1 trunk → Tier 3 ---
+          if (t3Coords.length > 0 && t2Coords.length >= 2) {
+            const trunkTopY = t1.by + (t2Coords[0].ty - t1.by) / 2;
+            const lowerMidY = t2Coords[0].by + (t3Coords[0].ty - t2Coords[0].by) / 2;
+            // Trunk continues from upper horizontal junction down to lower junction
+            newLines.push({ x1: t1.cx, y1: trunkTopY, x2: t1.cx, y2: lowerMidY });
+            newJoints.push({ cx: t1.cx, cy: lowerMidY });
+            // Lower horizontal bar across Tier 3
+            const t3Left = Math.min(...t3Coords.map(c => c.cx));
+            const t3Right = Math.max(...t3Coords.map(c => c.cx));
+            newLines.push({ x1: t3Left, y1: lowerMidY, x2: t3Right, y2: lowerMidY });
+            // Drops into each T3 node
+            t3Coords.forEach(c => {
+              newLines.push({ x1: c.cx, y1: lowerMidY, x2: c.cx, y2: c.ty });
+              newJoints.push({ cx: c.cx, cy: lowerMidY });
+            });
+          }
+
+          // --- Tier 3 center → Tier 4 ---
+          const t3Center = t3Coords.find(c => c.pos === 'center');
+          if (t3Center && t4Coords.length > 0) {
+            const t4MidY = t3Center.by + (t4Coords[0].ty - t3Center.by) / 2;
+            // Stem from center T3
+            newLines.push({ x1: t3Center.cx, y1: t3Center.by, x2: t3Center.cx, y2: t4MidY });
+            newJoints.push({ cx: t3Center.cx, cy: t4MidY });
+            // Horizontal bar across Tier 4
+            const t4Left = Math.min(...t4Coords.map(c => c.cx));
+            const t4Right = Math.max(...t4Coords.map(c => c.cx));
+            newLines.push({ x1: t4Left, y1: t4MidY, x2: t4Right, y2: t4MidY });
+            // Drops into each T4 node
+            t4Coords.forEach(c => {
+              newLines.push({ x1: c.cx, y1: t4MidY, x2: c.cx, y2: c.ty });
+              newJoints.push({ cx: c.cx, cy: t4MidY });
+            });
+          }
+
+        } else {
+          /* ══════════════════════════════════════════
+             RESTRUCTURED: ព្រះគ្រូវិន័យធរ deleted
+             Left: T1 → T2-left → T3-left
+             Right: T1 → T2-right → T3-right
+             Bus line: T3-left ↔ T3-right → T4 drops
+             ══════════════════════════════════════════ */
+
+          const t2Left = t2Coords[0];
+          const t2Right = t2Coords[1];
+          const t3Left = t3Coords.find(c => c.pos === 'left');
+          const t3Right = t3Coords.find(c => c.pos === 'right');
+
+          // --- Tier 1 → Tier 2 (same as normal) ---
+          if (t2Left && t2Right) {
+            const upperMidY = t1.by + (t2Left.ty - t1.by) / 2;
+            newLines.push({ x1: t1.cx, y1: t1.by, x2: t1.cx, y2: upperMidY });
+            newJoints.push({ cx: t1.cx, cy: upperMidY });
+            newLines.push({ x1: t2Left.cx, y1: upperMidY, x2: t2Right.cx, y2: upperMidY });
+            newLines.push({ x1: t2Left.cx, y1: upperMidY, x2: t2Left.cx, y2: t2Left.ty });
+            newLines.push({ x1: t2Right.cx, y1: upperMidY, x2: t2Right.cx, y2: t2Right.ty });
+            newJoints.push({ cx: t2Left.cx, cy: upperMidY });
+            newJoints.push({ cx: t2Right.cx, cy: upperMidY });
+          }
+
+          // --- T2-left → T3-left ---
+          if (t2Left && t3Left) {
+            const midY = t2Left.by + (t3Left.ty - t2Left.by) / 2;
+            newLines.push({ x1: t2Left.cx, y1: t2Left.by, x2: t2Left.cx, y2: midY });
+            newLines.push({ x1: t2Left.cx, y1: midY, x2: t3Left.cx, y2: midY });
+            newLines.push({ x1: t3Left.cx, y1: midY, x2: t3Left.cx, y2: t3Left.ty });
+            newJoints.push({ cx: t2Left.cx, cy: midY });
+            newJoints.push({ cx: t3Left.cx, cy: midY });
+          }
+
+          // --- T2-right → T3-right ---
+          if (t2Right && t3Right) {
+            const midY = t2Right.by + (t3Right.ty - t2Right.by) / 2;
+            newLines.push({ x1: t2Right.cx, y1: t2Right.by, x2: t2Right.cx, y2: midY });
+            newLines.push({ x1: t2Right.cx, y1: midY, x2: t3Right.cx, y2: midY });
+            newLines.push({ x1: t3Right.cx, y1: midY, x2: t3Right.cx, y2: t3Right.ty });
+            newJoints.push({ cx: t2Right.cx, cy: midY });
+            newJoints.push({ cx: t3Right.cx, cy: midY });
+          }
+
+          // --- Shared Bus: T3-left ↔ T3-right → T4 ---
+          if (t3Left && t3Right && t4Coords.length > 0) {
+            const busY = t3Left.by + (t4Coords[0].ty - t3Left.by) / 2;
+            // Stem from T3-left
+            newLines.push({ x1: t3Left.cx, y1: t3Left.by, x2: t3Left.cx, y2: busY });
+            newJoints.push({ cx: t3Left.cx, cy: busY });
+            // Stem from T3-right
+            newLines.push({ x1: t3Right.cx, y1: t3Right.by, x2: t3Right.cx, y2: busY });
+            newJoints.push({ cx: t3Right.cx, cy: busY });
+            // Horizontal bus
+            const busLeft = Math.min(t3Left.cx, ...t4Coords.map(c => c.cx));
+            const busRight = Math.max(t3Right.cx, ...t4Coords.map(c => c.cx));
+            newLines.push({ x1: busLeft, y1: busY, x2: busRight, y2: busY });
+            // T4 drops
+            t4Coords.forEach(c => {
+              newLines.push({ x1: c.cx, y1: busY, x2: c.cx, y2: c.ty });
+              newJoints.push({ cx: c.cx, cy: busY });
+            });
           }
         }
 
-        setLines(calculatedLines);
-      }, [data]);
+        setLines(newLines);
+        setJoints(newJoints);
+      }, [data, hasCenterT3]);
 
       useEffect(() => {
-        const t = setTimeout(recalc, 100);
+        const t = setTimeout(recalc, 120);
         return () => clearTimeout(t);
       }, [recalc, data]);
 
       useEffect(() => {
         if (!containerRef.current) return;
-        const ro = new ResizeObserver(() => setTimeout(recalc, 30));
+        const ro = new ResizeObserver(() => setTimeout(recalc, 50));
         ro.observe(containerRef.current);
         return () => ro.disconnect();
       }, [recalc]);
+
+      // Tier 3 layout: centered/symmetric when restructured
+      const t3Gap = hasCenterT3 ? 60 : 200;
 
       return (
         <div className="oc-scroll" style={{ width: '100%' }}>
@@ -473,11 +654,11 @@
             ref={containerRef}
             style={{
               position: 'relative',
-              padding: '36px 24px 48px',
+              padding: '40px 30px 56px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: 60,
+              gap: 55,
               minWidth: 'max-content',
             }}
           >
@@ -492,9 +673,15 @@
                 zIndex: 1,
               }}
             >
+              <defs>
+                <linearGradient id="goldGradV" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#d4a843" />
+                  <stop offset="100%" stopColor="#b88429" />
+                </linearGradient>
+              </defs>
               {lines.map((l, i) => (
                 <line
-                  key={i}
+                  key={`line-${i}-${l.x1}-${l.y1}`}
                   x1={l.x1} y1={l.y1}
                   x2={l.x2} y2={l.y2}
                   stroke="#d4a843"
@@ -503,17 +690,28 @@
                   strokeLinejoin="round"
                 />
               ))}
+              {joints.map((j, i) => (
+                <circle
+                  key={`joint-${i}-${j.cx}-${j.cy}`}
+                  cx={j.cx} cy={j.cy}
+                  r="4.5"
+                  fill="#d4a843"
+                  stroke="#fff"
+                  strokeWidth="2"
+                  className="oc-joint"
+                />
+              ))}
             </svg>
 
-            {/* ═══ TIER 1: Chief Abbot (Top Center) ═══ */}
-            <div data-nid={data.id} style={{ zIndex: 2 }}>
-              <NodeCard node={data} tier={1} onEdit={onEdit} onDelete={onDelete} />
+            {/* ═══ TIER 1: Head (Top Center) ═══ */}
+            <div data-nid={data.tier1.id} style={{ zIndex: 2 }}>
+              <NodeCard node={data.tier1} tier={1} onEdit={onEdit} onDelete={onDelete} />
             </div>
 
-            {/* ═══ TIER 2: Recitation Masters (Left & Right) ═══ */}
-            {data.deputies?.length > 0 && (
-              <div style={{ display: 'flex', gap: 140, justifyContent: 'center', zIndex: 2 }}>
-                {data.deputies.map(dep => (
+            {/* ═══ TIER 2: Recitation Masters (Left & Right of Head) ═══ */}
+            {data.tier2.length > 0 && (
+              <div style={{ display: 'flex', gap: 200, justifyContent: 'center', zIndex: 2 }}>
+                {data.tier2.map(dep => (
                   <div key={dep.id} data-nid={dep.id}>
                     <NodeCard node={dep} tier={2} onEdit={onEdit} onDelete={onDelete} />
                   </div>
@@ -521,27 +719,37 @@
               </div>
             )}
 
-            {/* ═══ TIER 3: Officers (Bottom Row) ═══ */}
-            {data.officers?.length > 0 && (
-              <div style={{ position: 'relative', zIndex: 2 }}>
-                {/* Horizontal Gold Banner Accent behind Tier 3 cards */}
-                <div style={{
-                  position: 'absolute',
-                  top: '48%', left: -20, right: -20, height: 42,
-                  background: 'linear-gradient(90deg, transparent 0%, rgba(212,168,67,0.25) 15%, rgba(212,168,67,0.40) 50%, rgba(212,168,67,0.25) 85%, transparent 100%)',
-                  borderRadius: 10,
-                  transform: 'translateY(-50%)',
-                  pointerEvents: 'none',
-                  zIndex: 0,
-                }} />
+            {/* ═══ TIER 3: Secretary / Discipline / Manager ═══ */}
+            {data.tier3.length > 0 && (
+              <div style={{
+                display: 'flex', gap: t3Gap, justifyContent: 'center', zIndex: 2,
+                transition: 'gap 0.4s ease',
+              }}>
+                {data.tier3.map(off => (
+                  <div key={off.id} data-nid={off.id}>
+                    <NodeCard
+                      node={off}
+                      tier={3}
+                      onEdit={onEdit}
+                      onDelete={onDelete}
+                      isHighlighted={off.highlighted}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
 
-                <div style={{ display: 'flex', gap: 32, justifyContent: 'center', position: 'relative', zIndex: 1 }}>
-                  {data.officers.map(off => (
-                    <div key={off.id} data-nid={off.id}>
-                      <NodeCard node={off} tier={3} onEdit={onEdit} onDelete={onDelete} />
-                    </div>
-                  ))}
-                </div>
+            {/* ═══ TIER 4: មេកុដិ (Horizontal Row) ═══ */}
+            {data.tier4.length > 0 && (
+              <div style={{
+                display: 'flex', gap: 18, justifyContent: 'center', zIndex: 2,
+                flexWrap: 'nowrap',
+              }}>
+                {data.tier4.map(mk => (
+                  <div key={mk.id} data-nid={mk.id}>
+                    <NodeCard node={mk} tier={4} onEdit={onEdit} onDelete={onDelete} />
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -554,13 +762,13 @@
     ═══════════════════════════════════════════════════════════════════ */
     const EDIT_FIELDS = [
       ['name',    'ឈ្មោះ / Name'],
-      ['role',    'តួនាទី (ខ្មែរ) / Role (KH)'],
+      ['role',    'តួនាទី (ខ្មែរ)'],
       ['roleEn',  'Role (English)'],
-      ['phone',   'លេខទូរស័ព្ទ / Phone'],
-      ['carrier', 'ប្រព័ន្ធ / Carrier (CELLCARD|METFONE|SMART)'],
+      ['phone',   'លេខទូរស័ព្ទ'],
+      ['carrier', 'Carrier (CELLCARD|METFONE|SMART)'],
       ['avatar',  'Avatar URL'],
       ['fb',      'Facebook URL'],
-      ['tg',      'Telegram URL'],
+      ['ig',      'Instagram URL'],
     ];
 
     function EditModal({ node, onSave, onClose }) {
@@ -572,7 +780,7 @@
           onClick={onClose}
           style={{
             position: 'fixed', inset: 0,
-            background: 'rgba(0,0,0,0.52)',
+            background: 'rgba(0,0,0,0.55)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             zIndex: 9999, padding: 20,
           }}
@@ -589,17 +797,17 @@
               maxHeight: '90vh', overflowY: 'auto',
             }}
           >
-            <h3 style={{ fontWeight: 800, color: '#1a3a5c', marginBottom: 4 }}>
-              ✏ Edit Node
+            <h3 style={{ fontWeight: 800, color: '#1a3a5c', marginBottom: 4, fontSize: '1.1rem' }}>
+              ✏ កែប្រែ / Edit Node
             </h3>
             <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginBottom: 18 }}>
-              ID: <code style={{ background: '#f1f5f9', padding: '1px 4px', borderRadius: 4 }}>
+              ID: <code style={{ background: '#f1f5f9', padding: '1px 6px', borderRadius: 4 }}>
                 {node.id}
               </code>
             </p>
 
             {EDIT_FIELDS.map(([key, label]) => (
-              <div key={key} style={{ marginBottom: 11 }}>
+              <div key={key} style={{ marginBottom: 12 }}>
                 <label style={{
                   fontSize: '0.78rem', fontWeight: 600,
                   color: '#374151', display: 'block', marginBottom: 3,
@@ -612,7 +820,7 @@
                   onChange={e => setDraft(p => ({ ...p, [key]: e.target.value }))}
                   style={{
                     width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
-                    borderRadius: 9, padding: '7px 10px',
+                    borderRadius: 10, padding: '8px 12px',
                     fontSize: '0.85rem', outline: 'none',
                     fontFamily: 'inherit', color: '#1a3a5c',
                     transition: 'border-color 0.2s',
@@ -629,21 +837,21 @@
                 style={{
                   flex: 1,
                   background: 'linear-gradient(135deg, #d4a843, #b88429)',
-                  border: 'none', borderRadius: 11,
-                  color: '#fff', padding: '10px 0',
+                  border: 'none', borderRadius: 12,
+                  color: '#fff', padding: '11px 0',
                   fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(212,168,67,0.35)',
+                  boxShadow: '0 4px 14px rgba(212,168,67,0.35)',
                 }}
-              >💾 Save</button>
+              >💾 រក្សាទុក / Save</button>
               <button
                 onClick={onClose}
                 style={{
                   flex: 1,
                   background: '#f1f5f9', border: '1.5px solid #e2e8f0',
-                  borderRadius: 11, color: '#374151',
-                  padding: '10px 0', fontWeight: 600, cursor: 'pointer',
+                  borderRadius: 12, color: '#374151',
+                  padding: '11px 0', fontWeight: 600, cursor: 'pointer',
                 }}
-              >Cancel</button>
+              >បោះបង់ / Cancel</button>
             </div>
           </div>
         </div>
@@ -651,86 +859,152 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════════
-       HELPERS
-    ═══════════════════════════════════════════════════════════════════ */
-    function treeUpdate(tree, updatedNode) {
-      if (tree.id === updatedNode.id) return { ...updatedNode, children: tree.children };
-      return { ...tree, children: (tree.children || []).map(c => treeUpdate(c, updatedNode)) };
-    }
-
-    function treeRemove(tree, targetId) {
-      if (tree.id === targetId) return null;
-      return {
-        ...tree,
-        children: (tree.children || []).map(c => treeRemove(c, targetId)).filter(Boolean),
-      };
-    }
-
-    /* ═══════════════════════════════════════════════════════════════════
-       APP
+       APP — Main Application with Authorization
     ═══════════════════════════════════════════════════════════════════ */
     function App() {
-      const [data,    setData]    = useState(INITIAL_DATA);
-      const [editing, setEditing] = useState(null);
-      const [toast,   setToast]   = useState('');
+      const [data,     setData]     = useState(INITIAL_DATA);
+      const [editing,  setEditing]  = useState(null);
+      const [toast,    setToast]    = useState({ msg: '', type: 'info' });
+      const [userRole, setUserRole] = useState('admin'); // 'admin' | 'owner' | 'viewer'
 
-      const showToast = (msg) => {
-        setToast(msg);
-        setTimeout(() => setToast(''), 3000);
+      const showToast = (msg, type = 'info') => {
+        setToast({ msg, type });
+        setTimeout(() => setToast({ msg: '', type: 'info' }), 4000);
       };
 
-      const handleEdit   = (node) => setEditing(node);
+      const handleEdit = (node) => setEditing(node);
+
       const handleDelete = (node) => {
-        if (node.id === 'root') { showToast('⚠️ Cannot delete the root node'); return; }
-        setData(d => treeRemove(d, node.id));
-        showToast(`🗑️ Deleted: ${node.name}`);
+        // === Authorization Check ===
+        if (userRole !== 'admin' && userRole !== 'owner') {
+          showToast('អ្នកគ្មានសិទ្ធិលុបតួនាទីនេះទេ។ មានតែ Admin ឬ Owner ប៉ុណ្ណោះដែលអាចលុបបាន។', 'deny');
+          return;
+        }
+
+        // Cannot delete Tier 1
+        if (node.id === data.tier1.id) {
+          showToast('⚠️ មិនអាចលុបថ្នាក់ដឹកនាំកំពូលបានទេ!', 'warn');
+          return;
+        }
+
+        // Prevent deleting Tier 4 nodes
+        if (data.tier4.some(n => n.id === node.id)) {
+          showToast('⚠️ មិនអាចលុបមេកុដិបានទេ!', 'warn');
+          return;
+        }
+
+        setData(prev => {
+          const next = { ...prev };
+
+          // Check Tier 2
+          if (prev.tier2.some(n => n.id === node.id)) {
+            next.tier2 = prev.tier2.filter(n => n.id !== node.id);
+            showToast(`🗑️ បានលុប: ${node.name}`, 'success');
+            return next;
+          }
+
+          // Check Tier 3
+          if (prev.tier3.some(n => n.id === node.id)) {
+            next.tier3 = prev.tier3.filter(n => n.id !== node.id);
+            showToast(`🗑️ បានលុប: ${node.name} — ខ្សែបន្ទាត់ត្រូវបានរៀបចំឡើងវិញ`, 'success');
+            return next;
+          }
+
+          return prev;
+        });
       };
 
       const handleSave = (updated) => {
-        setData(d => treeUpdate(d, updated));
-        showToast(`✅ Updated: ${updated.name}`);
+        setData(prev => {
+          const next = { ...prev };
+
+          if (prev.tier1.id === updated.id) {
+            next.tier1 = { ...prev.tier1, ...updated };
+          } else {
+            next.tier2 = prev.tier2.map(n => n.id === updated.id ? { ...n, ...updated } : n);
+            next.tier3 = prev.tier3.map(n => n.id === updated.id ? { ...n, ...updated } : n);
+            next.tier4 = prev.tier4.map(n => n.id === updated.id ? { ...n, ...updated } : n);
+          }
+
+          return next;
+        });
+        showToast(`✅ បានកែប្រែ: ${updated.name}`, 'success');
         setEditing(null);
       };
 
-      return (
-        <div style={{ minHeight: '100vh', background: '#fdf8f0' }}>
+      const handleReset = () => {
+        setData(INITIAL_DATA);
+        showToast('↺ បានកំណត់ឡើងវិញ / Reset complete', 'info');
+      };
 
-          {/* ── Top Nav ── */}
+      const cycleRole = () => {
+        const roles = ['admin', 'owner', 'viewer'];
+        const idx = roles.indexOf(userRole);
+        const nextRole = roles[(idx + 1) % roles.length];
+        setUserRole(nextRole);
+        showToast(`🔑 Role: ${nextRole.toUpperCase()}`, 'info');
+      };
+
+      const roleColors = {
+        admin: '#10b981',
+        owner: '#d4a843',
+        viewer: '#ef4444',
+      };
+
+      return (
+        <div style={{ minHeight: '100vh' }}>
+
+          {/* ── Header ── */}
           <header style={{
             background: 'linear-gradient(135deg, #0f2640 0%, #1a3a5c 60%, #2c5282 100%)',
             borderBottom: '3px solid #d4a843',
-            padding: '18px 28px',
+            padding: '16px 28px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             flexWrap: 'wrap', gap: 12,
           }}>
             <div>
-              <h1 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 800, color: '#f0d48a' }}>
-                ☸ Org Chart · Hierarchy Tree Component
+              <h1 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 800, color: '#f0d48a' }}>
+                ☸ រចនាសម្ព័ន្ធគ្រប់គ្រង · Organizational Chart
               </h1>
-              <p style={{ margin: '3px 0 0', fontSize: '0.78rem', color: 'rgba(255,255,255,0.55)' }}>
-                React 18 · SVG Lines · Cream / Gold Theme · Responsive
+              <p style={{ margin: '3px 0 0', fontSize: '0.76rem', color: 'rgba(255,255,255,0.5)' }}>
+                4-Tier Hierarchy · SVG Lines · Authorization Control · Dynamic Restructuring
               </p>
             </div>
-            <div style={{ display: 'flex', gap: 10 }}>
+
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+              {/* Role Toggle */}
+              <div className="role-toggle" onClick={cycleRole}>
+                <div style={{
+                  width: 10, height: 10, borderRadius: '50%',
+                  background: roleColors[userRole],
+                  boxShadow: `0 0 8px ${roleColors[userRole]}`,
+                }} />
+                <span style={{ color: '#f0d48a', fontSize: '0.82rem', fontWeight: 700 }}>
+                  {userRole.toUpperCase()}
+                </span>
+              </div>
+
+              {/* Reset */}
               <button
-                onClick={() => setData(INITIAL_DATA)}
+                onClick={handleReset}
                 style={{
                   background: 'rgba(212,168,67,0.15)',
                   border: '1.5px solid #d4a843',
                   borderRadius: 10, color: '#f0d48a',
-                  padding: '8px 18px', fontSize: '0.82rem', fontWeight: 700,
+                  padding: '7px 16px', fontSize: '0.82rem', fontWeight: 700,
                   cursor: 'pointer',
+                  transition: 'all 0.2s ease',
                 }}
               >↺ Reset</button>
             </div>
           </header>
 
           {/* ── Main ── */}
-          <main style={{ padding: '36px 20px', maxWidth: 1600, margin: '0 auto' }}>
+          <main style={{ padding: '32px 20px', maxWidth: 1600, margin: '0 auto' }}>
 
-            {/* Chart wrapper */}
+            {/* Chart Container — Gold Frame */}
             <div style={{
-              background: 'linear-gradient(135deg, #fffdf8 0%, #f3e9d4 40%, #faf4ea 70%, #fffdf8 100%)',
+              background: 'linear-gradient(135deg, #fffdf8 0%, #f3e9d4 35%, #faf4ea 65%, #fffdf8 100%)',
               border: '2.5px solid #d4a843',
               borderRadius: 28,
               overflow: 'hidden',
@@ -740,11 +1014,11 @@
               {/* Inner decorative border */}
               <div style={{
                 position: 'absolute', inset: 8,
-                border: '1px solid rgba(212,168,67,0.18)',
+                border: '1px solid rgba(212,168,67,0.2)',
                 borderRadius: 22, pointerEvents: 'none', zIndex: 0,
               }} />
 
-              {/* Chart header */}
+              {/* Chart Header */}
               <div style={{
                 textAlign: 'center',
                 padding: '32px 24px 0',
@@ -753,6 +1027,7 @@
                 <h2 style={{
                   fontSize: '2rem', fontWeight: 900, color: '#2c1810',
                   textShadow: '0 1px 2px rgba(0,0,0,0.06)',
+                  fontFamily: "'Noto Sans Khmer', sans-serif",
                 }}>
                   រចនាសម្ព័ន្ធគ្រប់គ្រង
                 </h2>
@@ -760,13 +1035,35 @@
                   វត្តខេមវ័ន(បឹងស្នាយ) · ☸️ ឋានានុក្រមព្រះសង្ឃ
                 </p>
                 <div style={{
-                  display: 'inline-block', marginTop: 12,
+                  display: 'inline-block', marginTop: 14,
                   background: 'linear-gradient(135deg, #1a3a5c, #2c5282)',
                   border: '1.5px solid #d4a843', borderRadius: 25,
-                  color: '#d4a843', padding: '7px 22px',
+                  color: '#d4a843', padding: '8px 24px',
                   fontSize: '0.88rem', fontWeight: 700,
                 }}>
                   ☸ ព្រះសង្ឃ
+                </div>
+
+                {/* Authorization indicator */}
+                <div style={{
+                  marginTop: 12,
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'rgba(255,255,255,0.7)',
+                  border: `1.5px solid ${roleColors[userRole]}`,
+                  borderRadius: 20,
+                  padding: '5px 16px',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  color: '#374151',
+                }}>
+                  <div style={{
+                    width: 8, height: 8, borderRadius: '50%',
+                    background: roleColors[userRole],
+                  }} />
+                  សិទ្ធិ: {userRole.toUpperCase()}
+                  {(userRole === 'admin' || userRole === 'owner')
+                    ? ' — អាចកែប្រែ/លុបបាន'
+                    : ' — មើលបានតែប៉ុណ្ណោះ'}
                 </div>
               </div>
 
@@ -781,19 +1078,20 @@
             {/* Legend */}
             <div style={{
               display: 'flex', gap: 10, flexWrap: 'wrap',
-              justifyContent: 'center', marginTop: 20,
+              justifyContent: 'center', marginTop: 22,
             }}>
               {[
-                { icon: '✏', color: '#d4a843', label: 'Edit node' },
-                { icon: '✕', color: '#ef4444', label: 'Delete node' },
-                { icon: '↺', color: '#1a3a5c', label: 'Reset tree' },
+                { icon: '✏', color: '#d4a843', label: 'កែប្រែ / Edit' },
+                { icon: '✕', color: '#ef4444', label: 'លុប / Delete (Admin/Owner)' },
+                { icon: '↺', color: '#1a3a5c', label: 'កំណត់ឡើងវិញ / Reset' },
+                { icon: '🔑', color: '#10b981', label: 'ប្ដូរតួនាទី / Toggle Role' },
                 { icon: '→', color: '#6b7280', label: 'Scroll if tree is wide' },
               ].map(({ icon, color, label }) => (
                 <div key={label} style={{
                   display: 'flex', alignItems: 'center', gap: 6,
                   background: '#fff', border: '1px solid #e2e8f0',
                   borderRadius: 10, padding: '6px 13px',
-                  fontSize: '0.78rem', color: '#4b5563',
+                  fontSize: '0.76rem', color: '#4b5563',
                   boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
                 }}>
                   <span style={{ color, fontWeight: 700 }}>{icon}</span>
@@ -802,26 +1100,26 @@
               ))}
             </div>
 
-            {/* ── Code note ── */}
-            <details style={{ marginTop: 28, background: '#1a3a5c', borderRadius: 16, overflow: 'hidden' }}>
+            {/* Info Panel */}
+            <details style={{ marginTop: 24, background: '#1a3a5c', borderRadius: 16, overflow: 'hidden' }}>
               <summary style={{
                 padding: '14px 20px', color: '#f0d48a', fontWeight: 700,
                 fontSize: '0.88rem', cursor: 'pointer', userSelect: 'none',
               }}>
-                📐 How SVG lines are calculated (no dangling stubs)
+                📐 ការគណនាខ្សែភ្ជាប់ SVG / Line Calculation Logic
               </summary>
-              <div style={{ padding: '0 20px 18px', color: 'rgba(255,255,255,0.75)', fontSize: '0.82rem', lineHeight: 1.8 }}>
+              <div style={{ padding: '0 20px 18px', color: 'rgba(255,255,255,0.75)', fontSize: '0.82rem', lineHeight: 1.9 }}>
                 <pre style={{ background: 'rgba(0,0,0,0.3)', borderRadius: 10, padding: 16, overflow: 'auto', fontSize: '0.78rem' }}>{`
-For each parent P with children C0…Cn:
+Normal State (3 nodes in Tier 3):
+  T1 → stem → hbar → T2 left & right
+  T1 → trunk → hbar → T3 left, center, right
+  T3-center → stem → hbar → T4 (5 nodes)
 
-  midY = P.bottom + (C0.top − P.bottom) / 2
-
-  1. STEM  : P.cx,    P.bottom → P.cx,    midY     (straight down)
-  2. HBAR  : C0.cx,  midY     → Cn.cx,   midY     (first to last ← the key fix!)
-  3. DROPS : Ci.cx,  midY     → Ci.cx,   Ci.top   (one per child)
-
-The horizontal bar uses ACTUAL measured child centres from
-getBoundingClientRect(), so it never overhangs or falls short.
+After deleting ព្រះគ្រូវិន័យធរ (center):
+  T1 → stem → hbar → T2 left & right
+  T2-left → T3-left (direct)
+  T2-right → T3-right (direct)
+  T3-left + T3-right → shared bus → T4 (5 nodes)
                 `.trim()}</pre>
               </div>
             </details>
@@ -836,29 +1134,27 @@ getBoundingClientRect(), so it never overhangs or falls short.
             />
           )}
 
-          {/* ── Toast notification ── */}
-          {toast && (
+          {/* ── Toast ── */}
+          {toast.msg && (
             <div style={{
               position: 'fixed', bottom: 24,
               left: '50%', transform: 'translateX(-50%)',
-              background: '#1a3a5c', color: '#fff',
-              padding: '10px 22px', borderRadius: 14,
+              background: toast.type === 'deny' ? '#7f1d1d' : '#1a3a5c',
+              color: '#fff',
+              padding: '12px 24px', borderRadius: 14,
               fontSize: '0.85rem', fontWeight: 600,
-              boxShadow: '0 8px 28px rgba(0,0,0,0.22)',
-              border: '1.5px solid #d4a843',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+              border: `1.5px solid ${toast.type === 'deny' ? '#ef4444' : '#d4a843'}`,
               zIndex: 99999,
-              animation: 'toastIn 0.3s ease both',
+              animation: `toastSlideIn 0.3s ease both${toast.type === 'deny' ? ', denyShake 0.5s ease 0.1s' : ''}`,
               whiteSpace: 'nowrap',
+              maxWidth: '90vw',
+              textAlign: 'center',
             }}>
-              {toast}
+              {toast.type === 'deny' && <span style={{ marginRight: 6 }}>🚫</span>}
+              {toast.msg}
             </div>
           )}
-          <style>{`
-            @keyframes toastIn {
-              from { opacity:0; transform:translate(-50%,12px); }
-              to   { opacity:1; transform:translate(-50%,0); }
-            }
-          `}</style>
         </div>
       );
     }
