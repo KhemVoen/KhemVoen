@@ -196,7 +196,6 @@
           carrier: 'SMART',
           fb: '#',
           position: 'right',
-          highlighted: true,
         },
       ],
       tier4: [
@@ -279,8 +278,8 @@
       };
       const s = sizing[tier] || sizing[3];
 
-      const borderColor = isHighlighted ? '#c85a00' : '#d4a843';
-      const borderWidth = isHighlighted ? '3.5px' : '2px';
+      const borderColor = '#d4a843';
+      const borderWidth = '2px';
 
       return (
         <div
