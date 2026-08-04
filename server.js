@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 8090;
 
 // Ensure directories exist safely
-['data', 'uploads/images', 'uploads/videos'].forEach(dir => {
+['data', 'uploads/images', 'uploads/videos', 'uploads/audio'].forEach(dir => {
   try {
     const p = path.join('/tmp', dir);
     if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
@@ -108,6 +108,8 @@ app.use((req, res, next) => {
   next();
 });
 
+const SESSIONS_FILE = path.join(__dirname, 'data', 'sessions.json');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
@@ -117,12 +119,66 @@ app.use(session({
   cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
+// Restore sessions from file store across server restarts
+app.use((req, res, next) => {
+  if (req.session && !req.session.user && req.sessionID) {
+    try {
+      const sessions = readJSON(SESSIONS_FILE);
+      if (sessions && typeof sessions === 'object' && sessions[req.sessionID]) {
+        req.session.user = sessions[req.sessionID];
+      }
+    } catch (e) {}
+  }
+  next();
+});
+
+function saveSessionUser(req, user) {
+  req.session.user = user;
+  try {
+    let sessions = readJSON(SESSIONS_FILE);
+    if (typeof sessions !== 'object' || Array.isArray(sessions) || !sessions) sessions = {};
+    sessions[req.sessionID] = user;
+    writeJSON(SESSIONS_FILE, sessions);
+  } catch (e) {}
+}
+
+function removeSessionUser(req) {
+  if (req.sessionID) {
+    try {
+      let sessions = readJSON(SESSIONS_FILE);
+      if (typeof sessions === 'object' && sessions && !Array.isArray(sessions)) {
+        delete sessions[req.sessionID];
+        writeJSON(SESSIONS_FILE, sessions);
+      }
+    } catch (e) {}
+  }
+}
+
 app.use(express.static(__dirname));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads', express.static('/tmp/uploads'));
 app.use('/khemvoen', express.static(__dirname));
 app.use('/khemvoen/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/khemvoen/uploads', express.static('/tmp/uploads'));
+
+// Audio storage
+const audioStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, getUploadDir('audio')),
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, `aud-${Date.now()}-${uuidv4().slice(0, 8)}${ext}`);
+  }
+});
+
+const uploadAudio = multer({
+  storage: audioStorage,
+  limits: { fileSize: 50 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = /\.(mp3|wav|ogg|m4a|aac)$/i;
+    if (allowed.test(path.extname(file.originalname))) cb(null, true);
+    else cb(new Error('Only audio files are allowed'));
+  }
+});
 
 app.get('/khemvoen', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -183,22 +239,22 @@ const uploadVideo = multer({
 });
 
 function requireAuth(req, res, next) {
-  if (!req.session.user) return res.status(401).json({ error: 'មិនទាន់ចូលគណនី' });
+  if (!req.session.user) return res.status(401).json({ error: 'សូមចូលគណនីឡើងវិញ (Session Expired)' });
   next();
 }
 
 function requireAdmin(req, res, next) {
-  if (!req.session.user) return res.status(401).json({ error: 'មិនទាន់ចូលគណនី' });
+  if (!req.session.user) return res.status(401).json({ error: 'សូមចូលគណនីឡើងវិញ (Session Expired)' });
   if (req.session.user.role !== 'admin' && req.session.user.role !== 'owner') {
-    return res.status(403).json({ error: 'គ្មានសិទ្ធិ' });
+    return res.status(403).json({ error: 'គណនីរបស់អ្នកគ្មានសិទ្ធិកែប្រែទេ (Permission Denied)' });
   }
   next();
 }
 
 function requireOwner(req, res, next) {
-  if (!req.session.user) return res.status(401).json({ error: 'មិនទាន់ចូលគណនី' });
+  if (!req.session.user) return res.status(401).json({ error: 'សូមចូលគណនីឡើងវិញ (Session Expired)' });
   if (req.session.user.role !== 'owner') {
-    return res.status(403).json({ error: 'តម្រូវឱ្យមានសិទ្ធិម្ចាស់' });
+    return res.status(403).json({ error: 'តម្រូវឱ្យមានសិទ្ធិម្ចាស់ (Owner Required)' });
   }
   next();
 }
@@ -214,11 +270,14 @@ app.post('/api/auth/login', async (req, res) => {
   if (!user) return res.status(401).json({ error: 'ឈ្មោះអ្នកប្រើ/អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ' });
   const valid = await bcrypt.compare(password, user.password);
   if (!valid) return res.status(401).json({ error: 'ឈ្មោះអ្នកប្រើ/អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ' });
-  req.session.user = { id: user.id, username: user.username, email: user.email, displayName: user.displayName, role: user.role };
-  res.json({ success: true, user: req.session.user });
+  
+  const sessionUser = { id: user.id, username: user.username, email: user.email, displayName: user.displayName, role: user.role };
+  saveSessionUser(req, sessionUser);
+  res.json({ success: true, user: sessionUser });
 });
 
 app.post('/api/auth/logout', (req, res) => {
+  removeSessionUser(req);
   req.session.destroy();
   res.json({ success: true });
 });
@@ -231,6 +290,15 @@ app.get('/api/auth/me', (req, res) => {
 // ===== CONTENT ROUTES =====
 app.get('/api/content', (req, res) => {
   const content = readJSON(CONTENT_FILE);
+  if (!content.history) {
+    content.history = {
+      title: 'វត្តខេមវ័ន(បឹងស្នាយ)',
+      imageUrl: 'images/buddha.png',
+      content: ''
+    };
+  } else if (!content.history.imageUrl) {
+    content.history.imageUrl = 'images/buddha.png';
+  }
   if (!content.stats || !Array.isArray(content.stats)) {
     content.stats = [
       { id: 'stat-1', count: 50, label: 'ឆ្នាំប្រវត្តិ' },
@@ -247,12 +315,81 @@ app.get('/api/content', (req, res) => {
       telegram: 'https://t.me'
     };
   }
+  if (!Array.isArray(content.playlists)) {
+    content.playlists = [];
+  }
+  if (!Array.isArray(content.counselors)) {
+    content.counselors = [
+      {
+        id: 'counselor-1',
+        name: 'ព្រះមហាវីរៈ សុខា',
+        title: 'ព្រះចៅអធិការវត្ត / អ្នកប្រឹក្សាយោបល់ធម៌',
+        image: 'images/hero.png',
+        phone: '012 345 678',
+        facebook: 'https://facebook.com',
+        telegram: 'https://t.me'
+      },
+      {
+        id: 'counselor-2',
+        name: 'លោកគ្រូ សុភ័ក្ត្រ',
+        title: 'អ្នកប្រឹក្សាយោបល់ជីវិត និងធម៌អាថ៌',
+        image: 'images/buddha.png',
+        phone: '010 888 999',
+        facebook: 'https://facebook.com',
+        telegram: 'https://t.me'
+      }
+    ];
+  }
+  if (!Array.isArray(content.committee)) {
+    content.committee = [
+      {
+        id: 'cm-monk-1',
+        category: 'monk',
+        name: 'ព្រះមហាវីរៈ សុខា',
+        title: 'ព្រះចៅអធិការវត្ត',
+        image: 'images/hero.png',
+        phone: '012 345 678',
+        facebook: 'https://facebook.com',
+        telegram: 'https://t.me'
+      },
+      {
+        id: 'cm-monk-2',
+        category: 'monk',
+        name: 'ព្រះគ្រូ ធម្មធរ',
+        title: 'គ្រូសូត្រស្តាំ',
+        image: 'images/buddha.png',
+        phone: '012 888 999',
+        facebook: 'https://facebook.com',
+        telegram: 'https://t.me'
+      },
+      {
+        id: 'cm-lay-1',
+        category: 'layperson',
+        name: 'លោក ជុំ សារិន',
+        title: 'ប្រធានគណៈកម្មការវត្ត',
+        image: 'logo.png',
+        phone: '011 222 333',
+        facebook: 'https://facebook.com',
+        telegram: 'https://t.me'
+      },
+      {
+        id: 'cm-lay-2',
+        category: 'layperson',
+        name: 'លោកស្រី ម៉ៅ សុខា',
+        title: 'អនុប្រធានគណៈកម្មការ / ហិរញ្ញវត្ថុ',
+        image: 'logo.png',
+        phone: '012 444 555',
+        facebook: 'https://facebook.com',
+        telegram: 'https://t.me'
+      }
+    ];
+  }
   res.json(content);
 });
 
 app.put('/api/content/history', requireAdmin, (req, res) => {
   const content = readJSON(CONTENT_FILE);
-  content.history = { ...req.body, updatedAt: new Date().toISOString() };
+  content.history = { ...(content.history || {}), ...req.body, updatedAt: new Date().toISOString() };
   writeJSON(CONTENT_FILE, content);
   res.json({ success: true, history: content.history });
 });
@@ -359,6 +496,214 @@ app.post('/api/events', requireAdmin, (req, res) => {
 app.delete('/api/events/:id', requireAdmin, (req, res) => {
   const content = readJSON(CONTENT_FILE);
   content.events = content.events.filter(e => e.id !== req.params.id);
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true });
+});
+
+// ===== PLAYLIST ROUTES =====
+app.get('/api/playlists', (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  let playlists = content.playlists || [];
+  if (req.query.category) {
+    playlists = playlists.filter(p => p.category === req.query.category);
+  }
+  res.json(playlists);
+});
+
+app.post('/api/playlists', requireAdmin, uploadImage.single('coverImage'), (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.playlists)) content.playlists = [];
+  const playlist = {
+    id: uuidv4(),
+    category: req.body.category || 'dhamma-teachings',
+    title: req.body.title || '',
+    description: req.body.description || '',
+    coverImage: req.file ? `/uploads/images/${req.file.filename}` : (req.body.coverImage || ''),
+    items: [],
+    createdAt: new Date().toISOString()
+  };
+  content.playlists.push(playlist);
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, playlist });
+});
+
+app.put('/api/playlists/:id', requireAdmin, uploadImage.single('coverImage'), (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.playlists)) return res.status(404).json({ error: 'Not found' });
+  const idx = content.playlists.findIndex(p => p.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Playlist not found' });
+  const pl = content.playlists[idx];
+  pl.title = req.body.title || pl.title;
+  pl.description = req.body.description || pl.description;
+  pl.category = req.body.category || pl.category;
+  if (req.file) pl.coverImage = `/uploads/images/${req.file.filename}`;
+  else if (req.body.coverImage) pl.coverImage = req.body.coverImage;
+  pl.updatedAt = new Date().toISOString();
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, playlist: pl });
+});
+
+app.delete('/api/playlists/:id', requireAdmin, (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.playlists)) return res.status(404).json({ error: 'Not found' });
+  content.playlists = content.playlists.filter(p => p.id !== req.params.id);
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true });
+});
+
+app.post('/api/playlists/:id/items', requireAdmin, uploadAudio.single('audioFile'), (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.playlists)) return res.status(404).json({ error: 'Not found' });
+  const pl = content.playlists.find(p => p.id === req.params.id);
+  if (!pl) return res.status(404).json({ error: 'Playlist not found' });
+  const item = {
+    id: uuidv4(),
+    type: req.body.type || 'video',
+    title: req.body.title || '',
+    description: req.body.description || '',
+    url: req.file ? `/uploads/audio/${req.file.filename}` : (req.body.url || ''),
+    content: req.body.content || '',
+    createdAt: new Date().toISOString()
+  };
+  pl.items.push(item);
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, item });
+});
+
+app.delete('/api/playlists/:id/items/:itemId', requireAdmin, (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.playlists)) return res.status(404).json({ error: 'Not found' });
+  const pl = content.playlists.find(p => p.id === req.params.id);
+  if (!pl) return res.status(404).json({ error: 'Playlist not found' });
+  pl.items = pl.items.filter(i => i.id !== req.params.itemId);
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true });
+});
+
+// ===== COUNSELOR ROUTES =====
+app.get('/api/counselors', (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  res.json(content.counselors || []);
+});
+
+app.post('/api/counselors', requireAdmin, uploadImage.single('image'), (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.counselors)) content.counselors = [];
+  
+  if (!req.body.name || !req.body.name.trim()) {
+    return res.status(400).json({ error: 'សូមបញ្ចូលឈ្មោះអ្នកប្រឹក្សាយោបល់' });
+  }
+
+  const counselor = {
+    id: uuidv4(),
+    name: req.body.name.trim(),
+    title: req.body.title ? req.body.title.trim() : '',
+    image: req.file ? `/uploads/images/${req.file.filename}` : (req.body.image || 'logo.png'),
+    phone: req.body.phone ? req.body.phone.trim() : '',
+    facebook: req.body.facebook ? req.body.facebook.trim() : '',
+    telegram: req.body.telegram ? req.body.telegram.trim() : '',
+    createdAt: new Date().toISOString()
+  };
+  content.counselors.push(counselor);
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, counselor });
+});
+
+app.put('/api/counselors/:id', requireAdmin, uploadImage.single('image'), (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.counselors)) return res.status(404).json({ error: 'រកមិនឃើញទិន្នន័យ' });
+  const idx = content.counselors.findIndex(c => c.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'រកមិនឃើញអ្នកប្រឹក្សាយោបល់នេះទេ' });
+
+  if (req.body.name !== undefined && !req.body.name.trim()) {
+    return res.status(400).json({ error: 'ឈ្មោះអ្នកប្រឹក្សាយោបល់មិនអាចទទេបានទេ' });
+  }
+
+  const item = content.counselors[idx];
+  if (req.body.name) item.name = req.body.name.trim();
+  if (req.body.title !== undefined) item.title = req.body.title.trim();
+  if (req.body.phone !== undefined) item.phone = req.body.phone.trim();
+  if (req.body.facebook !== undefined) item.facebook = req.body.facebook.trim();
+  if (req.body.telegram !== undefined) item.telegram = req.body.telegram.trim();
+  if (req.file) item.image = `/uploads/images/${req.file.filename}`;
+  else if (req.body.image) item.image = req.body.image;
+  item.updatedAt = new Date().toISOString();
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, counselor: item });
+});
+
+app.delete('/api/counselors/:id', requireAdmin, (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.counselors)) return res.status(404).json({ error: 'រកមិនឃើញទិន្នន័យ' });
+  content.counselors = content.counselors.filter(c => c.id !== req.params.id);
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true });
+});
+
+// ===== COMMITTEE ROUTES (គណៈគ្រប់គ្រង) =====
+app.get('/api/committee', (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  let committee = content.committee || [];
+  if (req.query.category) {
+    committee = committee.filter(c => c.category === req.query.category);
+  }
+  res.json(committee);
+});
+
+app.post('/api/committee', requireAdmin, uploadImage.single('image'), (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.committee)) content.committee = [];
+  
+  if (!req.body.name || !req.body.name.trim()) {
+    return res.status(400).json({ error: 'សូមបញ្ចូលឈ្មោះសមាជិក' });
+  }
+
+  const member = {
+    id: uuidv4(),
+    category: req.body.category === 'layperson' ? 'layperson' : 'monk',
+    roleRank: req.body.roleRank ? req.body.roleRank.trim() : 'root',
+    name: req.body.name.trim(),
+    title: req.body.title ? req.body.title.trim() : '',
+    image: req.file ? `/uploads/images/${req.file.filename}` : (req.body.image || 'logo.png'),
+    phone: req.body.phone ? req.body.phone.trim() : '',
+    facebook: req.body.facebook ? req.body.facebook.trim() : '',
+    telegram: req.body.telegram ? req.body.telegram.trim() : '',
+    createdAt: new Date().toISOString()
+  };
+  content.committee.push(member);
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, member });
+});
+
+app.put('/api/committee/:id', requireAdmin, uploadImage.single('image'), (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.committee)) return res.status(404).json({ error: 'រកមិនឃើញទិន្នន័យ' });
+  const idx = content.committee.findIndex(c => c.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'រកមិនឃើញសមាជិកនេះទេ' });
+
+  if (req.body.name !== undefined && !req.body.name.trim()) {
+    return res.status(400).json({ error: 'ឈ្មោះមិនអាចទទេបានទេ' });
+  }
+
+  const item = content.committee[idx];
+  if (req.body.category) item.category = req.body.category === 'layperson' ? 'layperson' : 'monk';
+  if (req.body.roleRank !== undefined) item.roleRank = req.body.roleRank.trim();
+  if (req.body.name) item.name = req.body.name.trim();
+  if (req.body.title !== undefined) item.title = req.body.title.trim();
+  if (req.body.phone !== undefined) item.phone = req.body.phone.trim();
+  if (req.body.facebook !== undefined) item.facebook = req.body.facebook.trim();
+  if (req.body.telegram !== undefined) item.telegram = req.body.telegram.trim();
+  if (req.file) item.image = `/uploads/images/${req.file.filename}`;
+  else if (req.body.image) item.image = req.body.image;
+  item.updatedAt = new Date().toISOString();
+  writeJSON(CONTENT_FILE, content);
+  res.json({ success: true, member: item });
+});
+
+app.delete('/api/committee/:id', requireAdmin, (req, res) => {
+  const content = readJSON(CONTENT_FILE);
+  if (!Array.isArray(content.committee)) return res.status(404).json({ error: 'រកមិនឃើញទិន្នន័យ' });
+  content.committee = content.committee.filter(c => c.id !== req.params.id);
   writeJSON(CONTENT_FILE, content);
   res.json({ success: true });
 });

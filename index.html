@@ -16,7 +16,7 @@
   <meta name="twitter:description" content="វត្តខេមវ័ន(បឹងស្នាយ) - សង្គាត់បូរមាស ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម">
   <meta name="twitter:image" content="https://khemvoen.org/logo.png">
   <title>វត្តខេមវ័ន(បឹងស្នាយ)</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=5">
   <link rel="icon" href="logo.png" type="image/png">
 </head>
 <body>
@@ -60,6 +60,7 @@
       <nav>
         <ul class="nav-menu" id="navMenu">
           <li><a href="#home" class="active">ទំព័រដើម</a></li>
+          <li><a href="#management">គណៈគ្រប់គ្រង</a></li>
           <li><a href="#about">អំពីវត្ត</a></li>
           <li><a href="#services">សកម្មភាព</a></li>
           <li><a href="#gallery">វិចិត្រសាល</a></li>
@@ -155,6 +156,36 @@
     </div>
   </section>
 
+  <!-- MANAGEMENT COMMITTEE SECTION -->
+  <section class="section management-section" id="management">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <h2>គណៈគ្រប់គ្រងវត្ត</h2>
+        <div class="divider"></div>
+        <p>បញ្ជីព្រះសង្ឃ និងគណៈកម្មការវត្តខេមវ័ន(បឹងស្នាយ)</p>
+      </div>
+
+
+
+      <!-- Category Filter Tabs -->
+      <div class="management-tabs animate-on-scroll">
+        <button class="mgmt-tab-btn active" data-filter="monk" onclick="filterCommittee('monk')">
+          <span>☸️ ព្រះសង្ឃ</span>
+        </button>
+        <button class="mgmt-tab-btn" data-filter="layperson" onclick="filterCommittee('layperson')">
+          <span>👥 ពុទ្ធបរិស័ទ / គណៈកម្មការ</span>
+        </button>
+      </div>
+
+      <!-- Committee Tree View Container -->
+      <div class="management-tree-container" id="committeeTreeContainer">
+        <!-- Rendered via JS -->
+      </div>
+
+
+    </div>
+  </section>
+
   <!-- SERVICES / ACTIVITIES -->
   <section class="section services-section" id="services">
     <div class="container">
@@ -165,52 +196,58 @@
       </div>
 
       <div class="services-grid">
-        <div class="service-card animate-on-scroll">
+        <div class="service-card animate-on-scroll" data-category="dhamma-teachings" onclick="openPlaylistModal('dhamma-teachings')" style="cursor:pointer;">
           <div class="service-icon">
             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           </div>
           <h3>សម្តែងធម៌ទេសនា</h3>
           <p>ព្រះសង្ឃសម្តែងធម៌ទេសនា និងបង្រៀនអំពីព្រះធម៌ជូនប្រជាពលរដ្ឋជារៀងរាល់សប្ដាហ៍</p>
+          <span class="service-view-more">មើលកម្មវិធី →</span>
         </div>
 
-        <div class="service-card animate-on-scroll">
+        <div class="service-card animate-on-scroll" data-category="religious-festivals" onclick="openPlaylistModal('religious-festivals')" style="cursor:pointer;">
           <div class="service-icon">
             <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
           </div>
           <h3>បុណ្យសាសនា</h3>
           <p>រៀបចំពិធីបុណ្យសាសនាផ្សេងៗ ដូចជា បុណ្យកឋិន បុណ្យភ្ជុំបិណ្ឌ បុណ្យចូលឆ្នាំថ្មី ជាដើម</p>
+          <span class="service-view-more">មើលកម្មវិធី →</span>
         </div>
 
-        <div class="service-card animate-on-scroll">
+        <div class="service-card animate-on-scroll" data-category="dhamma-school" onclick="openPlaylistModal('dhamma-school')" style="cursor:pointer;">
           <div class="service-icon">
             <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
           </div>
           <h3>សាលាធម៌</h3>
           <p>បង្រៀនព្រះធម៌វិន័យ និងភាសាបាលី ជូនយុវជន និងព្រះសង្ឃក្នុងវត្ត</p>
+          <span class="service-view-more">មើលកម្មវិធី →</span>
         </div>
 
-        <div class="service-card animate-on-scroll">
+        <div class="service-card animate-on-scroll" data-category="community" onclick="openPlaylistModal('community')" style="cursor:pointer;">
           <div class="service-icon">
             <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
           </div>
           <h3>សកម្មភាពសង្គម</h3>
           <p>ចូលរួមក្នុងសកម្មភាពសង្គម ជួយឧបត្ថម្ភដល់សិស្សក្រីក្រ និងប្រជាពលរដ្ឋមានការលំបាក</p>
+          <span class="service-view-more">មើលកម្មវិធី →</span>
         </div>
 
-        <div class="service-card animate-on-scroll">
+        <div class="service-card animate-on-scroll" data-category="meditation" onclick="openPlaylistModal('meditation')" style="cursor:pointer;">
           <div class="service-icon">
             <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
           </div>
           <h3>ធ្វើសមាធិ</h3>
           <p>រៀបចំកម្មវិធីធ្វើសមាធិ និងវិបស្សនាជូនប្រជាពលរដ្ឋដែលចង់រៀនសមាធិ</p>
+          <span class="service-view-more">មើលកម្មវិធី →</span>
         </div>
 
-        <div class="service-card animate-on-scroll">
+        <div class="service-card animate-on-scroll" data-category="counseling" onclick="openPlaylistModal('counseling')" style="cursor:pointer;">
           <div class="service-icon">
             <svg viewBox="0 0 24 24"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/></svg>
           </div>
           <h3>ប្រឹក្សាយោបល់</h3>
           <p>ផ្តល់ប្រឹក្សាយោបល់ផ្នែកធម៌ និងជីវភាពប្រចាំថ្ងៃជូនប្រជាពលរដ្ឋគ្រប់រូប</p>
+          <span class="service-view-more">មើលកម្មវិធី →</span>
         </div>
       </div>
     </div>
@@ -389,6 +426,20 @@
               <p>រៀងរាល់ថ្ងៃ ៥:០០ ព្រឹក - ៦:០០ ល្ងាច</p>
             </div>
           </div>
+
+          <div class="contact-card bank-card-public" id="publicBankCard">
+            <div class="contact-card-icon" style="background:var(--gold,#d4a843);color:#fff;">
+              <svg viewBox="0 0 24 24"><path d="M4 10h16v10H4V10zm2 2v6h12v-6H6zm-2-8h16v3H4V4zm8 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div style="flex:1;">
+              <h4>🏦 គណនីធនាគារ (បរិច្ចាគ)</h4>
+              <p style="margin-bottom:4px;"><strong id="pubBankName">ABA Bank</strong>: <span id="pubBankAccName">WAT KHEMVOEN</span></p>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                <code id="pubBankAccNum" style="background:#f1f5f9;padding:4px 10px;border-radius:6px;font-weight:700;color:var(--primary,#1a3a5c);font-size:0.95rem;letter-spacing:0.5px;">123 456 789</code>
+                <button onclick="copyPhone(document.getElementById('pubBankAccNum').innerText)" title="ចម្លងលេខគណនី" style="background:none;border:1px solid #cbd5e1;border-radius:6px;cursor:pointer;font-size:0.85rem;padding:3px 8px;color:#475569;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='#cbd5e1';this.style.color='#475569'">📋 ចម្លង</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="map-container animate-on-scroll">
@@ -450,7 +501,34 @@
   <!-- BACK TO TOP -->
   <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
 
+  <!-- PLAYLIST MODAL OVERLAY -->
+  <div class="playlist-modal-overlay" id="playlistModalOverlay">
+    <div class="playlist-modal">
+      <div class="playlist-modal-header">
+        <button class="playlist-back-btn" id="playlistBackBtn" onclick="playlistGoBack()">← ត្រឡប់</button>
+        <h2 id="playlistModalHeading">កម្មវិធីធម៌</h2>
+        <button class="playlist-close-btn" onclick="closePlaylistOverlay()">✕</button>
+      </div>
+      <div class="playlist-modal-body" id="playlistModalBody">
+        <!-- Dynamic content loaded here -->
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Org Chart Fullscreen Toggle
+    document.addEventListener('click', function(e) {
+      const img = document.getElementById('orgChartFullImg');
+      if (!img) return;
+      if (e.target === img) {
+        img.classList.toggle('fullscreen');
+        document.body.style.overflow = img.classList.contains('fullscreen') ? 'hidden' : '';
+      } else if (img.classList.contains('fullscreen')) {
+        img.classList.remove('fullscreen');
+        document.body.style.overflow = '';
+      }
+    });
+
     // Hero Slider
     let heroSlidesData = [
       { imageUrl: 'images/hero.png', showText: true, title: 'សូមស្វាគមន៍មកកាន់<br>វត្តខេមវ័ន(បឹងស្នាយ)', description: 'វត្តខេមវ័នជាស្ថានបូជនីយដ្ឋានដ៏ពិសិដ្ឋ ដែលស្ថិតនៅក្នុងសង្គាត់បូរមាស ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម។ សូមអញ្ជើញមកថ្វាយបង្គំព្រះ និងចូលរួមសកម្មភាពធម៌។', buttonText: 'ស្វែងយល់បន្ថែម →', buttonLink: '#about' },
@@ -489,143 +567,357 @@
       if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
       currentSlide = n % slides.length;
       if (slides[currentSlide]) slides[currentSlide].classList.add('active');
-      if (dots[currentSlide]) dots[currentSlide].classList.add('active');
       updateSlideText(currentSlide);
     }
 
-    function startSliderTimer() {
-      if (slideTimer) clearInterval(slideTimer);
-      slideTimer = setInterval(() => {
-        if (slides.length > 0) {
-          goToSlide((currentSlide + 1) % slides.length);
-        }
-      }, 5000);
+    // ===== TIER 1 CARD: Chief Abbot =====
+    function createAbbotCard(member, nid, defaultTitle, defaultEnTitle) {
+      const name = member ? (member.name || defaultTitle) : defaultTitle;
+      const title = member ? (member.title || defaultTitle) : defaultTitle;
+      const enTitle = member ? (member.subTitle || member.enTitle || member.en_title || defaultEnTitle) : defaultEnTitle;
+      const image = member ? (member.image || 'images/hero.png') : 'images/hero.png';
+      const phone = member ? (member.phone || '') : '';
+      const carrier = phone ? getCarrierInfo(phone) : null;
+      const carrierBadge = carrier ? `<span style="background:${carrier.bg};color:${carrier.color};border:1px solid ${carrier.border};font-size:0.62rem;font-weight:800;padding:1px 6px;border-radius:10px;text-transform:lowercase;">${carrier.name.toLowerCase()}</span>` : '';
+      const fb = member ? (member.facebook || member.fb || '#') : '#';
+      const tg = member ? (member.telegram || member.tg || '#') : '#';
+
+      return `
+        <div class="oc-card" data-nid="${nid || 'monk-root'}" style="width:240px;flex-shrink:0;background:linear-gradient(180deg, #fffdf8 0%, #faf3e6 100%);border-radius:20px;border:2px solid #d4a843;box-shadow:0 8px 24px rgba(44,24,16,0.08), inset 0 0 0 3px rgba(212,168,67,0.18);padding:18px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;">
+          <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:42px;height:4px;background:#d4a843;border-radius:0 0 4px 4px;"></div>
+          <div style="position:relative;width:92px;height:92px;">
+            <div style="width:100%;height:100%;border-radius:50%;border:3.5px solid #c49a45;outline:2px solid rgba(212,168,67,0.3);outline-offset:2px;overflow:hidden;background:#fef3c7;box-shadow:0 4px 12px rgba(0,0,0,0.12);">
+              <img src="${image}" alt="${name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.src='logo.png'">
+            </div>
+            <div style="position:absolute;top:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg, #d4a843, #b88429);border:2px solid #ffffff;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.2);">☸</div>
+          </div>
+          <h3 style="font-weight:800;color:#2c1810;font-size:1.02rem;text-align:center;line-height:1.25;margin:0;font-family:'Noto Sans Khmer',sans-serif;">${name}</h3>
+          ${enTitle ? `<div style="background:rgba(212,168,67,0.20);border:1px solid rgba(212,168,67,0.35);border-radius:14px;padding:3px 12px;font-size:0.72rem;font-weight:700;color:#4a3625;text-align:center;line-height:1.3;">${enTitle}</div>` : ''}
+          ${phone ? `<div style="background:#ffffff;border:1.5px solid rgba(212,168,67,0.45);border-radius:18px;padding:4px 12px;display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#2c1810;box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <span style="font-size:0.8rem;color:#b88429;">📞</span>
+            <a href="tel:${phone.replace(/\s/g,'')}" style="color:#2c1810;text-decoration:none;">${phone}</a>
+            ${carrierBadge}
+          </div>` : ''}
+          <div style="display:flex;gap:10px;margin-top:2px;">
+            ${fb ? `<a href="${fb}" target="_blank" rel="noopener" style="width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(44,24,16,0.4);color:#2c1810;display:flex;align-items:center;justify-content:center;font-size:11px;text-decoration:none;font-weight:800;">f</a>` : ''}
+            ${tg ? `<a href="${tg}" target="_blank" rel="noopener" style="width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(44,24,16,0.4);color:#2c1810;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;">📷</a>` : ''}
+          </div>
+        </div>`;
     }
 
-    function attachDotListeners() {
-      dots.forEach(dot => {
-        dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.slide)));
-      });
+    // ===== TIER 2 CARD: Deputy =====
+    function createDeputyCard(member, nid, defaultTitle, defaultEnTitle) {
+      const name = member ? (member.name || defaultTitle) : defaultTitle;
+      const title = member ? (member.title || defaultTitle) : defaultTitle;
+      const enTitle = member ? (member.subTitle || member.enTitle || member.en_title || defaultEnTitle) : defaultEnTitle;
+      const image = member ? (member.image || 'images/buddha.png') : 'images/buddha.png';
+      const phone = member ? (member.phone || '') : '';
+      const carrier = phone ? getCarrierInfo(phone) : null;
+      const carrierBadge = carrier ? `<span style="background:${carrier.bg};color:${carrier.color};border:1px solid ${carrier.border};font-size:0.62rem;font-weight:800;padding:1px 6px;border-radius:10px;text-transform:lowercase;">${carrier.name.toLowerCase()}</span>` : '';
+      const fb = member ? (member.facebook || member.fb || '#') : '#';
+      const tg = member ? (member.telegram || member.tg || '#') : '#';
+
+      return `
+        <div class="oc-card" data-nid="${nid || 'monk-dep'}" style="width:220px;flex-shrink:0;background:linear-gradient(180deg, #fffdf8 0%, #faf3e6 100%);border-radius:20px;border:2px solid #d4a843;box-shadow:0 8px 24px rgba(44,24,16,0.08), inset 0 0 0 3px rgba(212,168,67,0.18);padding:18px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;">
+          <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:42px;height:4px;background:#d4a843;border-radius:0 0 4px 4px;"></div>
+          <div style="position:relative;width:92px;height:92px;">
+            <div style="width:100%;height:100%;border-radius:50%;border:3.5px solid #c49a45;outline:2px solid rgba(212,168,67,0.3);outline-offset:2px;overflow:hidden;background:#fef3c7;box-shadow:0 4px 12px rgba(0,0,0,0.12);">
+              <img src="${image}" alt="${name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.src='logo.png'">
+            </div>
+            <div style="position:absolute;top:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg, #d4a843, #b88429);border:2px solid #ffffff;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.2);">☸</div>
+          </div>
+          <h3 style="font-weight:800;color:#2c1810;font-size:1.02rem;text-align:center;line-height:1.25;margin:0;font-family:'Noto Sans Khmer',sans-serif;">${name}</h3>
+          ${enTitle ? `<div style="background:rgba(212,168,67,0.20);border:1px solid rgba(212,168,67,0.35);border-radius:14px;padding:3px 12px;font-size:0.72rem;font-weight:700;color:#4a3625;text-align:center;line-height:1.3;">${enTitle}</div>` : ''}
+          ${phone ? `<div style="background:#ffffff;border:1.5px solid rgba(212,168,67,0.45);border-radius:18px;padding:4px 12px;display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#2c1810;box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <span style="font-size:0.8rem;color:#b88429;">📞</span>
+            <a href="tel:${phone.replace(/\s/g,'')}" style="color:#2c1810;text-decoration:none;">${phone}</a>
+            ${carrierBadge}
+          </div>` : ''}
+          <div style="display:flex;gap:10px;margin-top:2px;">
+            ${fb ? `<a href="${fb}" target="_blank" rel="noopener" style="width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(44,24,16,0.4);color:#2c1810;display:flex;align-items:center;justify-content:center;font-size:11px;text-decoration:none;font-weight:800;">f</a>` : ''}
+            ${tg ? `<a href="${tg}" target="_blank" rel="noopener" style="width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(44,24,16,0.4);color:#2c1810;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;">📷</a>` : ''}
+          </div>
+        </div>`;
     }
 
-    attachDotListeners();
-    startSliderTimer();
+    // ===== TIER 3 CARD: Officer =====
+    function createOfficerCard(member, nid, defaultTitle, defaultEnTitle) {
+      const name = member ? (member.name || defaultTitle) : defaultTitle;
+      const title = member ? (member.title || defaultTitle) : defaultTitle;
+      const enTitle = member ? (member.subTitle || member.enTitle || member.en_title || defaultEnTitle) : defaultEnTitle;
+      const image = member ? (member.image || 'images/garden.png') : 'images/garden.png';
+      const phone = member ? (member.phone || '') : '';
+      const carrier = phone ? getCarrierInfo(phone) : null;
+      const carrierBadge = carrier ? `<span style="background:${carrier.bg};color:${carrier.color};border:1px solid ${carrier.border};font-size:0.62rem;font-weight:800;padding:1px 6px;border-radius:10px;text-transform:lowercase;">${carrier.name.toLowerCase()}</span>` : '';
+      const fb = member ? (member.facebook || member.fb || '#') : '#';
+      const tg = member ? (member.telegram || member.tg || '#') : '#';
 
-    function renderDynamicHeroSlides(newSlides) {
-      if (!newSlides || !newSlides.length) return;
-      heroSlidesData = newSlides;
-      const heroSection = document.getElementById('home');
-      const dotsContainer = document.querySelector('.hero-dots');
-      if (!heroSection || !dotsContainer) return;
-
-      heroSection.querySelectorAll('.hero-slide').forEach(s => s.remove());
-      const heroContent = heroSection.querySelector('.hero-content');
-
-      newSlides.forEach((slide, idx) => {
-        const slideDiv = document.createElement('div');
-        slideDiv.className = `hero-slide${idx === 0 ? ' active' : ''}`;
-        slideDiv.innerHTML = `<img src="${slide.imageUrl || 'images/hero.png'}" alt="${slide.title || 'វត្តខេមវ័ន'}"><div class="hero-overlay"></div>`;
-        heroSection.insertBefore(slideDiv, heroContent);
-      });
-
-      dotsContainer.innerHTML = newSlides.map((_, idx) => `<span class="${idx === 0 ? 'active' : ''}" data-slide="${idx}"></span>`).join('');
-
-      slides = document.querySelectorAll('.hero-slide');
-      dots = document.querySelectorAll('.hero-dots span');
-      currentSlide = 0;
-
-      attachDotListeners();
-      goToSlide(0);
-      startSliderTimer();
+      return `
+        <div class="oc-card" data-nid="${nid || 'monk-off'}" style="width:215px;flex-shrink:0;background:linear-gradient(180deg, #fffdf8 0%, #faf3e6 100%);border-radius:20px;border:2px solid #d4a843;box-shadow:0 8px 24px rgba(44,24,16,0.08), inset 0 0 0 3px rgba(212,168,67,0.18);padding:18px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;">
+          <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:42px;height:4px;background:#d4a843;border-radius:0 0 4px 4px;"></div>
+          <div style="position:relative;width:92px;height:92px;">
+            <div style="width:100%;height:100%;border-radius:50%;border:3.5px solid #c49a45;outline:2px solid rgba(212,168,67,0.3);outline-offset:2px;overflow:hidden;background:#fef3c7;box-shadow:0 4px 12px rgba(0,0,0,0.12);">
+              <img src="${image}" alt="${name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.src='logo.png'">
+            </div>
+            <div style="position:absolute;top:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg, #d4a843, #b88429);border:2px solid #ffffff;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.2);">☸</div>
+          </div>
+          <h3 style="font-weight:800;color:#2c1810;font-size:1.02rem;text-align:center;line-height:1.25;margin:0;font-family:'Noto Sans Khmer',sans-serif;">${name}</h3>
+          ${enTitle ? `<div style="background:rgba(212,168,67,0.20);border:1px solid rgba(212,168,67,0.35);border-radius:14px;padding:3px 12px;font-size:0.72rem;font-weight:700;color:#4a3625;text-align:center;line-height:1.3;">${enTitle}</div>` : ''}
+          ${phone ? `<div style="background:#ffffff;border:1.5px solid rgba(212,168,67,0.45);border-radius:18px;padding:4px 12px;display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#2c1810;box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <span style="font-size:0.8rem;color:#b88429;">📞</span>
+            <a href="tel:${phone.replace(/\s/g,'')}" style="color:#2c1810;text-decoration:none;">${phone}</a>
+            ${carrierBadge}
+          </div>` : ''}
+          <div style="display:flex;gap:10px;margin-top:2px;">
+            ${fb ? `<a href="${fb}" target="_blank" rel="noopener" style="width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(44,24,16,0.4);color:#2c1810;display:flex;align-items:center;justify-content:center;font-size:11px;text-decoration:none;font-weight:800;">f</a>` : ''}
+            ${tg ? `<a href="${tg}" target="_blank" rel="noopener" style="width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(44,24,16,0.4);color:#2c1810;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;">📷</a>` : ''}
+          </div>
+        </div>`;
     }
 
-    // Mobile Menu
-    const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('navMenu');
+    function buildMonkOrgChart(members) {
+      const get = (rank, fallback) =>
+        members.find(m => m.roleRank === rank) ||
+        members.find(m => m.title && m.title.includes(fallback));
 
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      navMenu.classList.toggle('open');
-    });
+      const root     = get('root',       'ចៅអធិការ');
+      const deputy1  = get('deputy_1',   'សូត្រស្តាំ');
+      const deputy2  = get('deputy_2',   'សូត្រឆ្វេង');
 
-    navMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        hamburger.classList.remove('open');
-        navMenu.classList.remove('open');
-      });
-    });
+      const offMembers = [
+        get('officer_d1_discipline','វិន័យ') || get('officer_discipline','វិន័យ'),
+        get('officer_d1_secretary','លេខា')   || get('officer_secretary','លេខា'),
+        get('officer_d1_catering','ភត្ត')    || get('officer_catering','ភត្ត'),
+      ].filter(Boolean);
 
-    // Sticky Header
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 50);
-    });
+      const tierThreeSlots = offMembers.length > 0 ? offMembers : [null, null, null];
 
-    // Back to Top
-    const backToTop = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      backToTop.classList.toggle('visible', window.scrollY > 400);
-    });
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+      const tier3Cards = tierThreeSlots.map((m, i) => {
+        const defaults = [
+          { kh: 'ព្រះវិន័យធរ',     en: 'Venerable Discipline Master' },
+          { kh: 'ព្រះលេខា',          en: 'Venerable Secretary' },
+          { kh: 'ភត្តទ្ទេសក៍',      en: 'Venerable Meal Master / Bhaktaddeshaka' },
+        ];
+        const d = defaults[i] || { kh: 'ក្រុមការងារ', en: '' };
+        return createOfficerCard(m, `monk-off${i+1}`, d.kh, d.en);
+      }).join('');
 
-    // Scroll Animations
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
+      setTimeout(() => {
+        if (typeof recalcMonkTreeSVG === 'function') recalcMonkTreeSVG();
+      }, 60);
 
-    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+      return `
+        <div class="oc-chart-container" id="monkOrgContainer" style="position:relative;">
+          <svg id="monkTreeSVG" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible;"></svg>
 
-    // Active Nav Link
-    const sections = document.querySelectorAll('section[id]');
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY + 100;
-      sections.forEach(sec => {
-        const top = sec.offsetTop;
-        const height = sec.offsetHeight;
-        const id = sec.getAttribute('id');
-        const link = document.querySelector(`.nav-menu a[href="#${id}"]`);
-        if (link) {
-          if (scrollY >= top && scrollY < top + height) {
-            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
-            link.classList.add('active');
-          }
-        }
-      });
-    });
+          <!-- Chart header -->
+          <div class="oc-chart-header" style="position:relative;z-index:2;">
+            <h2 class="oc-chart-title">រចនាសម្ព័ន្ធគ្រប់គ្រង</h2>
+            <div class="oc-chart-subtitle">វត្តខេមវ័ន(បឹងស្នាយ) • សង្គាត់បូរមាស ក្រុងកំពង់ចាម</div>
+            <div class="oc-chart-badge">☸️ ឋានានុក្រមព្រះសង្ឃ</div>
+          </div>
 
-    // Counter Animation Helper
-    function animateCounter(el) {
-      const target = parseInt(el.dataset.count) || 0;
-      let current = 0;
-      const increment = Math.max(1, Math.ceil(target / 60));
-      if (el._countTimer) clearInterval(el._countTimer);
-      el._countTimer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          current = target;
-          clearInterval(el._countTimer);
-        }
-        el.textContent = current.toLocaleString();
-      }, 30);
+          <div class="oc-tree" style="position:relative;z-index:2;">
+
+            <!-- ═══ TIER 1: Chief Abbot ═══ -->
+            <div class="oc-tier oc-tier-1" style="display:flex;justify-content:center;">
+              ${createAbbotCard(root, 'monk-root', 'ព្រះគ្រូចៅអធិការវត្ត', 'Venerable Chief Abbot / Abbot')}
+            </div>
+
+            <div style="height:60px;"></div>
+
+            <!-- ═══ TIER 2: Deputies ═══ -->
+            <div class="oc-tier oc-tier-2" style="display:flex;justify-content:center;gap:120px;">
+              ${createDeputyCard(deputy1, 'monk-dep1', 'ព្រះគ្រូសូត្រស្ដាំ', 'Right-Side Recitation Master')}
+              ${createDeputyCard(deputy2, 'monk-dep2', 'ព្រះគ្រូសូត្រឆ្វេង', 'Left-Side Recitation Master')}
+            </div>
+
+            <div style="height:60px;"></div>
+
+            <!-- ═══ TIER 3: Officers ═══ -->
+            <div style="position:relative;width:100%;">
+              <div style="position:absolute;top:50%;left:-20px;right:-20px;height:42px;background:linear-gradient(90deg, transparent 0%, rgba(212,168,67,0.25) 15%, rgba(212,168,67,0.40) 50%, rgba(212,168,67,0.25) 85%, transparent 100%);border-radius:10px;transform:translateY(-50%);pointer-events:none;z-index:0;"></div>
+              <div class="oc-tier oc-tier-3" id="ocTier3Monks" style="display:flex;justify-content:center;gap:32px;position:relative;z-index:1;">
+                ${tier3Cards}
+              </div>
+            </div>
+
+          </div>
+        </div>`;
     }
 
-    const counters = document.querySelectorAll('.number[data-count]');
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounter(entry.target);
-          counterObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.2 });
+    let monkResizeObserver = null;
 
-    counters.forEach(c => counterObserver.observe(c));
+    function recalcMonkTreeSVG() {
+      const container = document.getElementById('monkOrgContainer');
+      const svg = document.getElementById('monkTreeSVG');
+      if (!container || !svg) return;
+
+      // Attach ResizeObserver if not already attached
+      if (!monkResizeObserver && window.ResizeObserver) {
+        monkResizeObserver = new ResizeObserver(() => {
+          requestAnimationFrame(recalcMonkTreeSVG);
+        });
+        monkResizeObserver.observe(container);
+      }
+
+      const cRect = container.getBoundingClientRect();
+      const getCoord = (id) => {
+        const wrapper = container.querySelector(`[data-nid="${id}"]`);
+        if (!wrapper) return null;
+        const card = wrapper.classList.contains('oc-card') ? wrapper : (wrapper.querySelector('.oc-card') || wrapper);
+        const r = card.getBoundingClientRect();
+        return {
+          cx: r.left - cRect.left + r.width / 2,
+          ty: r.top - cRect.top,
+          by: r.bottom - cRect.top,
+        };
+      };
+
+      const rootP = getCoord('monk-root');
+      const dep1P = getCoord('monk-dep1');
+      const dep2P = getCoord('monk-dep2');
+      const off1P = getCoord('monk-off1');
+      const off2P = getCoord('monk-off2');
+      const off3P = getCoord('monk-off3');
+
+      if (!rootP || !dep1P || !dep2P) return;
+
+      let html = '';
+      const addLine = (x1, y1, x2, y2) => {
+        html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#d4a843" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+      };
+
+      /* 1. Upper Connector: Root -> Deputies */
+      const upperY = rootP.by + (dep1P.ty - rootP.by) / 2;
+      addLine(rootP.cx, rootP.by, rootP.cx, upperY);
+      addLine(dep1P.cx, upperY, dep2P.cx, upperY);
+      addLine(dep1P.cx, upperY, dep1P.cx, dep1P.ty);
+      addLine(dep2P.cx, upperY, dep2P.cx, dep2P.ty);
+
+      /* 2. Central Trunk: Straight down from Root through middle gap to Officers */
+      if (off1P && off3P) {
+        const lowerY = dep1P.by + (off1P.ty - dep1P.by) / 2;
+        addLine(rootP.cx, upperY, rootP.cx, lowerY);
+        addLine(off1P.cx, lowerY, off3P.cx, lowerY);
+        addLine(off1P.cx, lowerY, off1P.cx, off1P.ty);
+        if (off2P) addLine(off2P.cx, lowerY, off2P.cx, off2P.ty);
+        addLine(off3P.cx, lowerY, off3P.cx, off3P.ty);
+      }
+
+      svg.innerHTML = html;
+    }
+
+    window.addEventListener('resize', recalcMonkTreeSVG);
+    window.addEventListener('load', recalcMonkTreeSVG);
+
+    // ===== LEGACY FALLBACK: keep old card for layperson category =====
+    function createTempleArchCard(member, defaultKhmerTitle, defaultSubTitle, defaultEnTitle, isMonkCategory) {
+      const isMonk = isMonkCategory;
+      const name = member ? (member.name || '') : 'មិនទាន់មានទិន្នន័យ';
+      const title = member ? (member.title || defaultKhmerTitle) : defaultKhmerTitle;
+      const image = member ? (member.image || (isMonk ? 'images/buddha.png' : 'logo.png')) : 'logo.png';
+      const phone = member ? member.phone : '';
+      const carrier = phone ? getCarrierInfo(phone) : null;
+      const carrierBadge = carrier ? `<span class="carrier-badge" style="background:${carrier.bg};color:${carrier.color};border:1px solid ${carrier.border};font-size:0.6rem;padding:1px 5px;border-radius:8px;display:inline-block;">${carrier.name}</span>` : '';
+      return `
+        <div class="temple-node-card ${member ? 'active-node' : 'empty-node'}">
+          <div class="temple-node-img-wrap">
+            <div class="temple-node-img-frame">
+              <img src="${image}" alt="${name}" onerror="this.src='logo.png'">
+            </div>
+            <div class="temple-node-ornament">👥</div>
+          </div>
+          <h4 class="temple-name">${name}</h4>
+          <div class="temple-navy-badge">
+            <div class="badge-khmer">${title}</div>
+          </div>
+          ${phone ? `
+            <div class="temple-phone">
+              <span>📞</span>
+              <a href="tel:${phone.replace(/\s/g,'')}">${ phone }</a>
+              ${carrierBadge}
+            </div>
+          ` : ''}
+        </div>`;
+    }
+
+    // ===== NEW MONK ORG CHART BUILDER =====
+    // ===== LAYPERSON ORG CHART (OLD LAYOUT, PRESERVED) =====
+    function buildOrgTreeBlock(title, icon, members, isMonkCategory) {
+      if (isMonkCategory) {
+        return buildMonkOrgChart(members);
+      }
+      const getMember = (rank, altTitleFilter) => {
+        return members.find(m => m.roleRank === rank) || 
+               members.find(m => m.title && m.title.includes(altTitleFilter));
+      };
+
+      const root = getMember('root', 'ប្រធាន');
+      const deputy1 = getMember('deputy_1', 'អនុប្រធានទី១');
+      const deputy2 = getMember('deputy_2', 'អនុប្រធានទី២');
+
+      const d1_off1 = getMember('officer_d1_discipline', 'វិន័យ') || getMember('officer_d1_finance', 'ហិរញ្ញ') || getMember('officer_discipline', 'វិន័យ') || getMember('officer_finance', 'ហិរញ្ញ');
+      const d1_off2 = getMember('officer_d1_secretary', 'លេខា') || getMember('officer_secretary', 'លេខា');
+      const d1_off3 = getMember('officer_d1_catering', 'ភត្ត') || getMember('officer_d1_events', 'ពិធី') || getMember('officer_catering', 'ភត្ត') || getMember('officer_events', 'ពិធី');
+
+      const d2_off1 = getMember('officer_d2_discipline', 'វិន័យ') || getMember('officer_d2_finance', 'ហិរញ្ញ') || getMember('officer_discipline', 'វិន័យ') || getMember('officer_finance', 'ហិរញ្ញ');
+      const d2_off2 = getMember('officer_d2_secretary', 'លេខា') || getMember('officer_secretary', 'លេខា');
+      const d2_off3 = getMember('officer_d2_catering', 'ភត្ត') || getMember('officer_d2_events', 'ពិធី') || getMember('officer_catering', 'ភត្ត') || getMember('officer_events', 'ពិធី');
+
+      return `
+        <div class="temple-chart-container">
+          <div class="temple-chart-header">
+            <h2 class="temple-chart-title">រចនាសម្ព័ន្ធគ្រប់គ្រង</h2>
+            <div class="temple-chart-subtitle">វត្តខេមវ័ន(បឹងស្នាយ) • សង្គាត់បូរមាស ក្រុងកំពង់ចាម</div>
+            <div class="temple-chart-badge">${icon} ${title}</div>
+          </div>
+
+          <div class="temple-tree-board">
+            <div class="temple-level level-root-center">
+              ${createTempleArchCard(root, 'ប្រធានគណៈកម្មការវត្ត', '', '', false)}
+            </div>
+            <div class="conduit-main-stem"></div>
+            <div class="conduit-top-bar"></div>
+            <div class="conduit-deputy-stems">
+              <span></span>
+              <span></span>
+            </div>
+            <div class="temple-level level-deputies-split">
+              <div class="deputy-branch-block left-branch">
+                <div class="deputy-card-wrap">
+                  ${createTempleArchCard(deputy1, 'អនុប្រធានទី១', '', '', false)}
+                </div>
+                <div class="conduit-sub-stem"></div>
+                <div class="conduit-sub-bar"></div>
+                <div class="conduit-officer-stems">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="officers-row">
+                  ${createTempleArchCard(d1_off1, 'ហិរញ្ញវត្ថុ / បេឡា', '', '', false)}
+                  ${createTempleArchCard(d1_off2, 'លេខាធិការ', '', '', false)}
+                  ${createTempleArchCard(d1_off3, 'គណៈកម្មការពិធី', '', '', false)}
+                </div>
+              </div>
+              <div class="deputy-branch-block right-branch">
+                <div class="deputy-card-wrap">
+                  ${createTempleArchCard(deputy2, 'អនុប្រធានទី២', '', '', false)}
+                </div>
+                <div class="conduit-sub-stem"></div>
+                <div class="conduit-sub-bar"></div>
+                <div class="conduit-officer-stems">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="officers-row">
+                  ${createTempleArchCard(d2_off1, 'ហិរញ្ញវត្ថុ / បេឡា', '', '', false)}
+                  ${createTempleArchCard(d2_off2, 'លេខាធិការ', '', '', false)}
+                  ${createTempleArchCard(d2_off3, 'គណៈកម្មការពិធី', '', '', false)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
 
     // Dynamic API Data Fetching for Visitors
     async function loadDynamicContent() {
@@ -656,6 +948,7 @@
               const labelSpan = statItems[idx].querySelector('.label');
               if (numSpan) {
                 numSpan.dataset.count = st.count;
+                numSpan.textContent = '0';
                 animateCounter(numSpan);
               }
               if (labelSpan && st.label) labelSpan.textContent = st.label;
@@ -681,15 +974,21 @@
               footerEmail.href = 'mailto:' + data.contact.email;
             }
           }
-          if (data.contact.location) {
-            const footerLocation = document.querySelector('.footer-links li:first-child a');
-            if (footerLocation) footerLocation.textContent = '📍 ' + data.contact.location;
+          if (data.contact.facebook) {
+            document.querySelectorAll('a[href*="facebook"]').forEach(a => {
+              if (!a.closest('.oc-social-links') && !a.closest('.temple-node-card')) a.href = data.contact.facebook;
+            });
+          }
+          if (data.contact.telegram) {
+            document.querySelectorAll('a[href*="t.me"], a[href*="telegram"]').forEach(a => {
+              if (!a.closest('.oc-social-links') && !a.closest('.temple-node-card')) a.href = data.contact.telegram;
+            });
           }
         }
 
         // Dynamic Gallery
         if (data.gallery && data.gallery.length > 0) {
-          const galleryGrid = document.getElementById('dynamicGalleryGrid');
+          const galleryGrid = document.querySelector('.gallery-grid');
           if (galleryGrid) {
             const uploadedItems = data.gallery.map(item => `
               <div class="gallery-item animate-on-scroll visible">
@@ -736,12 +1035,551 @@
             `).join('');
           }
         }
+
+        // Dynamic Committee
+        if (data.committee && Array.isArray(data.committee)) {
+          currentCommitteeData = data.committee;
+          renderCommittee('monk');
+        }
       } catch (err) {
         console.log('Using static content fallback');
       }
     }
 
     loadDynamicContent();
+
+    let currentCommitteeData = [];
+    let activeCommitteeFilter = 'monk';
+
+    function filterCommittee(filter) {
+      activeCommitteeFilter = filter;
+      document.querySelectorAll('.mgmt-tab-btn').forEach(btn => {
+        if (btn.dataset.filter === filter) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+      renderCommittee(filter);
+    }
+
+    function renderCommittee(filter) {
+      renderCommitteeTree(filter);
+    }
+
+    function createTempleArchCard(member, defaultKhmerTitle, defaultSubTitle, defaultEnTitle, isMonkCategory) {
+      const isMonk = isMonkCategory;
+      const name = member ? (member.name || '') : 'មិនទាន់មានទិន្នន័យ';
+      const title = member ? (member.title || defaultKhmerTitle) : defaultKhmerTitle;
+      const image = member ? (member.image || (isMonk ? 'images/buddha.png' : 'logo.png')) : 'logo.png';
+      const phone = member ? member.phone : '';
+      const carrier = phone ? getCarrierInfo(phone) : null;
+      const carrierBadge = carrier ? `<span class="carrier-badge" style="background:${carrier.bg};color:${carrier.color};border:1px solid ${carrier.border};font-size:0.6rem;padding:1px 5px;border-radius:8px;display:inline-block;">${carrier.name}</span>` : '';
+
+      return `
+        <div class="temple-node-card ${member ? 'active-node' : 'empty-node'}">
+          <div class="temple-node-img-wrap">
+            <div class="temple-node-img-frame">
+              <img src="${image}" alt="${name}" onerror="this.src='logo.png'">
+            </div>
+            <div class="temple-node-ornament">🥋</div>
+          </div>
+          <h4 class="temple-name">${name}</h4>
+          <div class="temple-navy-badge">
+            <div class="badge-khmer">${title}</div>
+          </div>
+          ${phone ? `
+            <div class="temple-phone">
+              <span>📞</span>
+              <a href="tel:${phone.replace(/\s/g,'')}">${phone}</a>
+              ${carrierBadge}
+            </div>
+          ` : ''}
+        </div>`;
+    }
+
+    function buildOrgTreeBlock(title, icon, members, isMonkCategory) {
+      if (isMonkCategory) {
+        return buildMonkOrgChart(members);
+      }
+      const getMember = (rank, altTitleFilter) => {
+        return members.find(m => m.roleRank === rank) || 
+               members.find(m => m.title && m.title.includes(altTitleFilter));
+      };
+
+      const root = getMember('root', isMonkCategory ? 'ចៅអធិការ' : 'ប្រធាន');
+      const deputy1 = getMember('deputy_1', isMonkCategory ? 'សូត្រស្តាំ' : 'អនុប្រធានទី១');
+      const deputy2 = getMember('deputy_2', isMonkCategory ? 'សូត្រឆ្វេង' : 'អនុប្រធានទី២');
+
+      const d1_off1 = getMember('officer_d1_discipline', 'វិន័យ') || getMember('officer_d1_finance', 'ហិរញ្ញ') || getMember('officer_discipline', 'វិន័យ') || getMember('officer_finance', 'ហិរញ្ញ');
+      const d1_off2 = getMember('officer_d1_secretary', 'លេខា') || getMember('officer_secretary', 'លេខា');
+      const d1_off3 = getMember('officer_d1_catering', 'ភត្ត') || getMember('officer_d1_events', 'ពិធី') || getMember('officer_catering', 'ភត្ត') || getMember('officer_events', 'ពិធី');
+
+      const d2_off1 = getMember('officer_d2_discipline', 'វិន័យ') || getMember('officer_d2_finance', 'ហិរញ្ញ') || getMember('officer_discipline', 'វិន័យ') || getMember('officer_finance', 'ហិរញ្ញ');
+      const d2_off2 = getMember('officer_d2_secretary', 'លេខា') || getMember('officer_secretary', 'លេខា');
+      const d2_off3 = getMember('officer_d2_catering', 'ភត្ត') || getMember('officer_d2_events', 'ពិធី') || getMember('officer_catering', 'ភត្ត') || getMember('officer_events', 'ពិធី');
+
+      return `
+        <div class="temple-chart-container">
+          <div class="temple-chart-header">
+            <h2 class="temple-chart-title">រចនាសម្ព័ន្ធគ្រប់គ្រង</h2>
+            <div class="temple-chart-subtitle">វត្តខេមវ័ន(បឹងស្នាយ) • សង្គាត់បូរមាស ក្រុងកំពង់ចាម</div>
+            <div class="temple-chart-badge">${icon} ${title}</div>
+          </div>
+
+          <div class="temple-tree-board">
+            
+            <!-- ថ្នាក់ទី១: ថ្នាក់នាំមុខ -->
+            <div class="temple-level level-root-center">
+              ${createTempleArchCard(root, isMonkCategory ? 'ព្រះគ្រូចៅអធិការវត្ត' : 'ប្រធានគណៈកម្មការវត្ត', '', '', isMonkCategory)}
+            </div>
+
+            <!-- បន្ទាត់ភ្ជាប់ -->
+            <div class="conduit-main-stem"></div>
+            <div class="conduit-top-bar"></div>
+            <div class="conduit-deputy-stems">
+              <span></span>
+              <span></span>
+            </div>
+
+            <!-- ថ្នាក់ទី២: អនុប្រធាន -->
+            <div class="temple-level level-deputies-split">
+              
+              <!-- សាខាឆ្វេង -->
+              <div class="deputy-branch-block left-branch">
+                <div class="deputy-card-wrap">
+                  ${createTempleArchCard(deputy1, isMonkCategory ? 'ព្រះគ្រូសូត្រស្តាំ' : 'អនុប្រធានទី១', '', '', isMonkCategory)}
+                </div>
+                
+                <div class="conduit-sub-stem"></div>
+                <div class="conduit-sub-bar"></div>
+                <div class="conduit-officer-stems">
+                  <span></span><span></span><span></span>
+                </div>
+
+                <div class="officers-row">
+                  ${createTempleArchCard(d1_off1, isMonkCategory ? 'ព្រះវិន័យធម៌' : 'ហិរញ្ញវត្ថុ / បេឡា', '', '', isMonkCategory)}
+                  ${createTempleArchCard(d1_off2, isMonkCategory ? 'ព្រះលេខា' : 'លេខាធិការ', '', '', isMonkCategory)}
+                  ${createTempleArchCard(d1_off3, isMonkCategory ? 'ព្រះភត្តទេសក៍' : 'គណៈកម្មការពិធី', '', '', isMonkCategory)}
+                </div>
+              </div>
+
+              <!-- សាខាស្តាំ -->
+              <div class="deputy-branch-block right-branch">
+                <div class="deputy-card-wrap">
+                  ${createTempleArchCard(deputy2, isMonkCategory ? 'ព្រះគ្រូសូត្រឆ្វេង' : 'អនុប្រធានទី២', '', '', isMonkCategory)}
+                </div>
+
+                <div class="conduit-sub-stem"></div>
+                <div class="conduit-sub-bar"></div>
+                <div class="conduit-officer-stems">
+                  <span></span><span></span><span></span>
+                </div>
+
+                <div class="officers-row">
+                  ${createTempleArchCard(d2_off1, isMonkCategory ? 'ព្រះវិន័យធម៌' : 'ហិរញ្ញវត្ថុ / បេឡា', '', '', isMonkCategory)}
+                  ${createTempleArchCard(d2_off2, isMonkCategory ? 'ព្រះលេខា' : 'លេខាធិការ', '', '', isMonkCategory)}
+                  ${createTempleArchCard(d2_off3, isMonkCategory ? 'ព្រះភត្តទេសក៍' : 'គណៈកម្មការពិធី', '', '', isMonkCategory)}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderCommitteeTree(filter) {
+      const container = document.getElementById('committeeTreeContainer');
+      if (!container) return;
+
+      const monks = (currentCommitteeData || []).filter(m => m.category === 'monk');
+      const laypeople = (currentCommitteeData || []).filter(m => m.category === 'layperson');
+
+      let html = '';
+      if (filter === 'all' || filter === 'monk') {
+        html += buildOrgTreeBlock('ឋានានុក្រមព្រះសង្ឃ', '☸️', monks, true);
+      }
+      if (filter === 'all' || filter === 'layperson') {
+        html += buildOrgTreeBlock('ឋានានុក្រមពុទ្ធបរិស័ទ / គណៈកម្មការវត្ត', '👥', laypeople, false);
+      }
+
+      container.innerHTML = html;
+    }
+
+    function renderCommitteeGrid(filter) {
+      const container = document.getElementById('committeeGrid');
+      if (!container) return;
+
+      let list = currentCommitteeData || [];
+      if (filter !== 'all') {
+        list = list.filter(m => m.category === filter);
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align:center; padding: 60px 20px; background: var(--cream,#fdf8f0); border-radius: 16px;">
+            <div style="font-size:3rem; margin-bottom:10px; opacity:0.4;">📭</div>
+            <h4 style="color:var(--primary); margin-bottom:6px;">មិនទាន់មានទិន្នន័យទេ</h4>
+            <p style="color:var(--text-light); font-size:0.9rem;">ពុំទាន់មានសមាជិកក្នុងផ្នែកនេះនៅឡើយទេ។</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(m => {
+        const isMonk = m.category === 'monk';
+        const badgeLabel = isMonk ? '☸️ ព្រះសង្ឃ' : '👥 ពុទ្ធបរិស័ទ';
+        const badgeClass = isMonk ? 'badge-monk' : 'badge-lay';
+        const carrier = getCarrierInfo(m.phone);
+        const carrierBadge = carrier ? `<span class="carrier-badge" style="background:${carrier.bg};color:${carrier.color};border:1px solid ${carrier.border};">${carrier.name}</span>` : '';
+
+        return `
+          <div class="mgmt-card animate-on-scroll visible">
+            <div class="mgmt-card-header">
+              <span class="mgmt-badge ${badgeClass}">${badgeLabel}</span>
+              <img src="${m.image || 'logo.png'}" alt="${m.name}" class="mgmt-avatar" onerror="this.src='logo.png'">
+            </div>
+            <div class="mgmt-card-body">
+              <h3 class="mgmt-name">${m.name || ''}</h3>
+              <p class="mgmt-title">${m.title || ''}</p>
+              
+              ${m.phone ? `
+                <div class="mgmt-phone">
+                  <span>📞</span>
+                  <a href="tel:${m.phone.replace(/\s/g,'')}">${m.phone}</a>
+                  ${carrierBadge}
+                  <button onclick="copyPhone('${m.phone}')" title="ចម្លងលេខ">📋</button>
+                </div>
+              ` : ''}
+
+              <div class="mgmt-socials">
+                ${m.facebook ? `<a href="${m.facebook}" target="_blank" class="social-btn fb">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> Facebook
+                </a>` : ''}
+                ${m.telegram ? `<a href="${m.telegram}" target="_blank" class="social-btn tg">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.562 8.161c-.18.717-.962 4.084-1.362 5.795-.169.724-.436.966-.693.989-.56.051-.985-.371-1.528-.727-.849-.556-1.329-.901-2.154-1.444-.954-.628-.336-.973.208-1.538.142-.148 2.613-2.396 2.661-2.602.006-.026.012-.124-.047-.176-.058-.052-.144-.034-.207-.02-.089.02-1.503.956-4.244 2.808-.402.276-.766.411-1.093.404-.36-.008-1.052-.204-1.567-.372-.632-.206-1.134-.316-1.09-.667.023-.183.273-.37.75-.56 2.936-1.278 4.896-2.122 5.88-2.532 2.798-1.164 3.38-1.366 3.76-1.372.083-.001.27.02.39.119.102.083.131.196.143.276.014.092.029.297.017.46z"/></svg> Telegram
+                </a>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    loadDynamicContent();
+
+    // ===== PLAYLIST MODAL =====
+    const CATEGORY_NAMES = {
+      'dhamma-teachings': 'សម្តែងធម៌ទេសនា',
+      'religious-festivals': 'បុណ្យសាសនា',
+      'dhamma-school': 'សាលាធម៌',
+      'community': 'សកម្មភាពសង្គម',
+      'meditation': 'ធ្វើសមាធិ',
+      'counseling': 'ប្រឹក្សាយោបល់'
+    };
+    let playlistViewStack = []; // navigation stack
+
+    async function openPlaylistModal(category) {
+      const overlay = document.getElementById('playlistModalOverlay');
+      const heading = document.getElementById('playlistModalHeading');
+      const body = document.getElementById('playlistModalBody');
+      const backBtn = document.getElementById('playlistBackBtn');
+
+      heading.textContent = CATEGORY_NAMES[category] || 'កម្មវិធីធម៌';
+      body.innerHTML = '<div style="text-align:center;padding:60px;color:#888;"><div class="loading-spinner"></div><p>កំពុងផ្ទុក...</p></div>';
+      backBtn.style.display = 'none';
+      playlistViewStack = [{ type: 'grid', category }];
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      if (category === 'counseling') {
+        heading.textContent = 'ផ្ទាំងប្រឹក្សាយោបល់ (Consultation Panel)';
+        try {
+          const res = await fetch('/api/counselors');
+          const counselors = await res.json();
+          const plRes = await fetch('/api/playlists?category=counseling');
+          const playlists = await plRes.json();
+          renderCounselorsPanel(counselors, playlists);
+        } catch (err) {
+          body.innerHTML = '<div style="text-align:center;padding:60px;color:#888;"><p>មិនអាចផ្ទុកទិន្នន័យបានទេ។</p></div>';
+        }
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/playlists?category=${category}`);
+        const playlists = await res.json();
+        renderPlaylistGrid(playlists, category);
+      } catch (err) {
+        body.innerHTML = '<div style="text-align:center;padding:60px;color:#888;"><p>មិនអាចផ្ទុកទិន្នន័យបានទេ។</p></div>';
+      }
+    }
+
+    function getCarrierInfo(phoneNumber) {
+      if (!phoneNumber) return null;
+      const digits = phoneNumber.replace(/\D/g, '');
+      if (!digits) return null;
+      let prefix = '';
+      if (digits.startsWith('855')) prefix = '0' + digits.substring(3, 5);
+      else if (digits.startsWith('0')) prefix = digits.substring(0, 3);
+      else prefix = '0' + digits.substring(0, 2);
+
+      const cellcard = ['011', '012', '014', '017', '061', '076', '077', '078', '085', '089', '092', '095', '099'];
+      const smart = ['010', '015', '016', '069', '070', '081', '086', '087', '093', '096', '098'];
+      const metfone = ['031', '060', '066', '067', '068', '071', '088', '090', '097'];
+
+      if (cellcard.includes(prefix)) return { name: 'Cellcard', color: '#ff6600', bg: '#fff0e6', border: '#ffb380' };
+      if (smart.includes(prefix)) return { name: 'Smart', color: '#00a859', bg: '#e6f7ef', border: '#80e0b0' };
+      if (metfone.includes(prefix)) return { name: 'Metfone', color: '#e60000', bg: '#ffe6e6', border: '#ff9999' };
+      return null;
+    }
+
+    function copyPhone(phoneNum) {
+      if (!phoneNum) return;
+      navigator.clipboard.writeText(phoneNum).then(() => {
+        let toast = document.getElementById('publicToast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'publicToast';
+          toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a3a5c;color:#fff;padding:10px 24px;border-radius:25px;font-size:0.9rem;box-shadow:0 10px 30px rgba(0,0,0,0.2);z-index:99999;transition:all 0.3s ease;opacity:0;pointer-events:none;';
+          document.body.appendChild(toast);
+        }
+        toast.innerHTML = `📋 បានចម្លងលេខទូរស័ព្ទ <strong>${phoneNum}</strong>!`;
+        toast.style.opacity = '1';
+        setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+      }).catch(err => {
+        alert('លេខទូរស័ព្ទ: ' + phoneNum);
+      });
+    }
+
+    function renderCounselorsPanel(counselors, playlists) {
+      const body = document.getElementById('playlistModalBody');
+      
+      let html = `<div style="max-width:800px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:30px;">
+          <h3 style="font-size:1.4rem;color:var(--primary);margin-bottom:8px;">លោកអ្នកអាចប្រឹក្សាយោបល់ផ្នែកធម៌ និងជីវិត</h3>
+          <p style="color:var(--text-light);font-size:0.95rem;">សូមទំនាក់ទំនងទៅកាន់ព្រះសង្ឃ និងគ្រូប្រឹក្សាយោបល់តាមរយៈលេខទូរស័ព្ទ ឬបណ្តាញសង្គមខាងក្រោម៖</p>
+        </div>`;
+
+      if (counselors && counselors.length > 0) {
+        html += `<div class="counselors-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));gap:24px;margin-bottom:40px;">`;
+        html += counselors.map(c => {
+          const carrier = getCarrierInfo(c.phone);
+          const carrierBadge = carrier ? `<span class="carrier-badge" style="background:${carrier.bg};color:${carrier.color};border:1px solid ${carrier.border};">${carrier.name}</span>` : '';
+          return `
+            <div class="counselor-card" style="background:var(--cream,#fdf8f0);border-radius:16px;padding:24px 20px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.06);transition:all 0.3s ease;display:flex;flex-direction:column;align-items:center;">
+              <div style="position:relative;margin-bottom:14px;">
+                <img src="${c.image || 'logo.png'}" alt="${c.name}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--gold,#d4a843);box-shadow:0 6px 16px rgba(0,0,0,0.1);" onerror="this.src='logo.png'">
+              </div>
+              <h4 style="font-size:1.15rem;color:var(--primary,#1a3a5c);margin:0 0 4px 0;font-weight:700;">${c.name || 'អ្នកប្រឹក្សាយោបល់'}</h4>
+              <p style="color:var(--text-light);font-size:0.85rem;margin-bottom:16px;line-height:1.4;">${c.title || ''}</p>
+              
+              ${c.phone ? `
+                <div style="background:#fff;padding:8px 14px;border-radius:25px;border:1px solid #e2e8f0;display:flex;align-items:center;gap:8px;margin-bottom:16px;width:100%;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.03);">
+                  <span style="font-size:1rem;">📞</span>
+                  <a href="tel:${c.phone.replace(/\s/g,'')}" style="color:var(--primary);font-weight:700;font-size:0.95rem;text-decoration:none;">${c.phone}</a>
+                  ${carrierBadge}
+                  <button onclick="copyPhone('${c.phone}')" title="ចម្លងលេខ" style="background:none;border:none;cursor:pointer;font-size:0.9rem;padding:2px 4px;margin-left:auto;color:#666;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='#666'">📋</button>
+                </div>
+              ` : ''}
+
+              <div style="display:flex;gap:10px;width:100%;margin-top:auto;">
+                ${c.facebook ? `<a href="${c.facebook}" target="_blank" style="flex:1;background:#1877f2;color:white;padding:9px 12px;border-radius:8px;font-size:0.85rem;font-weight:600;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> Facebook
+                </a>` : ''}
+                ${c.telegram ? `<a href="${c.telegram}" target="_blank" style="flex:1;background:#0088cc;color:white;padding:9px 12px;border-radius:8px;font-size:0.85rem;font-weight:600;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.562 8.161c-.18.717-.962 4.084-1.362 5.795-.169.724-.436.966-.693.989-.56.051-.985-.371-1.528-.727-.849-.556-1.329-.901-2.154-1.444-.954-.628-.336-.973.208-1.538.142-.148 2.613-2.396 2.661-2.602.006-.026.012-.124-.047-.176-.058-.052-.144-.034-.207-.02-.089.02-1.503.956-4.244 2.808-.402.276-.766.411-1.093.404-.36-.008-1.052-.204-1.567-.372-.632-.206-1.134-.316-1.09-.667.023-.183.273-.37.75-.56 2.936-1.278 4.896-2.122 5.88-2.532 2.798-1.164 3.38-1.366 3.76-1.372.083-.001.27.02.39.119.102.083.131.196.143.276.014.092.029.297.017.46z"/></svg> Telegram
+                </a>` : ''}
+              </div>
+            </div>`;
+        }).join('') + `</div>`;
+      }
+
+      if (playlists && playlists.length > 0) {
+        html += `<div style="margin-top:30px;border-top:1px solid #eee;padding-top:25px;">
+          <h4 style="font-size:1.1rem;color:var(--primary);margin-bottom:16px;">🎬 កម្មវិធីប្រឹក្សាយោបល់ / ធម៌ទេសនា</h4>
+          <div class="pl-grid">
+            ${playlists.map(pl => `
+              <div class="pl-card" onclick="openPlaylistDetail('${pl.id}')">
+                <div class="pl-card-img">
+                  <img src="${pl.coverImage || 'logo.png'}" alt="${pl.title}" onerror="this.src='logo.png'">
+                  <div class="pl-card-count">${(pl.items || []).length} មាតិកា</div>
+                </div>
+                <div class="pl-card-info">
+                  <h4>${pl.title || 'Untitled'}</h4>
+                  <p>${pl.description || ''}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>`;
+      }
+
+      html += `</div>`;
+      body.innerHTML = html;
+    }
+
+    function renderPlaylistGrid(playlists, category) {
+      const body = document.getElementById('playlistModalBody');
+      const backBtn = document.getElementById('playlistBackBtn');
+      backBtn.style.display = 'none';
+
+      if (!playlists || playlists.length === 0) {
+        body.innerHTML = `
+          <div style="text-align:center;padding:80px 20px;">
+            <div style="font-size:4rem;margin-bottom:20px;opacity:0.3;">📭</div>
+            <h3 style="color:var(--primary);margin-bottom:10px;">មិនទាន់មានកម្មវិធីទេ</h3>
+            <p style="color:var(--text-light);">កម្មវិធី${CATEGORY_NAMES[category] || ''}មិនទាន់មានទិន្នន័យទេ។ សូមត្រឡប់មកពិនិត្យម្តងទៀតនៅពេលក្រោយ។</p>
+          </div>`;
+        return;
+      }
+
+      body.innerHTML = `
+        <div class="pl-grid">
+          ${playlists.map(pl => {
+            const itemCount = (pl.items || []).length;
+            const videoCount = (pl.items || []).filter(i => i.type === 'video').length;
+            const audioCount = (pl.items || []).filter(i => i.type === 'audio').length;
+            const articleCount = (pl.items || []).filter(i => i.type === 'article').length;
+            const badges = [];
+            if (videoCount) badges.push('🎬 ' + videoCount);
+            if (audioCount) badges.push('🎵 ' + audioCount);
+            if (articleCount) badges.push('📖 ' + articleCount);
+            return `
+              <div class="pl-card" onclick="openPlaylistDetail('${pl.id}')">
+                <div class="pl-card-img">
+                  <img src="${pl.coverImage || 'logo.png'}" alt="${pl.title}" onerror="this.src='logo.png'">
+                  <div class="pl-card-count">${itemCount} មាតិកា</div>
+                </div>
+                <div class="pl-card-info">
+                  <h4>${pl.title || 'Untitled'}</h4>
+                  <p>${pl.description || ''}</p>
+                  <div class="pl-card-badges">${badges.join('  ')}</div>
+                </div>
+              </div>`;
+          }).join('')}
+        </div>`;
+    }
+
+    async function openPlaylistDetail(playlistId) {
+      const body = document.getElementById('playlistModalBody');
+      const heading = document.getElementById('playlistModalHeading');
+      const backBtn = document.getElementById('playlistBackBtn');
+
+      body.innerHTML = '<div style="text-align:center;padding:60px;color:#888;"><p>កំពុងផ្ទុក...</p></div>';
+
+      try {
+        const res = await fetch('/api/playlists');
+        const allPlaylists = await res.json();
+        const pl = allPlaylists.find(p => p.id === playlistId);
+        if (!pl) { body.innerHTML = '<p style="text-align:center;padding:40px;">រកមិនឃើញ Playlist</p>'; return; }
+
+        playlistViewStack.push({ type: 'detail', playlistId });
+        backBtn.style.display = '';
+        heading.textContent = pl.title || 'កម្មវិធីធម៌';
+
+        const items = pl.items || [];
+        if (items.length === 0) {
+          body.innerHTML = `
+            <div style="text-align:center;padding:60px;">
+              <div style="font-size:3rem;margin-bottom:15px;opacity:0.3;">📭</div>
+              <p style="color:var(--text-light);">មិនទាន់មានមាតិកាទេ។</p>
+            </div>`;
+          return;
+        }
+
+        body.innerHTML = `
+          <div class="pl-detail-desc">${pl.description || ''}</div>
+          <div class="pl-items-list">
+            ${items.map((item, idx) => {
+              const typeIcon = item.type === 'video' ? '🎬' : item.type === 'audio' ? '🎵' : '📖';
+              return `
+                <div class="pl-item" onclick="togglePlaylistItem(this, ${idx})">
+                  <div class="pl-item-header">
+                    <span class="pl-item-icon">${typeIcon}</span>
+                    <div class="pl-item-info">
+                      <strong>${item.title || 'គ្មានចំណងជើង'}</strong>
+                      <small>${item.description || ''}</small>
+                    </div>
+                    <span class="pl-item-toggle">▼</span>
+                  </div>
+                  <div class="pl-item-content" id="plItemContent_${idx}">
+                    ${renderPlaylistItemContent(item)}
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>`;
+      } catch (err) {
+        body.innerHTML = '<p style="text-align:center;padding:40px;color:#888;">កំហុសក្នុងការផ្ទុក</p>';
+      }
+    }
+
+    function renderPlaylistItemContent(item) {
+      if (item.type === 'video' && item.url) {
+        const embedUrl = getVideoEmbedUrl(item.url);
+        if (embedUrl) {
+          return `<div class="pl-video-container"><iframe src="${embedUrl}" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe></div>`;
+        }
+        return `<a href="${item.url}" target="_blank" style="color:var(--gold);display:inline-block;margin-top:10px;">🔗 បើកវីដេអូ →</a>`;
+      }
+      if (item.type === 'audio' && item.url) {
+        return `<div class="pl-audio-player"><audio controls src="${item.url}" style="width:100%;"></audio></div>`;
+      }
+      if (item.type === 'article') {
+        return `<div class="pl-article-content">${(item.content || '').replace(/\n/g, '<br>')}</div>`;
+      }
+      return '<p style="color:var(--text-light);font-style:italic;">មិនមានមាតិកា</p>';
+    }
+
+    function getVideoEmbedUrl(url) {
+      if (!url) return null;
+      // YouTube
+      const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?#]+)/);
+      if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+      // Facebook video
+      if (url.includes('facebook.com') && url.includes('video')) {
+        return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=560`;
+      }
+      return null;
+    }
+
+    function togglePlaylistItem(el, idx) {
+      const content = document.getElementById(`plItemContent_${idx}`);
+      if (!content) return;
+      const isOpen = content.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.pl-item-content.open').forEach(c => c.classList.remove('open'));
+      document.querySelectorAll('.pl-item.active').forEach(c => c.classList.remove('active'));
+      if (!isOpen) {
+        content.classList.add('open');
+        el.classList.add('active');
+      }
+    }
+
+    function playlistGoBack() {
+      if (playlistViewStack.length > 1) {
+        playlistViewStack.pop();
+        const prev = playlistViewStack[playlistViewStack.length - 1];
+        if (prev.type === 'grid') {
+          document.getElementById('playlistModalHeading').textContent = CATEGORY_NAMES[prev.category] || 'កម្មវិធីធម៌';
+          fetch(`/api/playlists?category=${prev.category}`)
+            .then(r => r.json())
+            .then(data => renderPlaylistGrid(data, prev.category));
+        }
+      }
+    }
+
+    function closePlaylistOverlay() {
+      document.getElementById('playlistModalOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+      playlistViewStack = [];
+      // Stop any playing media
+      document.querySelectorAll('#playlistModalBody audio, #playlistModalBody iframe').forEach(el => {
+        if (el.tagName === 'AUDIO') el.pause();
+        if (el.tagName === 'IFRAME') el.src = '';
+      });
+    }
+
+    // Close on overlay click
+    document.getElementById('playlistModalOverlay')?.addEventListener('click', function(e) {
+      if (e.target === this) closePlaylistOverlay();
+    });
   </script>
 </body>
 </html>

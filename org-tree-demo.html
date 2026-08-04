@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Org Tree Demo - វត្តខេមវ័ន</title>
+  <link rel="stylesheet" href="DynamicOrgTree.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f1f5f9;
+    }
+
+    .demo-header {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2c5282 100%);
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .demo-header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .demo-header p {
+      color: #cbd5e1;
+      margin-bottom: 20px;
+    }
+
+    .control-panel {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-success {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-info {
+      background: #8b5cf6;
+      color: white;
+    }
+
+    .info-box {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .stats-panel {
+      background: white;
+      padding: 30px;
+      margin: 40px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .stats-panel h3 {
+      color: #1a3a5c;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      border: 2px solid #e2e8f0;
+      transition: all 0.25s ease;
+    }
+
+    .stat-card:hover {
+      border-color: #d4a843;
+      transform: translateY(-2px);
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .footer {
+      background: #1a3a5c;
+      color: #cbd5e1;
+      padding: 20px;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .demo-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .control-panel {
+        gap: 8px;
+      }
+
+      .btn {
+        padding: 10px 18px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="demo-header">
+    <h1>🏛️ រចនាសម្ព័ន្ធគ្រប់គ្រងវត្តខេមវ័ន</h1>
+    <p>Dynamic Organizational Hierarchy Tree - Auto-realigning & Responsive</p>
+    
+    <div class="control-panel">
+      <button class="btn btn-success" onclick="addOfficer('deputy-1')">
+        ➕ Add Officer (Deputy 1)
+      </button>
+      <button class="btn btn-success" onclick="addOfficer('deputy-2')">
+        ➕ Add Officer (Deputy 2)
+      </button>
+      <button class="btn btn-primary" onclick="exportData()">
+        💾 Export JSON
+      </button>
+      <button class="btn btn-info" onclick="toggleEdit()">
+        ✏️ Toggle Edit Mode
+      </button>
+      <button class="btn btn-danger" onclick="resetTree()">
+        🔄 Reset
+      </button>
+    </div>
+
+    <div class="info-box">
+      💡 <strong>Features:</strong> Click ✕ to delete nodes • Tree auto-realigns • Smooth animations • Responsive design • Pure JavaScript
+    </div>
+  </div>
+
+  <!-- Org Tree Container -->
+  <div id="orgTreeContainer"></div>
+
+  <!-- Stats Panel -->
+  <div class="stats-panel">
+    <h3>📊 Tree Statistics</h3>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" style="color: #d4a843;" id="rootCount">1</div>
+        <div class="stat-label">Root Leader</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: #3b82f6;" id="deputyCount">0</div>
+        <div class="stat-label">Deputies</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: #10b981;" id="officerCount">0</div>
+        <div class="stat-label">Officers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: #8b5cf6;" id="totalCount">0</div>
+        <div class="stat-label">Total Members</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>&copy; 2026 វត្តខេមវ័ន(បឹងស្នាយ) • Dynamic Org Tree Component</p>
+    <p style="margin-top: 10px; font-size: 0.85rem;">
+      Built with Pure JavaScript • No Dependencies • Fully Responsive
+    </p>
+  </div>
+
+  <!-- Scripts -->
+  <script src="DynamicOrgTree.js"></script>
+  <script>
+    // Sample data
+    let orgData = {
+      root: {
+        id: 'root-1',
+        name: 'ព្រះមហាវីរៈ សុខា',
+        role: 'ព្រះចៅអធិការវត្ត',
+        image: 'images/hero.png',
+        phone: '012 345 678',
+        carrier: 'Cellcard',
+        facebook: 'https://facebook.com',
+        telegram: 'https://t.me',
+        verified: true
+      },
+      deputies: [
+        {
+          id: 'deputy-1',
+          name: 'ព្រះគ្រូ សុវណ្ណធម៌',
+          role: 'ព្រះគ្រូសូត្រស្តាំ',
+          image: 'images/ceremony.png',
+          phone: '011 888 999',
+          carrier: 'Cellcard',
+          facebook: 'https://facebook.com',
+          telegram: 'https://t.me',
+          verified: true,
+          officers: [
+            {
+              id: 'officer-1-1',
+              name: 'ព្រះ វិន័យធម៌',
+              role: 'ព្រះវិន័យធម៌',
+              image: 'images/meditation.png',
+              phone: '097 111 222',
+              carrier: 'Metfone',
+              facebook: 'https://facebook.com'
+            },
+            {
+              id: 'officer-1-2',
+              name: 'ព្រះ សភាលិកធម៌',
+              role: 'ព្រះលេខា',
+              image: 'images/buddha.png',
+              phone: '010 333 444',
+              carrier: 'Smart',
+              telegram: 'https://t.me'
+            },
+            {
+              id: 'officer-1-3',
+              name: 'ព្រះ ភត្តទេសក៍',
+              role: 'ព្រះភត្តទេសក៍',
+              image: 'logo.png',
+              phone: '012 555 666',
+              carrier: 'Cellcard'
+            }
+          ]
+        },
+        {
+          id: 'deputy-2',
+          name: 'ព្រះគ្រូ ធម្មធរ',
+          role: 'ព្រះគ្រូសូត្រឆ្វេង',
+          image: 'images/community.png',
+          phone: '015 777 888',
+          carrier: 'Smart',
+          facebook: 'https://facebook.com',
+          telegram: 'https://t.me',
+          verified: true,
+          officers: [
+            {
+              id: 'officer-2-1',
+              name: 'ព្រះ សីលធម៌',
+              role: 'ព្រះវិន័យធម៌',
+              image: 'images/garden.png',
+              phone: '098 111 222',
+              carrier: 'Smart',
+              facebook: 'https://facebook.com'
+            },
+            {
+              id: 'officer-2-2',
+              name: 'ព្រះ បញ្ញាធម៌',
+              role: 'ព្រះលេខា',
+              image: 'images/hero.png',
+              phone: '031 333 444',
+              carrier: 'Metfone'
+            },
+            {
+              id: 'officer-2-3',
+              name: 'ព្រះ សមាធិធម៌',
+              role: 'ព្រះភត្តទេសក៍',
+              image: 'logo.png',
+              phone: '016 555 666',
+              carrier: 'Smart',
+              telegram: 'https://t.me'
+            }
+          ]
+        }
+      ]
+    };
+
+    // Initialize tree
+    let tree = new DynamicOrgTree('orgTreeContainer', orgData, {
+      enableDelete: true,
+      onNodeDelete: (nodeId) => {
+        if (confirm('តើអ្នកប្រាកដទេថាចង់លុបសមាជិកនេះ?')) {
+          tree.deleteNode(nodeId);
+          updateStats();
+        }
+      },
+      onNodeClick: (node) => {
+        console.log('Node clicked:', node);
+      }
+    });
+
+    // Update statistics
+    function updateStats() {
+      const rootCount = orgData.root ? 1 : 0;
+      const deputyCount = orgData.deputies ? orgData.deputies.length : 0;
+      const officerCount = orgData.deputies ? 
+        orgData.deputies.reduce((sum, d) => sum + (d.officers ? d.officers.length : 0), 0) : 0;
+      const totalCount = rootCount + deputyCount + officerCount;
+
+      document.getElementById('rootCount').textContent = rootCount;
+      document.getElementById('deputyCount').textContent = deputyCount;
+      document.getElementById('officerCount').textContent = officerCount;
+      document.getElementById('totalCount').textContent = totalCount;
+    }
+
+    // Add officer function
+    function addOfficer(deputyId) {
+      const deputy = orgData.deputies.find(d => d.id === deputyId);
+      if (!deputy) return;
+
+      const newOfficer = {
+        id: `officer-${Date.now()}`,
+        name: 'ព្រះ សមាជិកថ្មី',
+        role: 'មន្ត្រីថ្មី',
+        image: 'logo.png',
+        phone: '012 000 000',
+        carrier: 'Cellcard'
+      };
+
+      if (!deputy.officers) {
+        deputy.officers = [];
+      }
+      deputy.officers.push(newOfficer);
+
+      tree.updateData(orgData);
+      updateStats();
+    }
+
+    // Export data
+    function exportData() {
+      const dataStr = JSON.stringify(orgData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'org-tree-data.json';
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Toggle edit mode
+    function toggleEdit() {
+      tree.options.enableDelete = !tree.options.enableDelete;
+      tree.refresh();
+      alert(tree.options.enableDelete ? 'Edit mode enabled' : 'Edit mode disabled');
+    }
+
+    // Reset tree
+    function resetTree() {
+      if (confirm('តើអ្នកប្រាកដទេថាចង់ reset?')) {
+        window.location.reload();
+      }
+    }
+
+    // Initial stats update
+    updateStats();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,603 @@
+/* ============================================
+   DYNAMIC ORGANIZATIONAL TREE COMPONENT
+   ============================================ */
+
+.dynamic-org-tree-wrapper {
+  width: 100%;
+  background: linear-gradient(135deg, #fdf8f0 0%, #fff9f2 100%);
+  padding: 60px 20px;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.dynamic-org-tree-container {
+  position: relative;
+  min-width: 1200px;
+  margin: 0 auto;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   SVG CONNECTORS LAYER
+   ============================================ */
+
+.connectors-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.connector-line {
+  stroke-linecap: round;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.connector-vertical {
+  stroke: url(#goldGradientV);
+  filter: drop-shadow(0 2px 4px rgba(196, 149, 48, 0.2));
+}
+
+.connector-horizontal {
+  stroke: url(#goldGradientH);
+  filter: drop-shadow(0 2px 6px rgba(196, 149, 48, 0.25));
+  animation: flowGold 8s linear infinite;
+}
+
+.connector-node {
+  fill: #d4a843;
+  stroke: #ffffff;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 8px rgba(212, 168, 67, 0.5));
+  animation: pulseNode 3s ease-in-out infinite;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes flowGold {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 100; }
+}
+
+@keyframes pulseNode {
+  0%, 100% {
+    r: 5;
+    filter: drop-shadow(0 0 8px rgba(212, 168, 67, 0.4));
+  }
+  50% {
+    r: 6;
+    filter: drop-shadow(0 0 12px rgba(212, 168, 67, 0.7));
+  }
+}
+
+/* ============================================
+/* Container ធំ */
+.tree-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.tree-structure {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+
+/* គម្លាត់ចន្លោះជួរឈរ (Vertical Gap រវាង Level នីមួយៗ) */
+.tree-level {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3.5rem; /* បង្កើនគម្លាត់ជួរដេក រវាងមនុស្ស និងមនុស្ស (Horizontal Gap) */
+  position: relative;
+  margin-top: 2.5rem; /* គម្លាត់ចុះក្រោមពី Level លើ */
+  width: 100%;
+  animation: fadeInLevel 0.6s ease-out backwards;
+}
+
+/* កូដបង្កើតខ្សែតភ្ជាប់ (Connector Line Fix) */
+.tree-level::before {
+  content: '';
+  position: absolute;
+  top: -1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%; /* បន្ថយ ឬបង្កើនប្រវែងខ្សែផ្កកាយដេក */
+  height: 2px;
+  background-color: #d97706; /* ពណ៌ខ្សែ (Amber/Gold) */
+}
+
+.level-root {
+  animation-delay: 0.2s;
+}
+
+.level-deputies {
+  gap: 120px;
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInLevel {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================
+   DEPUTY BRANCHES
+   ============================================ */
+
+.deputy-branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+
+.officers-group {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+/* ============================================
+   NODE CARD STYLING
+   ============================================ */
+
+.org-tree-node {
+  position: relative;
+  z-index: 3;
+  animation: fadeInNode 0.5s ease-out backwards;
+}
+
+@keyframes fadeInNode {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* កាតមនុស្ស (Node Card) */
+.node-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px 20px 20px;
+  width: 180px; /* កំណត់ទំហំថេរដើម្បីឱ្យស្មើគ្នា */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(212, 168, 67, 0.1);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.node-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 
+    0 12px 28px rgba(26, 58, 92, 0.15),
+    0 6px 16px rgba(212, 168, 67, 0.2),
+    0 0 0 2px rgba(212, 168, 67, 0.3);
+}
+
+/* ============================================
+   AVATAR / IMAGE
+   ============================================ */
+
+.node-avatar-wrapper {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.node-avatar-frame {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #d4a843;
+  box-shadow: 
+    0 4px 12px rgba(212, 168, 67, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.node-card:hover .node-avatar-frame {
+  border-color: #c49530;
+  box-shadow: 
+    0 6px 16px rgba(212, 168, 67, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.6);
+  transform: scale(1.05);
+}
+
+.node-avatar-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.node-verified-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #d4a843 0%, #c49530 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(212, 168, 67, 0.4);
+  animation: verifiedPulse 2s ease-in-out infinite;
+}
+
+@keyframes verifiedPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* ============================================
+   NAME / TITLE
+   ============================================ */
+
+.node-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a3a5c;
+  text-align: center;
+  margin: 0;
+  line-height: 1.3;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* ============================================
+   ROLE BADGE
+   ============================================ */
+
+.node-role-badge {
+  background: linear-gradient(135deg, #1a3a5c 0%, #2c5282 100%);
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(26, 58, 92, 0.3);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   CONTACT INFO
+   ============================================ */
+
+.node-contact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.85rem;
+  color: #475569;
+  width: 100%;
+  max-width: 160px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.contact-icon {
+  font-size: 0.9rem;
+}
+
+.contact-number {
+  font-weight: 600;
+  color: #1a3a5c;
+}
+
+.carrier-badge {
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.carrier-cellcard {
+  background: #fff0e6;
+  color: #ff6600;
+  border: 1px solid #ffb380;
+}
+
+.carrier-smart {
+  background: #e6f7ef;
+  color: #00a859;
+  border: 1px solid #80e0b0;
+}
+
+.carrier-metfone {
+  background: #ffe6e6;
+  color: #e60000;
+  border: 1px solid #ff9999;
+}
+
+/* ============================================
+   SOCIAL LINKS
+   ============================================ */
+
+.node-socials {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.social-link {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: all 0.25s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.social-link:hover {
+  background: #1a3a5c;
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(26, 58, 92, 0.3);
+}
+
+/* ============================================
+   DELETE BUTTON (ADMIN)
+   ============================================ */
+
+.node-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.9);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: bold;
+  opacity: 0;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+}
+
+.node-card:hover .node-delete-btn {
+  opacity: 1;
+}
+
+.node-delete-btn:hover {
+  background: rgba(220, 38, 38, 1);
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1400px) {
+  .dynamic-org-tree-container {
+    min-width: 1000px;
+  }
+  
+  .level-deputies {
+    gap: 80px;
+  }
+  
+  .officers-group {
+    gap: 30px;
+  }
+  
+  .node-card {
+    width: 160px;
+    padding: 20px 16px 16px;
+  }
+  
+  .node-avatar-frame {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dynamic-org-tree-container {
+    min-width: 900px;
+  }
+  
+  .tree-structure {
+    gap: 60px;
+  }
+  
+  .level-deputies {
+    gap: 60px;
+  }
+  
+  .deputy-branch {
+    gap: 60px;
+  }
+  
+  .officers-group {
+    gap: 24px;
+  }
+  
+  .node-card {
+    width: 150px;
+  }
+  
+  .node-avatar-frame {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .node-name {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dynamic-org-tree-wrapper {
+    padding: 40px 15px;
+  }
+  
+  .dynamic-org-tree-container {
+    min-width: 800px;
+  }
+  
+  .tree-structure {
+    gap: 50px;
+  }
+  
+  .level-deputies {
+    gap: 50px;
+  }
+  
+  .officers-group {
+    gap: 20px;
+  }
+  
+  .node-card {
+    width: 140px;
+    padding: 18px 14px 14px;
+  }
+  
+  .node-avatar-frame {
+    width: 75px;
+    height: 75px;
+  }
+  
+  /* Disable animations on mobile for performance */
+  .connector-horizontal {
+    animation: none;
+  }
+  
+  .connector-node {
+    animation: none;
+  }
+  
+  .node-verified-badge {
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .dynamic-org-tree-container {
+    min-width: 700px;
+  }
+  
+  .node-card {
+    width: 130px;
+  }
+  
+  .node-avatar-frame {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .node-name {
+    font-size: 0.9rem;
+  }
+  
+  .node-role-badge {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .dynamic-org-tree-wrapper {
+    background: white;
+    padding: 20px;
+  }
+  
+  .node-delete-btn {
+    display: none !important;
+  }
+  
+  .connector-horizontal,
+  .connector-node,
+  .node-verified-badge {
+    animation: none !important;
+  }
+  
+  .node-card {
+    break-inside: avoid;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.node-card:focus-within {
+  outline: 3px solid #d4a843;
+  outline-offset: 4px;
+}
+
+.social-link:focus {
+  outline: 2px solid #1a3a5c;
+  outline-offset: 2px;
+}

@@ -543,26 +543,61 @@ body {
   margin-top: 20px;
 }
 
+/* Invalid Field Error Indicator (Highlights wrong place for editor) */
+.is-invalid {
+  border-color: var(--danger, #ef4444) !important;
+  background-color: #fff5f5 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+  animation: shakeField 0.35s ease-in-out;
+}
+
+.field-error-msg {
+  color: var(--danger, #ef4444);
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  animation: fadeInMsg 0.25s ease;
+}
+
+@keyframes shakeField {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+@keyframes fadeInMsg {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Toast */
 .toast {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  padding: 14px 24px;
-  border-radius: 10px;
+  padding: 14px 22px;
+  border-radius: 12px;
   color: white;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 500;
-  box-shadow: var(--shadow-lg);
-  z-index: 200;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  z-index: 9999;
   transform: translateY(100px);
   opacity: 0;
-  transition: var(--transition);
+  transition: all 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 450px;
 }
 
 .toast.show { transform: translateY(0); opacity: 1; }
-.toast.success { background: var(--success); }
-.toast.error { background: var(--danger); }
+.toast.success { background: #059669; border-left: 5px solid #34d399; }
+.toast.error { background: #dc2626; border-left: 5px solid #fca5a5; }
+.toast.warning { background: #d97706; border-left: 5px solid #fcd34d; }
 
 /* Progress */
 .upload-progress {
@@ -614,3 +649,133 @@ body {
 }
 
 .mobile-toggle { display: none; }
+
+/* ===== ADMIN TREE — ANIMATION & NODE ACTIONS ===== */
+
+/* Fade-in when tree re-renders after add/delete */
+@keyframes treeNodeIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+.admin-tree-animated .temple-node-card {
+  animation: treeNodeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Stagger children so they cascade in nicely */
+.admin-tree-animated .level-root-center .temple-node-card { animation-delay: 0ms; }
+.admin-tree-animated .deputy-card-wrap  .temple-node-card { animation-delay: 80ms; }
+.admin-tree-animated .officers-row      .temple-node-card:nth-child(1) { animation-delay: 140ms; }
+.admin-tree-animated .officers-row      .temple-node-card:nth-child(2) { animation-delay: 180ms; }
+.admin-tree-animated .officers-row      .temple-node-card:nth-child(3) { animation-delay: 220ms; }
+
+/* Admin action buttons on tree cards */
+.admin-node-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Empty-node "Add" button — prominent call-to-action */
+.temple-node-card.empty-node .admin-node-actions .btn-outline {
+  background: linear-gradient(135deg, #fffdf5, #fff8e7);
+  border: 1.5px dashed var(--gold, #d4a843);
+  color: var(--primary, #1a3a5c);
+  font-weight: 700;
+  font-size: 0.78rem;
+  border-radius: 20px;
+  padding: 5px 14px;
+  transition: all 0.25s ease;
+  box-shadow: none;
+}
+
+.temple-node-card.empty-node .admin-node-actions .btn-outline:hover {
+  background: var(--gold, #d4a843);
+  border-style: solid;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(212, 168, 67, 0.4);
+  transform: scale(1.04);
+}
+
+/* Edit button (gold) */
+.admin-node-actions .btn-gold {
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-node-actions .btn-gold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(212,168,67,0.35);
+}
+
+/* Delete button — subtle warning pulse on hover */
+.admin-node-actions .btn-danger {
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-node-actions .btn-danger:hover {
+  transform: translateY(-1px) scale(1.06);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+
+/* Dimmed branches (empty deputy + no officers) */
+.deputy-branch-block[style*="opacity:0.55"] {
+  transition: opacity 0.3s ease;
+}
+
+.deputy-branch-block[style*="opacity:0.55"]:hover {
+  opacity: 0.8 !important;
+}
+
+/* ============================================
+   TREE STRUCTURE CUSTOM CONNECTOR & GAP FIXES
+   ============================================ */
+
+/* Container ធំ */
+.tree-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* គម្លាត់ចន្លោះជួរឈរ (Vertical Gap រវាង Level នីមួយៗ) */
+.tree-level {
+  display: flex;
+  justify-content: center;
+  gap: 3.5rem; /* បង្កើនគម្លាត់ជួរដេក រវាងមនុស្ស និងមនុស្ស (Horizontal Gap) */
+  position: relative;
+  margin-top: 2.5rem; /* គម្លាត់ចុះក្រោមពី Level លើ */
+}
+
+/* កាតមនុស្ស (Node Card) */
+.node-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px; /* កំណត់ទំហំថេរដើម្បីឱ្យស្មើគ្នា */
+  position: relative;
+}
+
+/* កូដបង្កើតខ្សែតភ្ជាប់ (Connector Line Fix) */
+.tree-level::before {
+  content: '';
+  position: absolute;
+  top: -1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%; /* បន្ថយ ឬបង្កើនប្រវែងខ្សែផ្កកាយដេក */
+  height: 2px;
+  background-color: #d97706; /* ពណ៌ខ្សែ (Amber/Gold) */
+}
+
+

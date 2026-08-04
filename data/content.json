@@ -2,7 +2,8 @@
   "history": {
     "title": "Sokha Admin Updated Title",
     "content": "Wat Khemvoen is a historical pagoda located in Kampong Cham Province, Cambodia. It has a long history and plays an important role in the local community.",
-    "updatedAt": "2026-07-31T11:41:28.573Z"
+    "updatedAt": "2026-08-02T11:22:56.234Z",
+    "imageUrl": "/uploads/images/img-1785669776204-9fae8f0d.jpg"
   },
   "heroSlides": [
     {
@@ -33,7 +34,16 @@
       "buttonLink": "#contact"
     }
   ],
-  "gallery": [],
+  "gallery": [
+    {
+      "id": "3dab395b-75fe-45a3-90de-cd13dc5b699a",
+      "filename": "img-1785669776204-9fae8f0d.jpg",
+      "url": "/uploads/images/img-1785669776204-9fae8f0d.jpg",
+      "caption": "Uploaded Image",
+      "uploadedBy": "owner",
+      "uploadedAt": "2026-08-02T11:22:56.208Z"
+    }
+  ],
   "videos": [],
   "events": [
     {
@@ -85,9 +95,243 @@
     "location": "សង្កាត់បូរមាស ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម",
     "facebook": "https://facebook.com",
     "telegram": "https://t.me",
-    "bankName": "",
-    "bankAccountName": "",
-    "bankAccountNumber": "",
+    "bankName": "ABA Bank",
+    "bankAccountName": "WAT KHEMVOEN",
+    "bankAccountNumber": "123 456 789",
     "bankQrUrl": ""
-  }
+  },
+  "playlists": [
+    {
+      "id": "3c988360-83a7-426c-88ca-cc550e0fd49a",
+      "category": "religious-festivals",
+      "title": "កម្មវិធីបុណ្យសាលាធម្មសាភា",
+      "description": "",
+      "coverImage": "/uploads/images/img-1785671944203-442258ac.jpg",
+      "items": [],
+      "createdAt": "2026-08-02T11:59:04.208Z"
+    },
+    {
+      "id": "b2c77883-51e2-4705-aacf-d1baf9ec80c7",
+      "category": "dhamma-teachings",
+      "title": "",
+      "description": "",
+      "coverImage": "",
+      "items": [],
+      "createdAt": "2026-08-02T12:29:51.544Z"
+    }
+  ],
+  "counselors": [
+    {
+      "id": "counselor-1",
+      "name": "ព្រះមហាវីរៈ សុខា",
+      "title": "ព្រះគ្រូចៅអធិការវត្ត - ប្រឹក្សាយោបល់ផ្នែកធម៌អាថ៌ និងជីវិត",
+      "image": "logo.png",
+      "phone": "012 345 678",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me",
+      "createdAt": "2026-08-03T00:00:00.000Z"
+    },
+    {
+      "id": "counselor-2",
+      "name": "ព្រះគ្រូ សុវណ្ណជោតិ",
+      "title": "ព្រះគ្រូសូត្រស្តាំ - ប្រឹក្សាយោបល់ការសមាធិ និងអប់រំចិត្ត",
+      "image": "images/buddha.png",
+      "phone": "012 888 999",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me",
+      "createdAt": "2026-08-03T00:00:00.000Z"
+    },
+    {
+      "id": "counselor-3",
+      "name": "ព្រះគ្រូ ធម្មធរ",
+      "title": "ព្រះគ្រូសូត្រឆ្វេង - ប្រឹក្សាយោបល់ធម៌វិន័យ និងការសិក្សា",
+      "image": "images/ceremony.png",
+      "phone": "015 777 888",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me",
+      "createdAt": "2026-08-03T00:00:00.000Z"
+    }
+  ],
+  "committee": [
+    {
+      "id": "cm-monk-1",
+      "category": "monk",
+      "roleRank": "root",
+      "name": "ព្រះគ្រូចៅអធិការវត្ត",
+      "title": "ព្រះគ្រូចៅអធិការវត្ត",
+      "subTitle": "Venerable Chief Abbot / Abbot",
+      "image": "images/hero.png",
+      "phone": "011 880 999",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-monk-2",
+      "category": "monk",
+      "roleRank": "deputy_1",
+      "name": "ព្រះគ្រូសូត្រស្ដាំ",
+      "title": "ព្រះគ្រូសូត្រស្ដាំ",
+      "subTitle": "Right-Side Recitation Master",
+      "image": "images/buddha.png",
+      "phone": "097 111 222",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-monk-3",
+      "category": "monk",
+      "roleRank": "deputy_2",
+      "name": "ព្រះគ្រូសូត្រឆ្វេង",
+      "title": "ព្រះគ្រូសូត្រឆ្វេង",
+      "subTitle": "Left-Side Recitation Master",
+      "image": "images/ceremony.png",
+      "phone": "915 777 888",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-monk-d1-off1",
+      "category": "monk",
+      "roleRank": "officer_d1_discipline",
+      "name": "ព្រះវិន័យធរ",
+      "title": "ព្រះវិន័យធរ",
+      "subTitle": "Venerable Discipline Master",
+      "image": "images/garden.png",
+      "phone": "097 111 366",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-monk-d1-off2",
+      "category": "monk",
+      "roleRank": "officer_d1_secretary",
+      "name": "ព្រះលេខា",
+      "title": "ព្រះលេខា",
+      "subTitle": "Venerable Secretary",
+      "image": "images/meditation.png",
+      "phone": "099 111 234",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-monk-d1-off3",
+      "category": "monk",
+      "roleRank": "officer_d1_catering",
+      "name": "ភត្តទ្ទេសក៍",
+      "title": "ភត្តទ្ទេសក៍",
+      "subTitle": "Venerable Meal Master / Bhaktaddeshaka",
+      "image": "images/community.png",
+      "phone": "013 777 444",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-lay-1",
+      "category": "layperson",
+      "roleRank": "root",
+      "name": "លោក ជុំ សារិន",
+      "title": "ប្រធានគណៈកម្មការវត្ត",
+      "subTitle": "(OWNER / ROOT NODE)",
+      "image": "logo.png",
+      "phone": "011 222 333",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-lay-2",
+      "category": "layperson",
+      "roleRank": "deputy_1",
+      "name": "លោកស្រី ម៉ៅ សុខា",
+      "title": "អនុប្រធានទី១",
+      "subTitle": "First Deputy",
+      "image": "logo.png",
+      "phone": "012 444 555",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-lay-3",
+      "category": "layperson",
+      "roleRank": "deputy_2",
+      "name": "លោក ហេង សំអុល",
+      "title": "អនុប្រធានទី២",
+      "subTitle": "Second Deputy",
+      "image": "logo.png",
+      "phone": "017 666 777",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-lay-d1-off1",
+      "category": "layperson",
+      "roleRank": "officer_d1_finance",
+      "name": "លោក សុខ ចាន់ថា",
+      "title": "ហិរញ្ញវត្ថុ / បេឡា",
+      "subTitle": "Finance / Treasurer",
+      "image": "logo.png",
+      "phone": "092 888 111",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-lay-d1-off2",
+      "category": "layperson",
+      "roleRank": "officer_d1_secretary",
+      "name": "លោកស្រី ចាន់ ធារី",
+      "title": "លេខាធិការ",
+      "subTitle": "Secretary",
+      "image": "logo.png",
+      "phone": "078 999 222",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-lay-d1-off3",
+      "category": "layperson",
+      "roleRank": "officer_d1_events",
+      "name": "លោក គឹម ស៊ុន",
+      "title": "គណៈកម្មការពិធី",
+      "subTitle": "Event Coordinator",
+      "image": "logo.png",
+      "phone": "085 444 333",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-lay-d2-off1",
+      "category": "layperson",
+      "roleRank": "officer_d2_finance",
+      "name": "លោក អ៊ុក សារ៉េត",
+      "title": "ហិរញ្ញវត្ថុ / បេឡា",
+      "subTitle": "Finance / Treasurer",
+      "image": "logo.png",
+      "phone": "092 555 777",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-lay-d2-off2",
+      "category": "layperson",
+      "roleRank": "officer_d2_secretary",
+      "name": "លោកស្រី លី ណា",
+      "title": "លេខាធិការ",
+      "subTitle": "Secretary",
+      "image": "logo.png",
+      "phone": "078 111 444",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    },
+    {
+      "id": "cm-lay-d2-off3",
+      "category": "layperson",
+      "roleRank": "officer_d2_events",
+      "name": "លោក មាស វ៉ាន់នី",
+      "title": "គណៈកម្មការពិធី",
+      "subTitle": "Event Coordinator",
+      "image": "logo.png",
+      "phone": "085 999 000",
+      "facebook": "https://facebook.com",
+      "telegram": "https://t.me"
+    }
+  ]
 }

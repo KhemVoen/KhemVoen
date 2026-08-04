@@ -7,6 +7,7 @@
   <meta property="og:url" content="https://khemvoen.org/admin.html">
   <meta property="og:title" content="គ្រប់គ្រង - វត្តខេមវ័ន(បឹងស្នាយ)">
   <title>គ្រប់គ្រង - វត្តខេមវ័ន(បឹងស្នាយ)</title>
+  <link rel="stylesheet" href="style.css?v=4">
   <link rel="stylesheet" href="admin.css">
   <link rel="icon" href="logo.png" type="image/png">
 </head>
@@ -74,6 +75,18 @@
           <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h18v14zM5 15h14l-4.5-6-3.5 4.5-2.5-3z"/></svg>
           រូបភាពស្លាយ (Hero)
         </a></li>
+        <li><a href="#" data-tab="playlists">
+          <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg>
+          កម្មវិធីធម៌ (Playlists)
+        </a></li>
+        <li><a href="#" data-tab="counselors">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+          អ្នកប្រឹក្សាយោបល់ (Counselors)
+        </a></li>
+        <li><a href="#" data-tab="committee">
+          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          គណៈគ្រប់គ្រង (Monks & Laypeople)
+        </a></li>
         <li><a href="#" data-tab="contact">
           <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
           ទំនាក់ទំនង និង គណនីធនាគារ
@@ -139,6 +152,16 @@
           <div class="form-group">
             <label>ចំណងជើង</label>
             <input type="text" id="historyTitle" placeholder="ចំណងជើង">
+          </div>
+          <div class="form-group">
+            <label>រូបភាពប្រវត្តិវត្ត (About Section Image)</label>
+            <div style="display:flex;gap:15px;align-items:center;margin-top:5px;margin-bottom:10px;">
+              <img id="historyImagePreview" src="images/buddha.png" style="width:120px;height:90px;object-fit:cover;border-radius:6px;border:1px solid #ccc;">
+              <div style="flex:1;">
+                <input type="file" id="historyFileInput" accept="image/*" style="margin-bottom:8px;" onchange="previewHistoryImage(this)">
+                <input type="text" id="historyImageUrl" placeholder="images/buddha.png ឬ URL រូបភាព">
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label>ខ្លឹមសារ</label>
@@ -319,11 +342,76 @@
             <input type="text" id="bankAccountNumber" placeholder="000 123 456">
           </div>
           <div class="form-group">
-            <label>រូបភាព QR Code / រូបភាពធនាគារ (QR Image URL)</label>
-            <input type="text" id="bankQrUrl" placeholder="images/aba_qr.png">
+            <label>រូបភាព QR Code / រូបភាពធនាគារ (Bank / QR Code Image)</label>
+            <div style="display:flex;gap:15px;align-items:center;margin-top:5px;margin-bottom:10px;">
+              <img id="bankQrPreview" src="images/aba_qr.png" style="width:100px;height:100px;object-fit:contain;border-radius:6px;border:1px solid #ccc;background:#f8f9fa;">
+              <div style="flex:1;">
+                <input type="file" id="bankQrFileInput" accept="image/*" style="margin-bottom:8px;" onchange="previewBankQrImage(this)">
+                <input type="text" id="bankQrUrl" placeholder="images/aba_qr.png">
+              </div>
+            </div>
           </div>
           <button class="btn btn-gold" id="saveBankBtn">💾 រក្សាទុកព័ត៌មានធនាគារ</button>
         </div>
+      </div>
+
+      <!-- PLAYLISTS TAB -->
+      <div class="tab-panel" id="tab-playlists">
+        <div class="page-header">
+          <div><h2>គ្រប់គ្រងកម្មវិធីធម៌ (Playlists)</h2><p class="breadcrumb">ផ្ទាំងគ្រប់គ្រង / កម្មវិធីធម៌</p></div>
+          <button class="btn btn-gold btn-sm" id="addPlaylistBtn">+ បន្ថែម Playlist ថ្មី</button>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header" style="display:flex;align-items:center;gap:15px;flex-wrap:wrap;">
+            <h3>តម្រងប្រភេទ (Category Filter)</h3>
+            <select id="playlistCategoryFilter" style="padding:8px 12px;border:1px solid var(--border-color);border-radius:6px;font-family:inherit;">
+              <option value="">ទាំងអស់ (All)</option>
+              <option value="dhamma-teachings">សម្តែងធម៌ទេសនា</option>
+              <option value="religious-festivals">បុណ្យសាសនា</option>
+              <option value="dhamma-school">សាលាធម៌</option>
+              <option value="community">សកម្មភាពសង្គម</option>
+              <option value="meditation">ធ្វើសមាធិ</option>
+              <option value="counseling">ប្រឹក្សាយោបល់</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="playlistsList"></div>
+        <p id="noPlaylists" style="color:var(--text-light);text-align:center;padding:30px;">មិនទាន់មាន Playlist ទេ។ ចុចប៊ូតុង "+" ខាងលើដើម្បីបន្ថែម។</p>
+      </div>
+
+      <!-- COUNSELORS TAB -->
+      <div class="tab-panel" id="tab-counselors">
+        <div class="page-header">
+          <div><h2>គ្រប់គ្រងអ្នកប្រឹក្សាយោបល់ (Consultation Panel)</h2><p class="breadcrumb">ផ្ទាំងគ្រប់គ្រង / អ្នកប្រឹក្សាយោបល់</p></div>
+          <button class="btn btn-gold btn-sm" id="addCounselorBtn">+ បន្ថែមអ្នកប្រឹក្សាថ្មី</button>
+        </div>
+
+        <div id="counselorsList" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:20px;"></div>
+        <p id="noCounselors" style="color:var(--text-light);text-align:center;padding:30px;">មិនទាន់មានអ្នកប្រឹក្សាយោបល់ទេ។ ចុចប៊ូតុង "+" ខាងលើដើម្បីបន្ថែម។</p>
+      </div>
+
+      <!-- COMMITTEE TAB (Monks & Laypeople) -->
+      <div class="tab-panel" id="tab-committee">
+        <div class="page-header">
+          <div><h2>គ្រប់គ្រងគណៈគ្រប់គ្រងវត្ត (Monks & Laypeople)</h2><p class="breadcrumb">ផ្ទាំងគ្រប់គ្រង / គណៈគ្រប់គ្រង</p></div>
+          <button class="btn btn-gold btn-sm" id="addCommitteeBtn">+ បន្ថែមសមាជិកថ្មី</button>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header" style="display:flex;align-items:center;gap:15px;flex-wrap:wrap;">
+            <h3>តម្រងប្រភេទ (Category Filter)</h3>
+            <select id="committeeCategoryFilter" style="padding:8px 12px;border:1px solid var(--border-color);border-radius:6px;font-family:inherit;">
+              <option value="">ទាំងអស់ (All)</option>
+              <option value="monk">☸️ ព្រះសង្ឃ (Monks)</option>
+              <option value="layperson">👥 ពុទ្ធបរិស័ទ / គណៈកម្មការ (Laypeople)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="committeeList"></div>
+        <p id="noCommittee" style="color:var(--text-light);text-align:center;padding:30px;">មិនទាន់មានសមាជិកគណៈគ្រប់គ្រងទេ។ ចុចប៊ូតុង "+" ខាងលើដើម្បីបន្ថែម។</p>
       </div>
 
       <!-- USERS TAB (Owner Only) -->
@@ -401,6 +489,185 @@
       <div class="modal-actions">
         <button class="btn btn-outline btn-sm" onclick="closeModal('eventModal')">បោះបង់</button>
         <button class="btn btn-gold btn-sm" id="saveEventBtn">រក្សាទុក</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYLIST MODAL -->
+  <div class="modal-overlay" id="playlistModal">
+    <div class="modal" style="max-width:550px;">
+      <h3 id="playlistModalTitle">បន្ថែម Playlist ថ្មី</h3>
+      <input type="hidden" id="editPlaylistId" value="">
+      <div class="form-group">
+        <label>ប្រភេទ (Category)</label>
+        <select id="plCategory" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:6px;font-family:inherit;">
+          <option value="dhamma-teachings">សម្តែងធម៌ទេសនា</option>
+          <option value="religious-festivals">បុណ្យសាសនា</option>
+          <option value="dhamma-school">សាលាធម៌</option>
+          <option value="community">សកម្មភាពសង្គម</option>
+          <option value="meditation">ធ្វើសមាធិ</option>
+          <option value="counseling">ប្រឹក្សាយោបល់</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ចំណងជើង (Title)</label>
+        <input type="text" id="plTitle" placeholder="ឧ. ពិធីបុណ្យភ្ជុំបិណ្ឌ ២០២៦">
+      </div>
+      <div class="form-group">
+        <label>ការពិពណ៌នា (Description)</label>
+        <textarea id="plDescription" rows="3" placeholder="ការពិពណ៌នា Playlist..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>រូបភាពគម្រប (Cover Image)</label>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:5px;">
+          <img id="plCoverPreview" src="logo.png" style="width:80px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #ccc;">
+          <input type="file" id="plCoverFile" accept="image/*" style="flex:1;">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline btn-sm" onclick="closeModal('playlistModal')">បោះបង់</button>
+        <button class="btn btn-gold btn-sm" id="savePlaylistBtn">រក្សាទុក</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYLIST ITEM MODAL -->
+  <div class="modal-overlay" id="playlistItemModal">
+    <div class="modal" style="max-width:550px;">
+      <h3>បន្ថែមធាតុ (Add Content Item)</h3>
+      <input type="hidden" id="itemPlaylistId" value="">
+      <div class="form-group">
+        <label>ប្រភេទ (Type)</label>
+        <select id="itemType" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:6px;font-family:inherit;" onchange="toggleItemFields()">
+          <option value="video">🎬 វីដេអូ (Video URL)</option>
+          <option value="audio">🎵 សំឡេង (Audio Upload)</option>
+          <option value="article">📖 អត្ថបទ (Article)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ចំណងជើង (Title)</label>
+        <input type="text" id="itemTitle" placeholder="ចំណងជើងមាតិកា">
+      </div>
+      <div class="form-group">
+        <label>ការពិពណ៌នា (Description)</label>
+        <input type="text" id="itemDescription" placeholder="ការពិពណ៌នាខ្លី...">
+      </div>
+      <div class="form-group" id="itemUrlGroup">
+        <label>តំណវីដេអូ (YouTube / Facebook URL)</label>
+        <input type="text" id="itemUrl" placeholder="https://youtube.com/watch?v=...">
+      </div>
+      <div class="form-group" id="itemAudioGroup" style="display:none;">
+        <label>ឯកសារសំឡេង (Audio File - MP3, WAV, OGG)</label>
+        <input type="file" id="itemAudioFile" accept=".mp3,.wav,.ogg,.m4a,.aac">
+      </div>
+      <div class="form-group" id="itemArticleGroup" style="display:none;">
+        <label>ខ្លឹមសារអត្ថបទ (Article Content)</label>
+        <textarea id="itemContent" rows="6" placeholder="សរសេរអត្ថបទនៅទីនេះ..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline btn-sm" onclick="closeModal('playlistItemModal')">បោះបង់</button>
+        <button class="btn btn-gold btn-sm" id="savePlaylistItemBtn">បន្ថែមធាតុ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COUNSELOR MODAL -->
+  <div class="modal-overlay" id="counselorModal">
+    <div class="modal" style="max-width:550px;">
+      <h3 id="counselorModalTitle">បន្ថែមអ្នកប្រឹក្សាយោបល់</h3>
+      <input type="hidden" id="editCounselorId" value="">
+      <div class="form-group">
+        <label>រូបថតប្រវត្តិរូប (Profile Image)</label>
+        <div style="display:flex;gap:15px;align-items:center;margin-top:5px;">
+          <img id="counselorImagePreview" src="logo.png" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid var(--gold,#d4a843);">
+          <input type="file" id="counselorImageFile" accept="image/*" style="flex:1;">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>ឈ្មោះ (Name)</label>
+        <input type="text" id="counselorName" placeholder="ឧ. ព្រះមហាវីរៈ សុខា">
+      </div>
+      <div class="form-group">
+        <label>តួនាទី / ងារ (Title)</label>
+        <input type="text" id="counselorTitle" placeholder="ឧ. ព្រះចៅអធិការ / អ្នកប្រឹក្សាយោបល់">
+      </div>
+      <div class="form-group">
+        <label>លេខទូរស័ព្ទ (Phone Number - support carrier auto-detect Smart/Cellcard/Metfone)</label>
+        <input type="text" id="counselorPhone" placeholder="ឧ. 012 345 678">
+      </div>
+      <div class="form-group">
+        <label>តំណ Facebook (Facebook URL)</label>
+        <input type="text" id="counselorFacebook" placeholder="https://facebook.com/username">
+      </div>
+      <div class="form-group">
+        <label>តំណ Telegram (Telegram Link / Username / Phone)</label>
+        <input type="text" id="counselorTelegram" placeholder="https://t.me/username ឬ t.me/012345678">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline btn-sm" onclick="closeModal('counselorModal')">បោះបង់</button>
+        <button class="btn btn-gold btn-sm" id="saveCounselorBtn">រក្សាទុក</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMITTEE MODAL -->
+  <div class="modal-overlay" id="committeeModal">
+    <div class="modal" style="max-width:550px;">
+      <h3 id="committeeModalTitle">បន្ថែមសមាជិកគណៈគ្រប់គ្រង</h3>
+      <input type="hidden" id="editCommitteeId" value="">
+      
+      <div class="form-group">
+        <label>ប្រភេទសមាជិក (Category)</label>
+        <select id="committeeCategory" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:6px;font-family:inherit;">
+          <option value="monk">☸️ ព្រះសង្ឃ (Monk)</option>
+          <option value="layperson">👥 ពុទ្ធបរិស័ទ / គណៈកម្មការ (Layperson)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>តួនាទីក្នុងឋានានុក្រម (Hierarchy Role Rank)</label>
+        <select id="committeeRoleRank" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:6px;font-family:inherit;">
+          <option value="root">👑 ថ្នាក់ដឹកនាំកំពូល (Owner / Root Node - ព្រះគ្រូចៅអធិការវត្ត / ប្រធាន)</option>
+          <option value="deputy_1">🥈 ព្រះគ្រូសូត្រស្តាំ / អនុប្រធានទី១ (First Deputy)</option>
+          <option value="deputy_2">🥈 ព្រះគ្រូសូត្រឆ្វេង / អនុប្រធានទី២ (Second Deputy)</option>
+          <option value="officer_d1_discipline">🥉 ព្រះវិន័យធម៌ / ហិរញ្ញវត្ថុ - ក្រុមទី១ (Discipline / Finance - Branch 1)</option>
+          <option value="officer_d1_secretary">🥉 ព្រះលេខា / លេខាធិការ - ក្រុមទី១ (Secretary - Branch 1)</option>
+          <option value="officer_d1_catering">🥉 ព្រះភត្តទេសក៍ / គណៈកម្មការពិធី - ក្រុមទី១ (Catering / Events - Branch 1)</option>
+          <option value="officer_d2_discipline">🥉 ព្រះវិន័យធម៌ / ហិរញ្ញវត្ថុ - ក្រុមទី២ (Discipline / Finance - Branch 2)</option>
+          <option value="officer_d2_secretary">🥉 ព្រះលេខា / លេខាធិការ - ក្រុមទី២ (Secretary - Branch 2)</option>
+          <option value="officer_d2_catering">🥉 ព្រះភត្តទេសក៍ / គណៈកម្មការពិធី - ក្រុមទី២ (Catering / Events - Branch 2)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ឈ្មោះសមាជិក (Name)</label>
+        <input type="text" id="committeeName" placeholder="ឧ. ព្រះមហាវីរៈ សុខា ឬ លោក ជុំ សារិន">
+      </div>
+      <div class="form-group">
+        <label>តួនាទី / ងារ (Title / Position)</label>
+        <input type="text" id="committeeTitle" placeholder="ឧ. ព្រះចៅអធិការវត្ត ឬ ប្រធានគណៈកម្មការវត្ត">
+      </div>
+      <div class="form-group">
+        <label>លេខទូរស័ព្ទ (Phone Number)</label>
+        <input type="text" id="committeePhone" placeholder="012 345 678">
+      </div>
+      <div class="form-group">
+        <label>Facebook Link</label>
+        <input type="text" id="committeeFacebook" placeholder="https://facebook.com/username">
+      </div>
+      <div class="form-group">
+        <label>Telegram Link</label>
+        <input type="text" id="committeeTelegram" placeholder="https://t.me/username">
+      </div>
+      <div class="form-group">
+        <label>រូបថតសមាជិក (Profile Image)</label>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:5px;">
+          <img id="committeeImgPreview" src="logo.png" style="width:70px;height:70px;object-fit:cover;border-radius:50%;border:2px solid #ccc;">
+          <input type="file" id="committeeImgFile" accept="image/*" style="flex:1;">
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-outline btn-sm" onclick="closeModal('committeeModal')">បោះបង់</button>
+        <button class="btn btn-gold btn-sm" id="saveCommitteeBtn">រក្សាទុក</button>
       </div>
     </div>
   </div>
