@@ -272,7 +272,7 @@
       // Card sizing per tier
       const sizing = {
         1: { cardW: 240, avatarSz: 100, nameSz: '1.1rem', roleSz: '0.74rem' },
-        2: { cardW: 200, avatarSz: 80,  nameSz: '0.95rem', roleSz: '0.7rem' },
+        2: { cardW: 210, avatarSz: 85,  nameSz: '0.95rem', roleSz: '0.7rem' },
         3: { cardW: 210, avatarSz: 85,  nameSz: '0.95rem', roleSz: '0.7rem' },
         4: { cardW: 170, avatarSz: 52,  nameSz: '0.82rem', roleSz: '0.65rem' },
       };
@@ -592,21 +592,15 @@
 
           // --- 2. Left Reciting Monk (ព្រះគ្រូសូត្រឆ្វេង) → Secretary Monk (គ្រូលេខាធិការ) ---
           if (t2Left && t3Left) {
+            newLines.push({ x1: t3Left.cx, y1: t2Left.by, x2: t3Left.cx, y2: t3Left.ty });
             const midY = t2Left.by + (t3Left.ty - t2Left.by) / 2;
-            newLines.push({ x1: t2Left.cx, y1: t2Left.by, x2: t2Left.cx, y2: midY });
-            newLines.push({ x1: t2Left.cx, y1: midY, x2: t3Left.cx, y2: midY });
-            newLines.push({ x1: t3Left.cx, y1: midY, x2: t3Left.cx, y2: t3Left.ty });
-            newJoints.push({ cx: t2Left.cx, cy: midY });
             newJoints.push({ cx: t3Left.cx, cy: midY });
           }
 
           // --- 3. Right Reciting Monk (ព្រះគ្រូសូត្រស្ដាំ) → Management Monk (គ្រូគ្រប់គ្រង) ---
           if (t2Right && t3Right) {
+            newLines.push({ x1: t3Right.cx, y1: t2Right.by, x2: t3Right.cx, y2: t3Right.ty });
             const midY = t2Right.by + (t3Right.ty - t2Right.by) / 2;
-            newLines.push({ x1: t2Right.cx, y1: t2Right.by, x2: t2Right.cx, y2: midY });
-            newLines.push({ x1: t2Right.cx, y1: midY, x2: t3Right.cx, y2: midY });
-            newLines.push({ x1: t3Right.cx, y1: midY, x2: t3Right.cx, y2: t3Right.ty });
-            newJoints.push({ cx: t2Right.cx, cy: midY });
             newJoints.push({ cx: t3Right.cx, cy: midY });
           }
 
