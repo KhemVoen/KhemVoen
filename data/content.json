@@ -333,5 +333,118 @@
       "facebook": "https://facebook.com",
       "telegram": "https://t.me"
     }
-  ]
+  ],
+  "orgTree": {
+    "tier1": {
+      "id": "t1-head",
+      "name": "ព្រះគ្រូចៅអធិការ",
+      "role": "ព្រះគ្រូចៅអធិការ",
+      "roleEn": "Owner / Head",
+      "avatar": "",
+      "phone": "097 111 222",
+      "carrier": "CELLCARD",
+      "fb": "#",
+      "ig": "#"
+    },
+    "tier2": [
+      {
+        "id": "t2-left",
+        "name": "គ្រូសូត្រឆ្វេង",
+        "role": "គ្រូសូត្រឆ្វេង",
+        "roleEn": "Recitation Master",
+        "avatar": "",
+        "phone": "097 117 231",
+        "carrier": "CELLCARD",
+        "fb": "#",
+        "position": "left"
+      },
+      {
+        "id": "t2-right",
+        "name": "គ្រូសូត្រស្ដាំ",
+        "role": "គ្រូសូត្រស្ដាំ",
+        "roleEn": "Recitation Master",
+        "avatar": "",
+        "phone": "012 117 609",
+        "carrier": "SMART",
+        "fb": "#",
+        "position": "right"
+      }
+    ],
+    "tier3": [
+      {
+        "id": "t3-left",
+        "name": "គ្រូលេខាធិការ",
+        "role": "គ្រូលេខាធិការ",
+        "roleEn": "Chief Secretary",
+        "avatar": "",
+        "phone": "097 111 272",
+        "carrier": "CELLCARD",
+        "fb": "#",
+        "position": "left"
+      },
+      {
+        "id": "t3-right",
+        "name": "គ្រូគ្រប់គ្រង",
+        "role": "គ្រូគ្រប់គ្រង",
+        "roleEn": "Lead Manager",
+        "avatar": "",
+        "phone": "065 117 221",
+        "carrier": "SMART",
+        "fb": "#",
+        "position": "right"
+      }
+    ],
+    "tier4": [
+      {
+        "id": "t4-1",
+        "name": "មេកុដិទី១",
+        "role": "មេកុដិទី១",
+        "roleEn": "Mequisi 1",
+        "avatar": "",
+        "phone": "097 111 222",
+        "carrier": "CELLCARD",
+        "fb": "#"
+      },
+      {
+        "id": "t4-2",
+        "name": "មេកុដិទី២",
+        "role": "មេកុដិទី២",
+        "roleEn": "Mequisi 2",
+        "avatar": "",
+        "phone": "097 117 231",
+        "carrier": "METFONE",
+        "fb": "#"
+      },
+      {
+        "id": "t4-3",
+        "name": "មេកុដិទី៣",
+        "role": "មេកុដិទី៣",
+        "roleEn": "Mequisi 3",
+        "avatar": "",
+        "phone": "097 117 222",
+        "carrier": "CELLCARD",
+        "fb": "#"
+      },
+      {
+        "id": "t4-4",
+        "name": "មេកុដិទី៤",
+        "role": "មេកុដិទី៤",
+        "roleEn": "Mequisi 4",
+        "avatar": "",
+        "phone": "097 117 222",
+        "carrier": "SMART",
+        "fb": "#"
+      },
+      {
+        "id": "t4-5",
+        "name": "មេកុដិទី៥",
+        "role": "មេកុដិទី៥",
+        "roleEn": "Mequisi 5",
+        "avatar": "",
+        "phone": "019 117 222",
+        "carrier": "METFONE",
+        "fb": "#"
+      }
+    ]
+  }
 }
