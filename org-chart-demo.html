@@ -493,134 +493,73 @@
         const newLines = [];
         const newJoints = [];
 
-        if (hasCenterT3) {
-          /* ══════════════════════════════════════════
-             NORMAL STATE: All 3 Tier-3 nodes present
-             ══════════════════════════════════════════ */
+        /* ══════════════════════════════════════════
+           LOCKED 4-TIER LINE FLOW ARCHITECTURE:
+           - Abbot → Left & Right Reciting Monks
+           - Left Reciting Monk → Secretary Monk
+           - Right Reciting Monk → Management Monk
+           - Secretary Monk → Mequisi Line
+           - Management Monk → Mequisi Line
+           ══════════════════════════════════════════ */
 
-          // --- Tier 1 → Tier 2 ---
-          if (t2Coords.length >= 2) {
-            const upperMidY = t1.by + (t2Coords[0].ty - t1.by) / 2;
-            // Stem down from T1
-            newLines.push({ x1: t1.cx, y1: t1.by, x2: t1.cx, y2: upperMidY });
-            newJoints.push({ cx: t1.cx, cy: upperMidY });
-            // Horizontal bar
-            const leftX = Math.min(...t2Coords.map(c => c.cx));
-            const rightX = Math.max(...t2Coords.map(c => c.cx));
-            newLines.push({ x1: leftX, y1: upperMidY, x2: rightX, y2: upperMidY });
-            // Drops into each T2 node
-            t2Coords.forEach(c => {
-              newLines.push({ x1: c.cx, y1: upperMidY, x2: c.cx, y2: c.ty });
-              newJoints.push({ cx: c.cx, cy: upperMidY });
-            });
-          }
+        const t2Left = t2Coords[0];
+        const t2Right = t2Coords[1];
+        const t3Left = t3Coords.find(c => c.pos === 'left') || t3Coords[0];
+        const t3Right = t3Coords.find(c => c.pos === 'right') || t3Coords[1];
 
-          // --- Tier 1 trunk → Tier 3 ---
-          if (t3Coords.length > 0 && t2Coords.length >= 2) {
-            const trunkTopY = t1.by + (t2Coords[0].ty - t1.by) / 2;
-            const lowerMidY = t2Coords[0].by + (t3Coords[0].ty - t2Coords[0].by) / 2;
-            // Trunk continues from upper horizontal junction down to lower junction
-            newLines.push({ x1: t1.cx, y1: trunkTopY, x2: t1.cx, y2: lowerMidY });
-            newJoints.push({ cx: t1.cx, cy: lowerMidY });
-            // Lower horizontal bar across Tier 3
-            const t3Left = Math.min(...t3Coords.map(c => c.cx));
-            const t3Right = Math.max(...t3Coords.map(c => c.cx));
-            newLines.push({ x1: t3Left, y1: lowerMidY, x2: t3Right, y2: lowerMidY });
-            // Drops into each T3 node
-            t3Coords.forEach(c => {
-              newLines.push({ x1: c.cx, y1: lowerMidY, x2: c.cx, y2: c.ty });
-              newJoints.push({ cx: c.cx, cy: lowerMidY });
-            });
-          }
+        // --- 1. Abbot (ព្រះគ្រូចៅអធិការ) → Left & Right Reciting Monks (ព្រះគ្រូសូត្រឆ្វេង ស្ដាំ) ---
+        if (t2Left && t2Right) {
+          const upperMidY = t1.by + (t2Left.ty - t1.by) / 2;
+          newLines.push({ x1: t1.cx, y1: t1.by, x2: t1.cx, y2: upperMidY });
+          newJoints.push({ cx: t1.cx, cy: upperMidY });
+          newLines.push({ x1: t2Left.cx, y1: upperMidY, x2: t2Right.cx, y2: upperMidY });
+          newLines.push({ x1: t2Left.cx, y1: upperMidY, x2: t2Left.cx, y2: t2Left.ty });
+          newLines.push({ x1: t2Right.cx, y1: upperMidY, x2: t2Right.cx, y2: t2Right.ty });
+          newJoints.push({ cx: t2Left.cx, cy: upperMidY });
+          newJoints.push({ cx: t2Right.cx, cy: upperMidY });
+        }
 
-          // --- Tier 3 center → Tier 4 ---
-          const t3Center = t3Coords.find(c => c.pos === 'center');
-          if (t3Center && t4Coords.length > 0) {
-            const t4MidY = t3Center.by + (t4Coords[0].ty - t3Center.by) / 2;
-            // Stem from center T3
-            newLines.push({ x1: t3Center.cx, y1: t3Center.by, x2: t3Center.cx, y2: t4MidY });
-            newJoints.push({ cx: t3Center.cx, cy: t4MidY });
-            // Horizontal bar across Tier 4
-            const t4Left = Math.min(...t4Coords.map(c => c.cx));
-            const t4Right = Math.max(...t4Coords.map(c => c.cx));
-            newLines.push({ x1: t4Left, y1: t4MidY, x2: t4Right, y2: t4MidY });
-            // Drops into each T4 node
-            t4Coords.forEach(c => {
-              newLines.push({ x1: c.cx, y1: t4MidY, x2: c.cx, y2: c.ty });
-              newJoints.push({ cx: c.cx, cy: t4MidY });
-            });
-          }
+        // --- 2. Left Reciting Monk (ព្រះគ្រូសូត្រឆ្វេង) → Secretary Monk (គ្រូលេខាធិការ) ---
+        if (t2Left && t3Left) {
+          newLines.push({ x1: t3Left.cx, y1: t2Left.by, x2: t3Left.cx, y2: t3Left.ty });
+          const midY = t2Left.by + (t3Left.ty - t2Left.by) / 2;
+          newJoints.push({ cx: t3Left.cx, cy: midY });
+        }
 
-        } else {
-          /* ══════════════════════════════════════════
-             RESTRUCTURED: 3rd level role removed
-             - Deleted line from Abbot to Mequisi
-             - Abbot → Left & Right Reciting Monks
-             - Left Reciting Monk → Secretary Monk
-             - Right Reciting Monk → Management Monk
-             - Secretary Monk → Mequisi Line
-             - Management Monk → Mequisi Line
-             ══════════════════════════════════════════ */
+        // --- 3. Right Reciting Monk (ព្រះគ្រូសូត្រស្ដាំ) → Management Monk (គ្រូគ្រប់គ្រង) ---
+        if (t2Right && t3Right) {
+          newLines.push({ x1: t3Right.cx, y1: t2Right.by, x2: t3Right.cx, y2: t3Right.ty });
+          const midY = t2Right.by + (t3Right.ty - t2Right.by) / 2;
+          newJoints.push({ cx: t3Right.cx, cy: midY });
+        }
 
-          const t2Left = t2Coords[0];
-          const t2Right = t2Coords[1];
-          const t3Left = t3Coords.find(c => c.pos === 'left');
-          const t3Right = t3Coords.find(c => c.pos === 'right');
+        // --- 4. Secretary Monk & Management Monk → Mequisi Line (ខ្សែបន្ទាត់មេកុដិ) ---
+        if (t3Left && t3Right && t4Coords.length > 0) {
+          const busY = t3Left.by + (t4Coords[0].ty - t3Left.by) / 2;
 
-          // --- 1. Abbot (ព្រះគ្រូចៅអធិការ) → Left & Right Reciting Monks (ព្រះគ្រូសូត្រឆ្វេង ស្ដាំ) ---
-          if (t2Left && t2Right) {
-            const upperMidY = t1.by + (t2Left.ty - t1.by) / 2;
-            newLines.push({ x1: t1.cx, y1: t1.by, x2: t1.cx, y2: upperMidY });
-            newJoints.push({ cx: t1.cx, cy: upperMidY });
-            newLines.push({ x1: t2Left.cx, y1: upperMidY, x2: t2Right.cx, y2: upperMidY });
-            newLines.push({ x1: t2Left.cx, y1: upperMidY, x2: t2Left.cx, y2: t2Left.ty });
-            newLines.push({ x1: t2Right.cx, y1: upperMidY, x2: t2Right.cx, y2: t2Right.ty });
-            newJoints.push({ cx: t2Left.cx, cy: upperMidY });
-            newJoints.push({ cx: t2Right.cx, cy: upperMidY });
-          }
+          // Direct line connecting from Secretary Monk (គ្រូលេខាធិការ) to Mequisi line
+          newLines.push({ x1: t3Left.cx, y1: t3Left.by, x2: t3Left.cx, y2: busY });
+          newJoints.push({ cx: t3Left.cx, cy: busY });
 
-          // --- 2. Left Reciting Monk (ព្រះគ្រូសូត្រឆ្វេង) → Secretary Monk (គ្រូលេខាធិការ) ---
-          if (t2Left && t3Left) {
-            newLines.push({ x1: t3Left.cx, y1: t2Left.by, x2: t3Left.cx, y2: t3Left.ty });
-            const midY = t2Left.by + (t3Left.ty - t2Left.by) / 2;
-            newJoints.push({ cx: t3Left.cx, cy: midY });
-          }
+          // Direct line connecting from Management Monk (គ្រូគ្រប់គ្រង) to Mequisi line
+          newLines.push({ x1: t3Right.cx, y1: t3Right.by, x2: t3Right.cx, y2: busY });
+          newJoints.push({ cx: t3Right.cx, cy: busY });
 
-          // --- 3. Right Reciting Monk (ព្រះគ្រូសូត្រស្ដាំ) → Management Monk (គ្រូគ្រប់គ្រង) ---
-          if (t2Right && t3Right) {
-            newLines.push({ x1: t3Right.cx, y1: t2Right.by, x2: t3Right.cx, y2: t3Right.ty });
-            const midY = t2Right.by + (t3Right.ty - t2Right.by) / 2;
-            newJoints.push({ cx: t3Right.cx, cy: midY });
-          }
+          // Head of Monks' Quarters line (ខ្សែបន្ទាត់មេកុដិ)
+          const busLeft = Math.min(t3Left.cx, ...t4Coords.map(c => c.cx));
+          const busRight = Math.max(t3Right.cx, ...t4Coords.map(c => c.cx));
+          newLines.push({ x1: busLeft, y1: busY, x2: busRight, y2: busY });
 
-          // --- 4. Secretary Monk & Management Monk → Mequisi Line (ខ្សែបន្ទាត់មេកុដិ) ---
-          if (t3Left && t3Right && t4Coords.length > 0) {
-            const busY = t3Left.by + (t4Coords[0].ty - t3Left.by) / 2;
-
-            // Direct line connecting from Secretary Monk (គ្រូលេខាធិការ) to Mequisi line
-            newLines.push({ x1: t3Left.cx, y1: t3Left.by, x2: t3Left.cx, y2: busY });
-            newJoints.push({ cx: t3Left.cx, cy: busY });
-
-            // Direct line connecting from Management Monk (គ្រូគ្រប់គ្រង) to Mequisi line
-            newLines.push({ x1: t3Right.cx, y1: t3Right.by, x2: t3Right.cx, y2: busY });
-            newJoints.push({ cx: t3Right.cx, cy: busY });
-
-            // Head of Monks' Quarters line (ខ្សែបន្ទាត់មេកុដិ)
-            const busLeft = Math.min(t3Left.cx, ...t4Coords.map(c => c.cx));
-            const busRight = Math.max(t3Right.cx, ...t4Coords.map(c => c.cx));
-            newLines.push({ x1: busLeft, y1: busY, x2: busRight, y2: busY });
-
-            // Drops into Head of Monks' Quarters (មេកុដិ 1-5)
-            t4Coords.forEach(c => {
-              newLines.push({ x1: c.cx, y1: busY, x2: c.cx, y2: c.ty });
-              newJoints.push({ cx: c.cx, cy: busY });
-            });
-          }
+          // Drops into Head of Monks' Quarters (មេកុដិ 1-5)
+          t4Coords.forEach(c => {
+            newLines.push({ x1: c.cx, y1: busY, x2: c.cx, y2: c.ty });
+            newJoints.push({ cx: c.cx, cy: busY });
+          });
         }
 
         setLines(newLines);
         setJoints(newJoints);
-      }, [data, hasCenterT3]);
+      }, [data]);
 
       useEffect(() => {
         const t = setTimeout(recalc, 120);
@@ -634,8 +573,8 @@
         return () => ro.disconnect();
       }, [recalc]);
 
-      // Tier 3 layout: centered/symmetric when restructured
-      const t3Gap = hasCenterT3 ? 60 : 200;
+      // Tier 3 layout: permanently locked to 200px gap
+      const t3Gap = 200;
 
       return (
         <div className="oc-scroll" style={{ width: '100%' }}>
