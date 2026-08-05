@@ -563,18 +563,15 @@
 
         } else {
           /* ══════════════════════════════════════════
-             CONDITION 2: Tier 3 role removed (2-node Restructured Flow)
+             CONDITION 2: Tier 3 is not 3 roles (Restructured Flow)
              - Abbot → Left & Right Reciting Monks
-             - Left Reciting Monk → Secretary Monk
-             - Right Reciting Monk → Management Monk
-             - Secretary Monk → Mequisi Line
-             - Management Monk → Mequisi Line
+             - Tier 2 nodes → Tier 3 nodes (direct centered lines)
+             - Every Tier 3 node (គ្រូលេខាធិការ & others) → Mequisi Line
+             - Mequisi Line → Mequisi drops 1-5
              ══════════════════════════════════════════ */
 
           const t2Left = t2Coords[0];
           const t2Right = t2Coords[1];
-          const t3Left = t3Coords.find(c => c.pos === 'left') || t3Coords[0];
-          const t3Right = t3Coords.find(c => c.pos === 'right') || t3Coords[1];
 
           // --- 1. Abbot (ព្រះគ្រូចៅអធិការ) → Left & Right Reciting Monks (ព្រះគ្រូសូត្រឆ្វេង ស្ដាំ) ---
           if (t2Left && t2Right) {
@@ -588,34 +585,33 @@
             newJoints.push({ cx: t2Right.cx, cy: upperMidY });
           }
 
-          // --- 2. Left Reciting Monk (ព្រះគ្រូសូត្រឆ្វេង) → Secretary Monk (គ្រូលេខាធិការ) ---
-          if (t2Left && t3Left) {
-            newLines.push({ x1: t3Left.cx, y1: t2Left.by, x2: t3Left.cx, y2: t3Left.ty });
-            const midY = t2Left.by + (t3Left.ty - t2Left.by) / 2;
-            newJoints.push({ cx: t3Left.cx, cy: midY });
-          }
+          // --- 2. Tier 2 → Tier 3 (Direct Centered Lines) ---
+          t3Coords.forEach((t3Node, idx) => {
+            const t2Node = t2Coords[idx] || (idx === 0 ? t2Left : t2Right);
+            if (t2Node) {
+              newLines.push({ x1: t3Node.cx, y1: t2Node.by, x2: t3Node.cx, y2: t3Node.ty });
+              const midY = t2Node.by + (t3Node.ty - t2Node.by) / 2;
+              newJoints.push({ cx: t3Node.cx, cy: midY });
+            }
+          });
 
-          // --- 3. Right Reciting Monk (ព្រះគ្រូសូត្រស្ដាំ) → Management Monk (គ្រូគ្រប់គ្រង) ---
-          if (t2Right && t3Right) {
-            newLines.push({ x1: t3Right.cx, y1: t2Right.by, x2: t3Right.cx, y2: t3Right.ty });
-            const midY = t2Right.by + (t3Right.ty - t2Right.by) / 2;
-            newJoints.push({ cx: t3Right.cx, cy: midY });
-          }
+          // --- 3. Every Tier 3 node (គ្រូលេខាធិការ & others) → Mequisi Line (ខ្សែបន្ទាត់មេកុដិ) ---
+          if (t3Coords.length > 0 && t4Coords.length > 0) {
+            const busY = t3Coords[0].by + (t4Coords[0].ty - t3Coords[0].by) / 2;
 
-          // --- 4. Secretary Monk & Management Monk → Mequisi Line (ខ្សែបន្ទាត់មេកុដិ) ---
-          if (t3Left && t3Right && t4Coords.length > 0) {
-            const busY = t3Left.by + (t4Coords[0].ty - t3Left.by) / 2;
+            // Direct line connecting from EVERY Tier 3 node (including គ្រូលេខាធិការ) down to Mequisi line
+            t3Coords.forEach(t3Node => {
+              newLines.push({ x1: t3Node.cx, y1: t3Node.by, x2: t3Node.cx, y2: busY });
+              newJoints.push({ cx: t3Node.cx, cy: busY });
+            });
 
-            newLines.push({ x1: t3Left.cx, y1: t3Left.by, x2: t3Left.cx, y2: busY });
-            newJoints.push({ cx: t3Left.cx, cy: busY });
-
-            newLines.push({ x1: t3Right.cx, y1: t3Right.by, x2: t3Right.cx, y2: busY });
-            newJoints.push({ cx: t3Right.cx, cy: busY });
-
-            const busLeft = Math.min(t3Left.cx, ...t4Coords.map(c => c.cx));
-            const busRight = Math.max(t3Right.cx, ...t4Coords.map(c => c.cx));
+            // Head of Monks' Quarters line (ខ្សែបន្ទាត់មេកុដិ)
+            const allX = [...t3Coords.map(c => c.cx), ...t4Coords.map(c => c.cx)];
+            const busLeft = Math.min(...allX);
+            const busRight = Math.max(...allX);
             newLines.push({ x1: busLeft, y1: busY, x2: busRight, y2: busY });
 
+            // Drops into Head of Monks' Quarters (មេកុដិ 1-5)
             t4Coords.forEach(c => {
               newLines.push({ x1: c.cx, y1: busY, x2: c.cx, y2: c.ty });
               newJoints.push({ cx: c.cx, cy: busY });
