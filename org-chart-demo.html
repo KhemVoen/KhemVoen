@@ -564,10 +564,11 @@
 
         } else {
           /* ══════════════════════════════════════════
-             RESTRUCTURED: ព្រះគ្រូវិន័យធរ deleted
-             Left: T1 → T2-left → T3-left
-             Right: T1 → T2-right → T3-right
-             Bus line: T3-left ↔ T3-right → T4 drops
+             RESTRUCTURED: ព្រះគ្រូវិន័យធរ eliminated (2 nodes in Tier 3)
+             Centrally positioned line flow:
+             T1 → T2 (horizontal bar at upperMidY)
+             T2 → T3 (centrally aligned trunk & bar at midY23)
+             T3 → T4 (centrally aligned bus bar at busY)
              ══════════════════════════════════════════ */
 
           const t2Left = t2Coords[0];
@@ -575,52 +576,69 @@
           const t3Left = t3Coords.find(c => c.pos === 'left');
           const t3Right = t3Coords.find(c => c.pos === 'right');
 
-          // --- Tier 1 → Tier 2 (same as normal) ---
+          // --- 1. Tier 1 → Tier 2 (Upper Junction) ---
           if (t2Left && t2Right) {
             const upperMidY = t1.by + (t2Left.ty - t1.by) / 2;
+            // Stem down from T1
             newLines.push({ x1: t1.cx, y1: t1.by, x2: t1.cx, y2: upperMidY });
             newJoints.push({ cx: t1.cx, cy: upperMidY });
+            // Horizontal bar across T2
             newLines.push({ x1: t2Left.cx, y1: upperMidY, x2: t2Right.cx, y2: upperMidY });
+            // Drops into T2 nodes
             newLines.push({ x1: t2Left.cx, y1: upperMidY, x2: t2Left.cx, y2: t2Left.ty });
             newLines.push({ x1: t2Right.cx, y1: upperMidY, x2: t2Right.cx, y2: t2Right.ty });
             newJoints.push({ cx: t2Left.cx, cy: upperMidY });
             newJoints.push({ cx: t2Right.cx, cy: upperMidY });
           }
 
-          // --- T2-left → T3-left ---
-          if (t2Left && t3Left) {
-            const midY = t2Left.by + (t3Left.ty - t2Left.by) / 2;
-            newLines.push({ x1: t2Left.cx, y1: t2Left.by, x2: t2Left.cx, y2: midY });
-            newLines.push({ x1: t2Left.cx, y1: midY, x2: t3Left.cx, y2: midY });
-            newLines.push({ x1: t3Left.cx, y1: midY, x2: t3Left.cx, y2: t3Left.ty });
-            newJoints.push({ cx: t2Left.cx, cy: midY });
-            newJoints.push({ cx: t3Left.cx, cy: midY });
+          // --- 2. Tier 2 → Tier 3 (Central Junction & Flow) ---
+          if (t2Left && t2Right && t3Left && t3Right) {
+            const midY23 = t2Left.by + (t3Left.ty - t2Left.by) / 2;
+            const upperMidY = t1.by + (t2Left.ty - t1.by) / 2;
+
+            // Central vertical trunk continuing from upper junction to midY23
+            newLines.push({ x1: t1.cx, y1: upperMidY, x2: t1.cx, y2: midY23 });
+
+            // Vertical stems from T2-left and T2-right down to midY23
+            newLines.push({ x1: t2Left.cx, y1: t2Left.by, x2: t2Left.cx, y2: midY23 });
+            newLines.push({ x1: t2Right.cx, y1: t2Right.by, x2: t2Right.cx, y2: midY23 });
+
+            // Horizontal bar across T3
+            newLines.push({ x1: t3Left.cx, y1: midY23, x2: t3Right.cx, y2: midY23 });
+
+            // Central joint & node joints on midY23
+            newJoints.push({ cx: t1.cx, cy: midY23 });
+            newJoints.push({ cx: t3Left.cx, cy: midY23 });
+            newJoints.push({ cx: t3Right.cx, cy: midY23 });
+
+            // Drops into T3-left and T3-right
+            newLines.push({ x1: t3Left.cx, y1: midY23, x2: t3Left.cx, y2: t3Left.ty });
+            newLines.push({ x1: t3Right.cx, y1: midY23, x2: t3Right.cx, y2: t3Right.ty });
           }
 
-          // --- T2-right → T3-right ---
-          if (t2Right && t3Right) {
-            const midY = t2Right.by + (t3Right.ty - t2Right.by) / 2;
-            newLines.push({ x1: t2Right.cx, y1: t2Right.by, x2: t2Right.cx, y2: midY });
-            newLines.push({ x1: t2Right.cx, y1: midY, x2: t3Right.cx, y2: midY });
-            newLines.push({ x1: t3Right.cx, y1: midY, x2: t3Right.cx, y2: t3Right.ty });
-            newJoints.push({ cx: t2Right.cx, cy: midY });
-            newJoints.push({ cx: t3Right.cx, cy: midY });
-          }
-
-          // --- Shared Bus: T3-left ↔ T3-right → T4 ---
+          // --- 3. Tier 3 → Tier 4 (Centrally Positioned Bus Line) ---
           if (t3Left && t3Right && t4Coords.length > 0) {
+            const midY23 = t2Left.by + (t3Left.ty - t2Left.by) / 2;
             const busY = t3Left.by + (t4Coords[0].ty - t3Left.by) / 2;
-            // Stem from T3-left
+
+            // Central vertical trunk continuing straight down to Tier 4 bus line
+            newLines.push({ x1: t1.cx, y1: midY23, x2: t1.cx, y2: busY });
+
+            // Stems from T3-left and T3-right down to busY
             newLines.push({ x1: t3Left.cx, y1: t3Left.by, x2: t3Left.cx, y2: busY });
-            newJoints.push({ cx: t3Left.cx, cy: busY });
-            // Stem from T3-right
             newLines.push({ x1: t3Right.cx, y1: t3Right.by, x2: t3Right.cx, y2: busY });
-            newJoints.push({ cx: t3Right.cx, cy: busY });
-            // Horizontal bus
+
+            // Horizontal bus bar for Tier 4
             const busLeft = Math.min(t3Left.cx, ...t4Coords.map(c => c.cx));
             const busRight = Math.max(t3Right.cx, ...t4Coords.map(c => c.cx));
             newLines.push({ x1: busLeft, y1: busY, x2: busRight, y2: busY });
-            // T4 drops
+
+            // Central joint on bus line
+            newJoints.push({ cx: t1.cx, cy: busY });
+            newJoints.push({ cx: t3Left.cx, cy: busY });
+            newJoints.push({ cx: t3Right.cx, cy: busY });
+
+            // Drops into Tier 4 nodes
             t4Coords.forEach(c => {
               newLines.push({ x1: c.cx, y1: busY, x2: c.cx, y2: c.ty });
               newJoints.push({ cx: c.cx, cy: busY });
