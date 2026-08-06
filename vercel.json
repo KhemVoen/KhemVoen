@@ -12,6 +12,10 @@
           "logo.png",
           "index.html",
           "admin.html",
+          "monks-chart.html",
+          "committee-chart.html",
+          "org-chart-demo.html",
+          "org-tree-demo.html",
           "data/**",
           "images/**"
         ]
