@@ -10,6 +10,71 @@
   <link rel="stylesheet" href="style.css?v=4">
   <link rel="stylesheet" href="admin.css">
   <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    .tab-switcher-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .tab-switcher-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(212, 168, 67, 0.45);
+      border-radius: 20px;
+      padding: 6px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(212, 168, 67, 0.15);
+      position: relative;
+      z-index: 10;
+    }
+    .org-switch-btn {
+      background: transparent;
+      color: #475569;
+      border: 1.5px solid transparent;
+      border-radius: 14px;
+      padding: 10px 22px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      outline: none;
+      user-select: none;
+    }
+    .org-switch-btn:hover {
+      color: #1a3a5c;
+      background: rgba(212, 168, 67, 0.12);
+      transform: translateY(-2px);
+    }
+    .org-switch-btn.active {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2c5282 100%);
+      color: #f0d48a;
+      border-color: #d4a843;
+      box-shadow: 0 6px 18px rgba(26, 58, 92, 0.35);
+      transform: scale(1.02);
+    }
+    .org-switch-btn:active {
+      transform: scale(0.96);
+    }
+    .org-switch-btn .tab-icon {
+      font-size: 1.05rem;
+      transition: transform 0.3s ease;
+    }
+    .org-switch-btn.active .tab-icon {
+      transform: scale(1.2) rotate(-6deg);
+    }
+    #orgFrame {
+      transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: opacity, transform;
+    }
+  </style>
 </head>
 <body>
 
@@ -392,18 +457,28 @@
         <p id="noCounselors" style="color:var(--text-light);text-align:center;padding:30px;">មិនទាន់មានអ្នកប្រឹក្សាយោបល់ទេ។ ចុចប៊ូតុង "+" ខាងលើដើម្បីបន្ថែម។</p>
       </div>
 
-      <!-- ORG TREE TAB (4-Tier Hierarchy Chart) -->
+      <!-- ORG TREE TAB (With Monks & Committee Switcher Buttons) -->
       <div class="tab-panel" id="tab-orgtree">
         <div class="page-header">
           <div>
-            <h2>រចនាសម្ព័ន្ធគ្រប់គ្រង</h2>
-            <p class="breadcrumb">ផ្ទាំងគ្រប់គ្រង / រចនាសម្ព័ន្ធគ្រប់គ្រង</p>
+            <h2>រចនាសម្ព័ន្ធគ្រប់គ្រងវត្ត</h2>
+            <p class="breadcrumb">ផ្ទាំងគ្រប់គ្រង / រចនាសម្ព័ន្ធគ្រប់គ្រងវត្ត</p>
           </div>
-          <a href="org-chart-demo.html" target="_blank" class="btn btn-outline btn-sm">🔗 បើកក្នុងផ្ទាំងថ្មី (Full Screen)</a>
+          <a id="orgTreeFullscreenBtn" href="monks-chart.html" target="_blank" class="btn btn-outline btn-sm">🔗 បើកក្នុងផ្ទាំងថ្មី (Full Screen)</a>
+        </div>
+
+        <!-- Top Button Switcher -->
+        <div style="display:flex;justify-content:center;gap:12px;margin-bottom:20px;">
+          <button id="btnSwitchMonks" class="org-switch-btn active" onclick="switchOrgChart('monks')">
+            <span>☸</span> <span>រចនាសម្ព័ន្ធព្រះសង្ឃ (Monks)</span>
+          </button>
+          <button id="btnSwitchCommittee" class="org-switch-btn" onclick="switchOrgChart('committee')">
+            <span>👥</span> <span>អាចារ្យ & គណៈកម្មការ (Committee)</span>
+          </button>
         </div>
 
         <div class="card" style="padding:0;overflow:hidden;border:none;box-shadow:0 8px 30px rgba(0,0,0,0.08);border-radius:20px;">
-          <iframe src="org-chart-demo.html" style="width:100%;height:1000px;border:none;border-radius:20px;display:block;" title="4-Tier Org Chart"></iframe>
+          <iframe id="orgFrame" src="monks-chart.html" style="width:100%;height:1000px;border:none;border-radius:20px;display:block;" title="Org Chart View"></iframe>
         </div>
       </div>
 
@@ -669,5 +744,42 @@
   <div class="toast" id="toast"></div>
 
   <script src="admin.js"></script>
+  <script>
+    function switchOrgChart(type) {
+      const frame = document.getElementById('orgFrame');
+      const btnMonks = document.getElementById('btnSwitchMonks');
+      const btnCom = document.getElementById('btnSwitchCommittee');
+      const fullBtn = document.getElementById('orgTreeFullscreenBtn');
+
+      if (btnMonks && btnCom) {
+        if (type === 'monks') {
+          btnMonks.classList.add('active');
+          btnCom.classList.remove('active');
+        } else {
+          btnCom.classList.add('active');
+          btnMonks.classList.remove('active');
+        }
+      }
+
+      if (frame) {
+        frame.style.opacity = '0';
+        frame.style.transform = 'translateY(10px) scale(0.99)';
+
+        setTimeout(() => {
+          if (type === 'monks') {
+            frame.src = 'monks-chart.html';
+            if (fullBtn) fullBtn.href = 'monks-chart.html';
+          } else {
+            frame.src = 'committee-chart.html';
+            if (fullBtn) fullBtn.href = 'committee-chart.html';
+          }
+          frame.onload = () => {
+            frame.style.opacity = '1';
+            frame.style.transform = 'translateY(0) scale(1)';
+          };
+        }, 180);
+      }
+    }
+  </script>
 </body>
 </html>

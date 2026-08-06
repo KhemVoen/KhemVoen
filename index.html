@@ -18,6 +18,83 @@
   <title>វត្តខេមវ័ន(បឹងស្នាយ)</title>
   <link rel="stylesheet" href="style.css?v=5">
   <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    section[id] {
+      scroll-margin-top: 90px;
+    }
+    .mgmt-gold-bar {
+      background: linear-gradient(135deg, #1a3a5c 0%, #112236 100%);
+      border: 2.5px solid #d4a843;
+      border-radius: 20px;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .mgmt-bar-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #fff;
+    }
+    .mgmt-bar-title .emblem {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #f0d48a, #d4a843);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: #1a3a5c;
+      font-weight: 900;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+    .mgmt-bar-title h3 {
+      font-size: 1.65rem;
+      font-weight: 900;
+      color: #f0d48a;
+      margin: 0;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .mgmt-bar-switcher {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mgmt-nav-btn {
+      background: rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      border: 1.5px solid rgba(212,168,67,0.3);
+      border-radius: 12px;
+      padding: 9px 18px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+    .mgmt-nav-btn:hover {
+      background: rgba(212,168,67,0.15);
+      color: #fff;
+      border-color: #d4a843;
+    }
+    .mgmt-nav-btn.active {
+      background: linear-gradient(135deg, #d4a843 0%, #b88429 100%);
+      color: #1a3a5c;
+      border-color: #f0d48a;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(212,168,67,0.35);
+    }
+  </style>
 </head>
 <body>
 
@@ -119,6 +196,25 @@
     </div>
   </section>
 
+  <!-- MANAGEMENT COMMITTEE SECTION -->
+  <section class="section management-section" id="management">
+    <div class="container" style="max-width: 1650px;">
+      
+      <!-- Premium Khmer Gold Banner Bar -->
+      <div class="mgmt-gold-bar" style="justify-content: center; text-align: center;">
+        <div class="mgmt-bar-title" style="justify-content: center;">
+          <span class="emblem">☸</span>
+          <h3>រចនាសម្ព័ន្ធគ្រប់គ្រងវត្តខេមវ័ន(បឹងស្នាយ)</h3>
+        </div>
+      </div>
+
+      <!-- Public Org Frame Container -->
+      <div style="background:transparent;border-radius:24px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.06);">
+        <iframe id="publicOrgFrame" src="monks-chart.html?mode=public" style="width:100%;height:1050px;border:none;display:block;" title="រចនាសម្ព័ន្ធគ្រប់គ្រងវត្ត"></iframe>
+      </div>
+    </div>
+  </section>
+
   <!-- ABOUT SECTION -->
   <section class="section" id="about">
     <div class="container">
@@ -153,36 +249,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- MANAGEMENT COMMITTEE SECTION -->
-  <section class="section management-section" id="management">
-    <div class="container">
-      <div class="section-header animate-on-scroll">
-        <h2>គណៈគ្រប់គ្រងវត្ត</h2>
-        <div class="divider"></div>
-        <p>បញ្ជីព្រះសង្ឃ និងគណៈកម្មការវត្តខេមវ័ន(បឹងស្នាយ)</p>
-      </div>
-
-
-
-      <!-- Category Filter Tabs -->
-      <div class="management-tabs animate-on-scroll">
-        <button class="mgmt-tab-btn active" data-filter="monk" onclick="filterCommittee('monk')">
-          <span>☸️ ព្រះសង្ឃ</span>
-        </button>
-        <button class="mgmt-tab-btn" data-filter="layperson" onclick="filterCommittee('layperson')">
-          <span>👥 ពុទ្ធបរិស័ទ / គណៈកម្មការ</span>
-        </button>
-      </div>
-
-      <!-- Committee Tree View Container -->
-      <div class="management-tree-container" id="committeeTreeContainer">
-        <!-- Rendered via JS -->
-      </div>
-
-
     </div>
   </section>
 
@@ -516,6 +582,145 @@
   </div>
 
   <script>
+    // ===== STATS COUNTER ANIMATION =====
+    function animateCounter(el) {
+      if (!el) return;
+      const target = parseInt(el.dataset.count) || 0;
+      let count = 0;
+      const duration = 1200;
+      const stepTime = 30;
+      const steps = duration / stepTime;
+      const increment = Math.max(1, Math.ceil(target / steps));
+      const timer = setInterval(() => {
+        count += increment;
+        if (count >= target) {
+          el.textContent = target;
+          clearInterval(timer);
+        } else {
+          el.textContent = count;
+        }
+      }, stepTime);
+    }
+
+    function initCounterObserver() {
+      const statNumbers = document.querySelectorAll('.about-stats .number');
+      if (!statNumbers.length) return;
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+              entry.target.classList.add('animated');
+              animateCounter(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+
+        statNumbers.forEach(el => observer.observe(el));
+      } else {
+        statNumbers.forEach(el => animateCounter(el));
+      }
+    }
+
+    // ===== NAVBAR SCROLLSPY & ACTIVE STATE TOGGLE =====
+    function updateActiveNavLink() {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav-menu a');
+      const scrollPos = window.scrollY || window.pageYOffset;
+      const headerOffset = 130;
+
+      let currentSectionId = '';
+      sections.forEach(sec => {
+        const top = sec.offsetTop - headerOffset;
+        const height = sec.offsetHeight;
+        if (scrollPos >= top && scrollPos < top + height) {
+          currentSectionId = sec.getAttribute('id');
+        }
+      });
+
+      if (currentSectionId) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + currentSectionId) {
+            link.classList.add('active');
+          }
+        });
+      }
+    }
+
+    window.addEventListener('scroll', updateActiveNavLink, { passive: true });
+    window.addEventListener('load', updateActiveNavLink);
+    window.addEventListener('hashchange', updateActiveNavLink);
+
+    // Nav Links Manual Click Highlight
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', function() {
+          document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Mobile Hamburger Toggle
+      const hamburger = document.getElementById('hamburger');
+      const navMenu = document.getElementById('navMenu');
+      if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+          hamburger.classList.toggle('active');
+          navMenu.classList.toggle('active');
+        });
+        document.querySelectorAll('.nav-menu a').forEach(a => {
+          a.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+          });
+        });
+      }
+
+      // Back to Top Button Listener
+      const backToTop = document.getElementById('backToTop');
+      if (backToTop) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 300) {
+            backToTop.classList.add('visible');
+          } else {
+            backToTop.classList.remove('visible');
+          }
+        }, { passive: true });
+        backToTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    });
+
+    // Scroll Animation Observer for .animate-on-scroll elements
+    function initScrollAnimations() {
+      const animatedEls = document.querySelectorAll('.animate-on-scroll');
+      if (!animatedEls.length) return;
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.05, rootMargin: '50px 0px 50px 0px' });
+
+        animatedEls.forEach(el => observer.observe(el));
+      } else {
+        animatedEls.forEach(el => el.classList.add('visible'));
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initScrollAnimations);
+    } else {
+      initScrollAnimations();
+    }
+    window.addEventListener('load', initScrollAnimations);
+    window.addEventListener('hashchange', () => setTimeout(initScrollAnimations, 100));
+
     // Org Chart Fullscreen Toggle
     document.addEventListener('click', function(e) {
       const img = document.getElementById('orgChartFullImg');
@@ -949,11 +1154,11 @@
               if (numSpan) {
                 numSpan.dataset.count = st.count;
                 numSpan.textContent = '0';
-                animateCounter(numSpan);
               }
               if (labelSpan && st.label) labelSpan.textContent = st.label;
             }
           });
+          initCounterObserver();
         }
 
         // Dynamic Contact Details
@@ -1580,6 +1785,40 @@
     document.getElementById('playlistModalOverlay')?.addEventListener('click', function(e) {
       if (e.target === this) closePlaylistOverlay();
     });
+
+    function switchPublicOrgChart(type) {
+      const frame = document.getElementById('publicOrgFrame');
+      const btnMonks = document.getElementById('pubBtnMonks');
+      const btnCom = document.getElementById('pubBtnCommittee');
+
+      if (btnMonks && btnCom) {
+        if (type === 'monks') {
+          btnMonks.classList.add('active');
+          btnCom.classList.remove('active');
+        } else {
+          btnCom.classList.add('active');
+          btnMonks.classList.remove('active');
+        }
+      }
+
+      if (frame) {
+        frame.style.transition = 'opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
+        frame.style.opacity = '0';
+        frame.style.transform = 'translateY(10px) scale(0.99)';
+
+        setTimeout(() => {
+          if (type === 'monks') {
+            frame.src = 'monks-chart.html?mode=public';
+          } else {
+            frame.src = 'committee-chart.html?mode=public';
+          }
+          frame.onload = () => {
+            frame.style.opacity = '1';
+            frame.style.transform = 'translateY(0) scale(1)';
+          };
+        }, 180);
+      }
+    }
   </script>
 </body>
 </html>

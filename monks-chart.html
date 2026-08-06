@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>រចនាសម្ព័ន្ធគ្រប់គ្រងព្រះសង្ឃ — វត្តខេមវ័ន(បឹងស្នាយ)</title>
+
+  <!-- Google Fonts: Noto Sans Khmer & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- React & Babel CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --bg-cream: #faf5eb;
+      --gold-primary: #d4a843;
+      --gold-dark: #b88429;
+      --navy-dark: #1a3a5c;
+      --text-dark: #2c1810;
+      --font-khmer: 'Noto Sans Khmer', sans-serif;
+      --font-en: 'Outfit', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-khmer);
+      background: var(--bg-cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: auto;
+      padding: 20px;
+    }
+
+    /* Embedded mode iframe hide header if embedded */
+    body.is-embedded .page-header-banner {
+      display: none !important;
+    }
+
+    .chart-card {
+      background: linear-gradient(180deg, #fffdf8 0%, #faf2e3 100%);
+      border: 2px solid var(--gold-primary);
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(180,130,40,0.1);
+      max-width: 1100px;
+      margin: 0 auto;
+      animation: chartPageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: opacity, transform, filter;
+      transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+    }
+
+    /* Segmented Tab Switcher */
+    .tab-switcher-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .tab-switcher-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(212, 168, 67, 0.45);
+      border-radius: 20px;
+      padding: 6px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(212, 168, 67, 0.15);
+      position: relative;
+      z-index: 10;
+    }
+
+    .tab-nav-btn {
+      background: transparent;
+      color: #475569;
+      border: 1.5px solid transparent;
+      border-radius: 14px;
+      padding: 10px 22px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      outline: none;
+      user-select: none;
+    }
+
+    .tab-nav-btn:hover {
+      color: #1a3a5c;
+      background: rgba(212, 168, 67, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .tab-nav-btn.active {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2c5282 100%);
+      color: #f0d48a;
+      border-color: #d4a843;
+      box-shadow: 0 6px 18px rgba(26, 58, 92, 0.35);
+      transform: scale(1.02);
+    }
+
+    .tab-nav-btn:active {
+      transform: scale(0.96);
+    }
+
+    .tab-nav-btn .tab-icon {
+      font-size: 1.05rem;
+      transition: transform 0.3s ease;
+    }
+
+    .tab-nav-btn.active .tab-icon {
+      transform: scale(1.2) rotate(-6deg);
+    }
+
+    /* Animated entrance and exit transitions */
+    @keyframes chartPageEnter {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+        filter: blur(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .page-transition-exit {
+      opacity: 0 !important;
+      transform: translateY(-12px) scale(0.98) !important;
+      filter: blur(4px) !important;
+    }
+
+    .header-banner {
+      text-align: center;
+      background: linear-gradient(135deg, #1a3a5c, #2c5282);
+      color: #f0d48a;
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-size: 1.6rem;
+      font-weight: 900;
+      border: 2px solid var(--gold-primary);
+      box-shadow: 0 4px 14px rgba(26,58,92,0.25);
+      margin-bottom: 30px;
+    }
+
+    /* SVG Lines */
+    @keyframes lineDraw {
+      from { stroke-dashoffset: 800; opacity: 0; }
+      to   { stroke-dashoffset: 0; opacity: 1; }
+    }
+    .svg-line {
+      stroke-dasharray: 800;
+      animation: lineDraw 0.6s cubic-bezier(0.4,0,0.2,1) both;
+    }
+
+    @keyframes ocPulse {
+      0%, 100% { r: 4.5; opacity: 0.85; }
+      50% { r: 6.5; opacity: 1; }
+    }
+    .oc-joint { animation: ocPulse 3s ease-in-out infinite; }
+
+    /* Node Cards */
+    .node-card {
+      background: #fffdf8;
+      border: 2px solid var(--gold-primary);
+      border-radius: 16px;
+      padding: 14px 16px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 6px 16px rgba(180,130,40,0.12);
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .node-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(180,130,40,0.22);
+    }
+
+    .avatar-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 2.5px solid var(--gold-primary);
+      margin: 0 auto 8px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      overflow: hidden;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .node-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #1a3a5c;
+      margin-bottom: 2px;
+    }
+    .node-role {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #b88429;
+      background: rgba(212,168,67,0.12);
+      border-radius: 20px;
+      padding: 2px 10px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .phone-tag {
+      font-size: 0.75rem;
+      font-family: var(--font-en);
+      font-weight: 700;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .carrier-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 6px;
+      text-transform: lowercase;
+    }
+
+    .btn-action {
+      border: none;
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 4px 2px 0;
+      color: #fff;
+    }
+    .btn-edit { background: #10b981; }
+    .btn-del  { background: #ef4444; }
+
+    /* Modal Backdrop */
+    body.is-public .btn-action { display: none !important; }
+
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15,23,42,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%; max-width: 440px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      border: 2px solid var(--gold-primary);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    const INITIAL_MONKS = {
+      tier1: {
+        id: 'm1-head',
+        name: 'ព្រះគ្រូចៅអធិការ សុខា',
+        role: 'ព្រះចៅអធិការវត្ត',
+        roleEn: 'Owner / Head Monk',
+        avatar: '',
+        phone: '097 111 222',
+        carrier: 'CELLCARD',
+        sticker: '☸',
+      },
+      tier2: [
+        {
+          id: 'm2-left',
+          name: 'ព្រះគ្រូ សុវណ្ណធម៌',
+          role: 'ព្រះគ្រូសូត្រឆ្វេង',
+          roleEn: 'Left Recitation Master',
+          avatar: '',
+          phone: '097 117 231',
+          carrier: 'CELLCARD',
+          sticker: '☸',
+        },
+        {
+          id: 'm2-right',
+          name: 'ព្រះគ្រូ ធម្មធរ',
+          role: 'ព្រះគ្រូសូត្រស្ដាំ',
+          roleEn: 'Right Recitation Master',
+          avatar: '',
+          phone: '012 117 609',
+          carrier: 'SMART',
+          sticker: '☸',
+        },
+      ],
+      tier3: [
+        {
+          id: 'm3-1',
+          name: 'ព្រះ សភាលិកធម៌',
+          role: 'ព្រះគ្រូលេខាធិការ',
+          roleEn: 'Chief Secretary Monk',
+          avatar: '',
+          phone: '097 111 272',
+          carrier: 'CELLCARD',
+          sticker: '📜',
+        },
+        {
+          id: 'm3-2',
+          name: 'ព្រះ វិន័យធម៌',
+          role: 'ព្រះគ្រូវិន័យធរ',
+          roleEn: 'Discipline Master Monk',
+          avatar: '',
+          phone: '097 117 122',
+          carrier: 'CELLCARD',
+          sticker: '☸',
+        },
+        {
+          id: 'm3-3',
+          name: 'គ្រូគ្រប់គ្រង',
+          role: 'ព្រះគ្រូគ្រប់គ្រង',
+          roleEn: 'Lead Manager Monk',
+          avatar: '',
+          phone: '065 117 221',
+          carrier: 'SMART',
+          sticker: '☸',
+        },
+        {
+          id: 'm3-4',
+          name: 'Preah Silathor',
+          role: 'ព្រះគ្រូសីលធម៌',
+          roleEn: 'Discipline Master',
+          avatar: '',
+          phone: '097 999 888',
+          carrier: 'CELLCARD',
+          sticker: '☸',
+        },
+      ],
+      tier4: [
+        { id: 'm4-1', name: 'មេកុដិទី១', role: 'មេកុដិទី១', phone: '097 111 222', carrier: 'CELLCARD', sticker: '☸' },
+        { id: 'm4-2', name: 'មេកុដិទី២', role: 'មេកុដិទី២', phone: '097 117 231', carrier: 'METFONE', sticker: '☸' },
+        { id: 'm4-3', name: 'មេកុដិទី៣', role: 'មេកុដិទី៣', phone: '097 117 222', carrier: 'CELLCARD', sticker: '☸' },
+        { id: 'm4-4', name: 'មេកុដិទី៤', role: 'មេកុដិទី៤', phone: '097 117 222', carrier: 'SMART', sticker: '☸' },
+        { id: 'm4-5', name: 'មេកុដិទី៥', role: 'មេកុដិទី៥', phone: '019 117 222', carrier: 'METFONE', sticker: '☸' },
+      ],
+    };
+
+    function App() {
+      const [data, setData] = useState(() => {
+        try {
+          const saved = localStorage.getItem('khemvoen_monks_chart');
+          return saved ? JSON.parse(saved) : INITIAL_MONKS;
+        } catch(e) { return INITIAL_MONKS; }
+      });
+
+      const [editing, setEditing] = useState(null);
+      const containerRef = useRef(null);
+      const [lines, setLines] = useState([]);
+      const [joints, setJoints] = useState([]);
+
+      useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mode') === 'public') {
+          document.body.classList.add('is-public');
+        }
+        if (window.self !== window.top) {
+          document.body.classList.add('is-embedded');
+        }
+      }, []);
+
+      const updateLines = useCallback(() => {
+        if (!containerRef.current) return;
+        const rootRect = containerRef.current.getBoundingClientRect();
+        const getCenter = (id) => {
+          const el = containerRef.current.querySelector(`[data-nid="${id}"]`);
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return {
+            top: { x: r.left + r.width/2 - rootRect.left, y: r.top - rootRect.top },
+            bottom: { x: r.left + r.width/2 - rootRect.left, y: r.bottom - rootRect.top }
+          };
+        };
+
+        const newLines = [];
+        const newJoints = [];
+
+        const t1 = getCenter(data.tier1.id);
+        const t2Nodes = data.tier2.map(n => ({ id: n.id, c: getCenter(n.id) })).filter(x => x.c);
+        const t3Nodes = data.tier3.map(n => ({ id: n.id, c: getCenter(n.id) })).filter(x => x.c);
+        const t4Nodes = data.tier4.map(n => ({ id: n.id, c: getCenter(n.id) })).filter(x => x.c);
+
+        if (t1 && t2Nodes.length > 0) {
+          const midY = (t1.bottom.y + t2Nodes[0].c.top.y) / 2;
+          newLines.push({ x1: t1.bottom.x, y1: t1.bottom.y, x2: t1.bottom.x, y2: midY });
+          const minX = Math.min(...t2Nodes.map(n => n.c.top.x));
+          const maxX = Math.max(...t2Nodes.map(n => n.c.top.x));
+          newLines.push({ x1: minX, y1: midY, x2: maxX, y2: midY });
+          t2Nodes.forEach(n => {
+            newLines.push({ x1: n.c.top.x, y1: midY, x2: n.c.top.x, y2: n.c.top.y });
+          });
+          newJoints.push({ cx: t1.bottom.x, cy: midY });
+        }
+
+        if (t2Nodes.length > 0 && t3Nodes.length > 0) {
+          const midY = (t2Nodes[0].c.bottom.y + t3Nodes[0].c.top.y) / 2;
+          const minX2 = Math.min(...t2Nodes.map(n => n.c.bottom.x));
+          const maxX2 = Math.max(...t2Nodes.map(n => n.c.bottom.x));
+          const minX3 = Math.min(...t3Nodes.map(n => n.c.top.x));
+          const maxX3 = Math.max(...t3Nodes.map(n => n.c.top.x));
+          const minX = Math.min(minX2, minX3);
+          const maxX = Math.max(maxX2, maxX3);
+
+          t2Nodes.forEach(n => {
+            newLines.push({ x1: n.c.bottom.x, y1: n.c.bottom.y, x2: n.c.bottom.x, y2: midY });
+          });
+          newLines.push({ x1: minX, y1: midY, x2: maxX, y2: midY });
+          t3Nodes.forEach(n => {
+            newLines.push({ x1: n.c.top.x, y1: midY, x2: n.c.top.x, y2: n.c.top.y });
+          });
+        }
+
+        if (t3Nodes.length > 0 && t4Nodes.length > 0) {
+          const midY = (t3Nodes[0].c.bottom.y + t4Nodes[0].c.top.y) / 2;
+          const minX3 = Math.min(...t3Nodes.map(n => n.c.bottom.x));
+          const maxX3 = Math.max(...t3Nodes.map(n => n.c.bottom.x));
+          const minX4 = Math.min(...t4Nodes.map(n => n.c.top.x));
+          const maxX4 = Math.max(...t4Nodes.map(n => n.c.top.x));
+          const minX = Math.min(minX3, minX4);
+          const maxX = Math.max(maxX3, maxX4);
+
+          t3Nodes.forEach(n => {
+            newLines.push({ x1: n.c.bottom.x, y1: n.c.bottom.y, x2: n.c.bottom.x, y2: midY });
+          });
+          newLines.push({ x1: minX, y1: midY, x2: maxX, y2: midY });
+          t4Nodes.forEach(n => {
+            newLines.push({ x1: n.c.top.x, y1: midY, x2: n.c.top.x, y2: n.c.top.y });
+          });
+        }
+
+        setLines(newLines);
+        setJoints(newJoints);
+      }, [data]);
+
+      useEffect(() => {
+        updateLines();
+        const t1 = setTimeout(updateLines, 60);
+        const t2 = setTimeout(updateLines, 250);
+        const t3 = setTimeout(updateLines, 600);
+        window.addEventListener('resize', updateLines);
+        return () => {
+          clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+          window.removeEventListener('resize', updateLines);
+        };
+      }, [updateLines]);
+
+      const handleTabSwitch = (targetUrl) => {
+        const card = document.querySelector('.chart-card');
+        if (card) card.classList.add('page-transition-exit');
+        setTimeout(() => {
+          const search = window.location.search;
+          window.location.href = targetUrl + search;
+        }, 180);
+      };
+
+      const handleSaveNode = (updated) => {
+        setData(prev => {
+          let next;
+          if (prev.tier1.id === updated.id) next = { ...prev, tier1: updated };
+          else next = {
+            ...prev,
+            tier2: prev.tier2.map(n => n.id === updated.id ? updated : n),
+            tier3: prev.tier3.map(n => n.id === updated.id ? updated : n),
+            tier4: prev.tier4.map(n => n.id === updated.id ? updated : n),
+          };
+          localStorage.setItem('khemvoen_monks_chart', JSON.stringify(next));
+          return next;
+        });
+        setEditing(null);
+      };
+
+      const handleDeleteNode = (node) => {
+        if (node.id === data.tier1.id) {
+          alert('⚠️ មិនអាចលុបព្រះចៅអធិការបានទេ!');
+          return;
+        }
+        if (!confirm(`តើអ្នកប្រាកដជាចង់លុប "${node.name}" ឬ?`)) return;
+
+        setData(prev => {
+          const next = {
+            ...prev,
+            tier2: prev.tier2.filter(n => n.id !== node.id),
+            tier3: prev.tier3.filter(n => n.id !== node.id),
+            tier4: prev.tier4.filter(n => n.id !== node.id),
+          };
+          try { localStorage.setItem('khemvoen_monks_chart', JSON.stringify(next)); } catch(e) {}
+          return next;
+        });
+      };
+
+      const carrierBg = (c) => {
+        if (c === 'SMART') return { bg: '#dcfce7', fg: '#166534' };
+        if (c === 'METFONE') return { bg: '#fee2e2', fg: '#991b1b' };
+        return { bg: '#fff0e6', fg: '#c85a00' };
+      };
+
+      return (
+        <div className="chart-card">
+          {/* Category Switcher Buttons */}
+          <div className="tab-switcher-wrapper">
+            <div className="tab-switcher-nav">
+              <button className="tab-nav-btn active" type="button">
+                <span className="tab-icon">☸</span>
+                <span>រចនាសម្ព័ន្ធព្រះសង្ឃ</span>
+              </button>
+              <button
+                className="tab-nav-btn"
+                type="button"
+                onClick={() => handleTabSwitch('committee-chart.html')}
+              >
+                <span className="tab-icon">👥</span>
+                <span>អាចារ្យ & គណៈកម្មការ</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="header-banner">
+            ☸ រចនាសម្ព័ន្ធគ្រប់គ្រងព្រះសង្ឃ — វត្តខេមវ័ន(បឹងស្នាយ)
+          </div>
+
+          <div ref={containerRef} style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 32, alignItems: 'center' }}>
+            <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+              {lines.map((l, i) => (
+                <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="#d4a843" strokeWidth="2.5" className="svg-line" />
+              ))}
+              {joints.map((j, i) => (
+                <circle key={i} cx={j.cx} cy={j.cy} r="4.5" fill="#d4a843" stroke="#fff" strokeWidth="2" className="oc-joint" />
+              ))}
+            </svg>
+
+            {/* Tier 1 */}
+            <div data-nid={data.tier1.id} style={{ zIndex: 2 }}>
+              <div className="node-card" style={{ width: 230 }}>
+                <div className="avatar-box">{data.tier1.sticker || '☸'}</div>
+                <div className="node-name">{data.tier1.name}</div>
+                <div className="node-role">{data.tier1.role}</div>
+                <div className="phone-tag">
+                  📞 {data.tier1.phone}
+                  <span className="carrier-badge" style={{ background: carrierBg(data.tier1.carrier).bg, color: carrierBg(data.tier1.carrier).fg }}>
+                    {data.tier1.carrier}
+                  </span>
+                </div>
+                <div>
+                  <button className="btn-action btn-edit" onClick={() => setEditing(data.tier1)}>✏️ Edit</button>
+                  <button className="btn-action btn-del" onClick={() => handleDeleteNode(data.tier1)}>✕ Delete</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Tier 2 */}
+            <div style={{ display: 'flex', gap: 40, justifyContent: 'center', zIndex: 2 }}>
+              {data.tier2.map(n => (
+                <div key={n.id} data-nid={n.id} className="node-card" style={{ width: 210 }}>
+                  <div className="avatar-box">{n.sticker || '☸'}</div>
+                  <div className="node-name">{n.name}</div>
+                  <div className="node-role">{n.role}</div>
+                  <div className="phone-tag">
+                    📞 {n.phone}
+                    <span className="carrier-badge" style={{ background: carrierBg(n.carrier).bg, color: carrierBg(n.carrier).fg }}>
+                      {n.carrier}
+                    </span>
+                  </div>
+                  <div>
+                    <button className="btn-action btn-edit" onClick={() => setEditing(n)}>✏️ Edit</button>
+                    <button className="btn-action btn-del" onClick={() => handleDeleteNode(n)}>✕ Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Tier 3 */}
+            <div style={{ display: 'flex', gap: 24, justifyContent: 'center', zIndex: 2 }}>
+              {data.tier3.map(n => (
+                <div key={n.id} data-nid={n.id} className="node-card" style={{ width: 200 }}>
+                  <div className="avatar-box">{n.sticker || '☸'}</div>
+                  <div className="node-name">{n.name}</div>
+                  <div className="node-role">{n.role}</div>
+                  <div className="phone-tag">
+                    📞 {n.phone}
+                    <span className="carrier-badge" style={{ background: carrierBg(n.carrier).bg, color: carrierBg(n.carrier).fg }}>
+                      {n.carrier}
+                    </span>
+                  </div>
+                  <div>
+                    <button className="btn-action btn-edit" onClick={() => setEditing(n)}>✏️ Edit</button>
+                    <button className="btn-action btn-del" onClick={() => handleDeleteNode(n)}>✕ Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Tier 4 */}
+            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', zIndex: 2 }}>
+              {data.tier4.map(n => (
+                <div key={n.id} data-nid={n.id} className="node-card" style={{ width: 170 }}>
+                  <div className="avatar-box" style={{ width: 50, height: 50, fontSize: '1.4rem' }}>{n.sticker || '☸'}</div>
+                  <div className="node-name" style={{ fontSize: '0.82rem' }}>{n.name}</div>
+                  <div className="node-role" style={{ fontSize: '0.65rem' }}>{n.role}</div>
+                  <div className="phone-tag" style={{ fontSize: '0.7rem' }}>
+                    📞 {n.phone}
+                    <span className="carrier-badge" style={{ background: carrierBg(n.carrier).bg, color: carrierBg(n.carrier).fg }}>
+                      {n.carrier}
+                    </span>
+                  </div>
+                  <div>
+                    <button className="btn-action btn-edit" onClick={() => setEditing(n)}>✏️ Edit</button>
+                    <button className="btn-action btn-del" onClick={() => handleDeleteNode(n)}>✕ Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+
+          {/* EDIT MODAL */}
+          {editing && (
+            <div className="modal-backdrop" onClick={() => setEditing(null)}>
+              <div className="modal-box" onClick={e => e.stopPropagation()}>
+                <h3 style={{ marginBottom: 16, color: '#1a3a5c' }}>✏️ កែប្រែព័ត៌មាន — {editing.name}</h3>
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600 }}>ឈ្មោះ</label>
+                  <input type="text" value={editing.name} onChange={e => setEditing({ ...editing, name: e.target.value })} style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid #cbd5e1', marginTop: 4 }} />
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600 }}>តួនាទី</label>
+                  <input type="text" value={editing.role} onChange={e => setEditing({ ...editing, role: e.target.value })} style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid #cbd5e1', marginTop: 4 }} />
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600 }}>លេខទូរស័ព្ទ</label>
+                  <input type="text" value={editing.phone} onChange={e => setEditing({ ...editing, phone: e.target.value })} style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid #cbd5e1', marginTop: 4 }} />
+                </div>
+                <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
+                  <button onClick={() => handleSaveNode(editing)} style={{ flex: 1, background: '#10b981', color: '#fff', border: 'none', padding: '10px 0', borderRadius: 10, fontWeight: 700, cursor: 'pointer' }}>💾 រក្សាទុក</button>
+                  <button onClick={() => setEditing(null)} style={{ flex: 1, background: '#f1f5f9', color: '#334155', border: '1px solid #cbd5e1', padding: '10px 0', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>បោះបង់</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

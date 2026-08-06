@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>រចនាសម្ព័ន្ធគ្រប់គ្រង — វត្តខេមវ័ន(បឹងស្នាយ)</title>
+  <title>រចនាសម្ព័ន្ធអាចារ្យ & គណៈកម្មការ — វត្តខេមវ័ន(បឹងស្នាយ)</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -205,9 +205,9 @@
       text-align: center;
       background: linear-gradient(135deg, #e7cb82 0%, #d4a843 50%, #c59628 100%);
       color: #2c1810;
-      padding: 9px 16px;
+      padding: 12px 20px;
       border-radius: 12px;
-      font-size: 1.25rem;
+      font-size: 1.55rem;
       font-weight: 900;
       font-family: 'Noto Sans Khmer', sans-serif;
       border: 1.5px solid #b88429;
@@ -265,6 +265,12 @@
     }
 
     /* ── IFRAME EMBEDDING CLEANUP ── */
+    body.is-public .oc-btn {
+      display: none !important;
+    }
+    body.is-embedded {
+      background: transparent !important;
+    }
     body.is-embedded .admin-sidebar,
     body.is-embedded .top-header {
       display: none !important;
@@ -275,6 +281,100 @@
     }
     body.is-embedded .tree-wrapper {
       padding: 10px !important;
+    }
+
+    /* Segmented Tab Switcher */
+    .tab-switcher-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .tab-switcher-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(212, 168, 67, 0.45);
+      border-radius: 20px;
+      padding: 6px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(212, 168, 67, 0.15);
+      position: relative;
+      z-index: 10;
+    }
+
+    .tab-nav-btn {
+      background: transparent;
+      color: #475569;
+      border: 1.5px solid transparent;
+      border-radius: 14px;
+      padding: 10px 22px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      outline: none;
+      user-select: none;
+    }
+
+    .tab-nav-btn:hover {
+      color: #1a3a5c;
+      background: rgba(212, 168, 67, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .tab-nav-btn.active {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2c5282 100%);
+      color: #f0d48a;
+      border-color: #d4a843;
+      box-shadow: 0 6px 18px rgba(26, 58, 92, 0.35);
+      transform: scale(1.02);
+    }
+
+    .tab-nav-btn:active {
+      transform: scale(0.96);
+    }
+
+    .tab-nav-btn .tab-icon {
+      font-size: 1.05rem;
+      transition: transform 0.3s ease;
+    }
+
+    .tab-nav-btn.active .tab-icon {
+      transform: scale(1.2) rotate(-6deg);
+    }
+
+    /* Animated entrance and exit transitions */
+    @keyframes chartPageEnter {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+        filter: blur(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .gold-card-container {
+      animation: chartPageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: opacity, transform, filter;
+      transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .page-transition-exit {
+      opacity: 0 !important;
+      transform: translateY(-12px) scale(0.98) !important;
+      filter: blur(4px) !important;
     }
   </style>
 </head>
@@ -762,17 +862,6 @@
                   ))}
                 </div>
               )}
-
-              {/* TIER 4 */}
-              {data.tier4 && data.tier4.length > 0 && (
-                <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', zIndex: 2, marginTop: 10 }}>
-                  {data.tier4.map(node => (
-                    <div key={node.id} data-nid={node.id}>
-                      <NodeCard node={node} tier={3} onEdit={onEdit} onDelete={onDelete} section={section} />
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -928,100 +1017,20 @@
       );
     }
 
-    const INITIAL_MONK_DATA = {
-      tier1: {
-        id: 'monk-head',
-        name: 'ព្រះគ្រូចៅអធិការ សុខា',
-        role: 'ព្រះចៅអធិការវត្ត',
-        roleEn: 'Owner / Head Monk',
-        avatar: '',
-        phone: '097 111 222',
-        carrier: 'CELLCARD',
-        sticker: '☸',
-        fb: '#',
-      },
-      tier2: [
-        {
-          id: 'monk-dep-1',
-          name: 'ព្រះគ្រូ សុវណ្ណធម៌',
-          role: 'ព្រះគ្រូសូត្រឆ្វេង',
-          roleEn: 'Left Recitation Master',
-          avatar: '',
-          phone: '097 117 231',
-          carrier: 'CELLCARD',
-          sticker: '☸',
-          position: 'left',
-        },
-        {
-          id: 'monk-dep-2',
-          name: 'ព្រះគ្រូ ធម្មធរ',
-          role: 'ព្រះគ្រូសូត្រស្ដាំ',
-          roleEn: 'Right Recitation Master',
-          avatar: '',
-          phone: '012 117 609',
-          carrier: 'SMART',
-          sticker: '☸',
-          position: 'right',
-        },
-      ],
-      tier3: [
-        {
-          id: 'monk-sub-1',
-          name: 'ព្រះ សភាលិកធម៌',
-          role: 'ព្រះគ្រូលេខាធិការ',
-          roleEn: 'Chief Secretary Monk',
-          avatar: '',
-          phone: '097 111 272',
-          carrier: 'CELLCARD',
-          sticker: '📜',
-          position: 'left',
-          parentId: 'monk-dep-1',
-        },
-        {
-          id: 'monk-sub-2',
-          name: 'ព្រះ វិន័យធម៌',
-          role: 'ព្រះគ្រូវិន័យធរ',
-          roleEn: 'Discipline Master Monk',
-          avatar: '',
-          phone: '016 888 999',
-          carrier: 'SMART',
-          sticker: '☸',
-          position: 'center',
-          parentId: 'monk-dep-1',
-        },
-        {
-          id: 'monk-sub-3',
-          name: 'ព្រះ ភត្តទេសក៍',
-          role: 'ព្រះគ្រូភត្តទេសក៍',
-          roleEn: 'Food Overseer Monk',
-          avatar: '',
-          phone: '097 555 777',
-          carrier: 'METFONE',
-          sticker: '📿',
-          position: 'right',
-          parentId: 'monk-dep-2',
-        },
-      ],
-      tier4: [
-        { id: 'monk-m1', name: 'ព្រះ មេកុដិទី១', role: 'មេកុដិទី១', phone: '097 111 001', carrier: 'METFONE', sticker: '☸' },
-        { id: 'monk-m2', name: 'ព្រះ មេកុដិទី២', role: 'មេកុដិទី២', phone: '097 111 002', carrier: 'METFONE', sticker: '☸' },
-        { id: 'monk-m3', name: 'ព្រះ មេកុដិទី៣', role: 'មេកុដិទី៣', phone: '097 111 003', carrier: 'CELLCARD', sticker: '☸' },
-        { id: 'monk-m4', name: 'ព្រះ មេកុដិទី៤', role: 'មេកុដិទី៤', phone: '097 111 004', carrier: 'SMART', sticker: '☸' },
-      ],
-    };
-
     /* ═══════════════════════════════════════════════════════════════════
        APP MAIN WITH FULL ADMIN LAYOUT
     ═══════════════════════════════════════════════════════════════════ */
     function App() {
-      const [monkTree, setMonkTree]           = useState(INITIAL_MONK_DATA);
       const [acharTree, setAcharTree]         = useState(INITIAL_ACHAR_DATA);
       const [committeeTree, setCommitteeTree] = useState(INITIAL_COMMITTEE_DATA);
-      const [activeCategory, setActiveCategory] = useState('committee'); // 'committee' | 'monks'
       const [editing, setEditing]             = useState(null);
       const [toast, setToast]                 = useState('');
 
       useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mode') === 'public') {
+          document.body.classList.add('is-public');
+        }
         if (window.self !== window.top) {
           document.body.classList.add('is-embedded');
         }
@@ -1032,61 +1041,47 @@
         setTimeout(() => setToast(''), 3500);
       };
 
+      const handleTabSwitch = (targetUrl) => {
+        const card = document.querySelector('.gold-card-container');
+        if (card) card.classList.add('page-transition-exit');
+        setTimeout(() => {
+          const search = window.location.search;
+          window.location.href = targetUrl + search;
+        }, 180);
+      };
+
       const handleEdit = (node, section) => setEditing({ node, section });
 
       const handleDelete = (node, section) => {
-        if (section === 'monks') {
-          if (node.id === monkTree.tier1.id) {
-            showToast('⚠️ មិនអាចលុបព្រះចៅអធិការបានទេ!');
-            return;
-          }
-          setMonkTree(prev => ({
-            ...prev,
-            tier2: prev.tier2.filter(n => n.id !== node.id),
-            tier3: prev.tier3.filter(n => n.id !== node.id),
-          }));
-        } else {
-          const isAchar = section === 'achar';
-          const data = isAchar ? acharTree : committeeTree;
-          const setData = isAchar ? setAcharTree : setCommitteeTree;
+        const isAchar = section === 'achar';
+        const data = isAchar ? acharTree : committeeTree;
+        const setData = isAchar ? setAcharTree : setCommitteeTree;
 
-          if (node.id === data.tier1.id) {
-            showToast('⚠️ មិនអាចលុបប្រធានបានទេ!');
-            return;
-          }
-
-          setData(prev => ({
-            ...prev,
-            tier2: prev.tier2.filter(n => n.id !== node.id),
-            tier3: prev.tier3.filter(n => n.id !== node.id),
-          }));
+        if (node.id === data.tier1.id) {
+          showToast('⚠️ មិនអាចលុបប្រធានបានទេ!');
+          return;
         }
+
+        setData(prev => ({
+          ...prev,
+          tier2: prev.tier2.filter(n => n.id !== node.id),
+          tier3: prev.tier3.filter(n => n.id !== node.id),
+        }));
         showToast(`🗑️ បានលុបសមាជិក: ${node.name}`);
       };
 
       const handleSave = (updated, section) => {
-        if (section === 'monks') {
-          setMonkTree(prev => {
-            if (prev.tier1.id === updated.id) return { ...prev, tier1: updated };
-            return {
-              ...prev,
-              tier2: prev.tier2.map(n => n.id === updated.id ? updated : n),
-              tier3: prev.tier3.map(n => n.id === updated.id ? updated : n),
-            };
-          });
-        } else {
-          const isAchar = section === 'achar';
-          const setData = isAchar ? setAcharTree : setCommitteeTree;
+        const isAchar = section === 'achar';
+        const setData = isAchar ? setAcharTree : setCommitteeTree;
 
-          setData(prev => {
-            if (prev.tier1.id === updated.id) return { ...prev, tier1: updated };
-            return {
-              ...prev,
-              tier2: prev.tier2.map(n => n.id === updated.id ? updated : n),
-              tier3: prev.tier3.map(n => n.id === updated.id ? updated : n),
-            };
-          });
-        }
+        setData(prev => {
+          if (prev.tier1.id === updated.id) return { ...prev, tier1: updated };
+          return {
+            ...prev,
+            tier2: prev.tier2.map(n => n.id === updated.id ? updated : n),
+            tier3: prev.tier3.map(n => n.id === updated.id ? updated : n),
+          };
+        });
 
         showToast(`✅ បានកែប្រែ: ${updated.name}`);
         setEditing(null);
@@ -1148,8 +1143,8 @@
             {/* Top Bar */}
             <div className="top-header">
               <div className="header-title">
-                <h1>រចនាសម្ព័ន្ធគ្រប់គ្រង</h1>
-                <p>ផ្ទាំងគ្រប់គ្រង / រចនាសម្ព័ន្ធគ្រប់គ្រង</p>
+                <h1>រចនាសម្ព័ន្ធអាចារ្យ & គណៈកម្មការ</h1>
+                <p>ផ្ទាំងគ្រប់គ្រង / រចនាសម្ព័ន្ធអាចារ្យ និង គណៈកម្មការ</p>
               </div>
 
               <button className="fullscreen-btn" onClick={toggleFullScreen}>
@@ -1171,76 +1166,42 @@
                 </div>
 
                 {/* Category Tab Buttons */}
-                <div style={{
-                  display: 'flex', justifyContent: 'center', gap: 12,
-                  marginBottom: 20, zIndex: 10, position: 'relative'
-                }}>
-                  <button
-                    onClick={() => setActiveCategory('monks')}
-                    style={{
-                      background: activeCategory === 'monks' ? 'linear-gradient(135deg, #1a3a5c, #2c5282)' : 'rgba(255,255,255,0.85)',
-                      color: activeCategory === 'monks' ? '#f0d48a' : '#334155',
-                      border: activeCategory === 'monks' ? '2px solid #d4a843' : '1.5px solid #cbd5e1',
-                      borderRadius: 14, padding: '9px 20px', fontSize: '0.9rem', fontWeight: 800,
-                      cursor: 'pointer', boxShadow: activeCategory === 'monks' ? '0 4px 14px rgba(26,58,92,0.3)' : 'none',
-                      transition: 'all 0.25s ease', display: 'flex', alignItems: 'center', gap: 8,
-                    }}
-                  >
-                    <span>☸</span>
-                    <span>រចនាសម្ព័ន្ធព្រះសង្ឃ (Monks)</span>
-                  </button>
-
-                  <button
-                    onClick={() => setActiveCategory('committee')}
-                    style={{
-                      background: activeCategory === 'committee' ? 'linear-gradient(135deg, #1a3a5c, #2c5282)' : 'rgba(255,255,255,0.85)',
-                      color: activeCategory === 'committee' ? '#f0d48a' : '#334155',
-                      border: activeCategory === 'committee' ? '2px solid #d4a843' : '1.5px solid #cbd5e1',
-                      borderRadius: 14, padding: '9px 20px', fontSize: '0.9rem', fontWeight: 800,
-                      cursor: 'pointer', boxShadow: activeCategory === 'committee' ? '0 4px 14px rgba(26,58,92,0.3)' : 'none',
-                      transition: 'all 0.25s ease', display: 'flex', alignItems: 'center', gap: 8,
-                    }}
-                  >
-                    <span>👥</span>
-                    <span>អាចារ្យ & គណៈកម្មការ (Committee)</span>
-                  </button>
+                <div className="tab-switcher-wrapper">
+                  <div className="tab-switcher-nav">
+                    <button
+                      className="tab-nav-btn"
+                      type="button"
+                      onClick={() => handleTabSwitch('monks-chart.html')}
+                    >
+                      <span className="tab-icon">☸</span>
+                      <span>រចនាសម្ព័ន្ធព្រះសង្ឃ</span>
+                    </button>
+                    <button className="tab-nav-btn active" type="button">
+                      <span className="tab-icon">👥</span>
+                      <span>អាចារ្យ & គណៈកម្មការ</span>
+                    </button>
+                  </div>
                 </div>
 
-                {/* VIEW 1: MONKS TREE */}
-                {activeCategory === 'monks' && (
-                  <div style={{ maxWidth: 880, margin: '0 auto', width: '100%', position: 'relative', zIndex: 2 }}>
-                    <TreePanel
-                      title="រចនាសម្ព័ន្ធគ្រប់គ្រងព្រះសង្ឃ — វត្តខេមវ័ន(បឹងស្នាយ)"
-                      data={monkTree}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                      section="monks"
-                    />
-                  </div>
-                )}
+                <div className="dual-grid">
+                  {/* LEFT PANEL: ផ្នែកអាចារ្យ */}
+                  <TreePanel
+                    title="រចនាសម្ព័ន្ធអាចារ្យ"
+                    data={acharTree}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    section="achar"
+                  />
 
-                {/* VIEW 2: DUAL COMMITTEE & ACHAR TREE */}
-                {activeCategory === 'committee' && (
-                  <div className="dual-grid">
-                    {/* LEFT PANEL: ផ្នែកអាចារ្យ */}
-                    <TreePanel
-                      title="រចនាសម្ព័ន្ធអាចារ្យ"
-                      data={acharTree}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                      section="achar"
-                    />
-
-                    {/* RIGHT PANEL: ផ្នែកគណៈកម្មការ */}
-                    <TreePanel
-                      title="រចនាសម្ព័ន្ធគណៈកម្មការ"
-                      data={committeeTree}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                      section="committee"
-                    />
-                  </div>
-                )}
+                  {/* RIGHT PANEL: ផ្នែកគណៈកម្មការ */}
+                  <TreePanel
+                    title="រចនាសម្ព័ន្ធគណៈកម្មការ"
+                    data={committeeTree}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    section="committee"
+                  />
+                </div>
               </div>
             </div>
           </main>

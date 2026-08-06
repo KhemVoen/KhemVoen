@@ -252,6 +252,135 @@
       ],
     };
 
+    const INITIAL_COMMITTEE_DATA = {
+      tier1: {
+        id: 't1-head-com',
+        name: 'លោកតា ឧបាសក ម៉េង ហួរ',
+        role: 'ប្រធានគណៈកម្មការវត្ត',
+        roleEn: 'Committee Chairman',
+        avatar: '',
+        phone: '012 888 000',
+        carrier: 'CELLCARD',
+        sticker: '👑',
+        fb: '#', ig: '#',
+      },
+      tier2: [
+        {
+          id: 't2-left-com',
+          name: 'លោក ឧបាសក សុខ ផន',
+          role: 'អនុប្រធានគណៈកម្មការ',
+          roleEn: 'Vice Chairman',
+          avatar: '',
+          phone: '097 777 888',
+          carrier: 'METFONE',
+          sticker: '🛡️',
+          fb: '#',
+          position: 'left',
+        },
+        {
+          id: 't2-right-com',
+          name: 'លោក អាចារ្យ សែម វ៉ន',
+          role: 'អាចារ្យធំ / ពិធីការ',
+          roleEn: 'Chief Ceremonial Master',
+          avatar: '',
+          phone: '016 666 777',
+          carrier: 'SMART',
+          sticker: '📜',
+          fb: '#',
+          position: 'right',
+        },
+      ],
+      tier3: [
+        {
+          id: 't3-left-com',
+          name: 'លោក លី ឃាង',
+          role: 'លេខាធិការគណៈកម្មការ',
+          roleEn: 'Chief Secretary',
+          avatar: '',
+          phone: '097 555 444',
+          carrier: 'METFONE',
+          sticker: '🌹',
+          fb: '#',
+          position: 'left',
+        },
+        {
+          id: 't3-center-com',
+          name: 'លោកស្រី ឧបាសិកា ចាន់ ធី',
+          role: 'បេឡាធិការ / ហិរញ្ញវត្ថុ',
+          roleEn: 'Chief Treasurer',
+          avatar: '',
+          phone: '012 333 222',
+          carrier: 'CELLCARD',
+          sticker: '🪷',
+          fb: '#', ig: '#',
+          position: 'center',
+        },
+        {
+          id: 't3-right-com',
+          name: 'លោក អាចារ្យ ហេង ស៊ាង',
+          role: 'អាចារ្យរៀបចំពិធី',
+          roleEn: 'Ritual Coordinator',
+          avatar: '',
+          phone: '088 111 222',
+          carrier: 'METFONE',
+          fb: '#',
+          position: 'right',
+        },
+      ],
+      tier4: [
+        {
+          id: 't4-1-com',
+          name: 'គណៈកម្មការសំណង់',
+          role: 'ប្រធានផ្នែកសំណង់',
+          roleEn: 'Construction Lead',
+          avatar: '',
+          phone: '097 123 456',
+          carrier: 'METFONE',
+          fb: '#',
+        },
+        {
+          id: 't4-2-com',
+          name: 'គណៈកម្មការចង្ហាន់',
+          role: 'ប្រធានផ្នែកចាត់ចែង',
+          roleEn: 'Catering Lead',
+          avatar: '',
+          phone: '012 234 567',
+          carrier: 'CELLCARD',
+          fb: '#',
+        },
+        {
+          id: 't4-3-com',
+          name: 'គណៈកម្មការសន្តិសុខ',
+          role: 'ប្រធានផ្នែករៀបរយ',
+          roleEn: 'Security Lead',
+          avatar: '',
+          phone: '097 345 678',
+          carrier: 'METFONE',
+          fb: '#',
+        },
+        {
+          id: 't4-4-com',
+          name: 'គណៈកម្មការសហគមន៍',
+          role: 'ប្រធានផ្នែកទំនាក់ទំនង',
+          roleEn: 'Public Relations',
+          avatar: '',
+          phone: '010 456 789',
+          carrier: 'SMART',
+          fb: '#',
+        },
+        {
+          id: 't4-5-com',
+          name: 'គណៈកម្មការថែរក្សា',
+          role: 'ប្រធានផ្នែកសម្បត្តិវត្ត',
+          roleEn: 'Asset Management',
+          avatar: '',
+          phone: '077 567 890',
+          carrier: 'CELLCARD',
+          fb: '#',
+        },
+      ],
+    };
+
     /* ═══════════════════════════════════════════════════════════════════
        CARRIER COLOR MAP
     ═══════════════════════════════════════════════════════════════════ */
@@ -265,7 +394,7 @@
     /* ═══════════════════════════════════════════════════════════════════
        NODE CARD COMPONENT — Matching Image 2
     ═══════════════════════════════════════════════════════════════════ */
-    function NodeCard({ node, tier = 1, onEdit, onDelete, isHighlighted }) {
+    function NodeCard({ node, tier = 1, onEdit, onDelete, isHighlighted, category = 'monks' }) {
       const cs1 = node.carrier ? carrierStyle(node.carrier) : null;
       const cs2 = node.carrier2 ? carrierStyle(node.carrier2) : null;
 
@@ -330,12 +459,12 @@
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   height: '100%', fontSize: tier === 4 ? '1.2rem' : '2rem', color: '#b88429',
                 }}>
-                  ☸
+                  {category === 'committee' ? '👤' : '☸'}
                 </div>
               )}
             </div>
 
-            {/* Lotus Ornament Badge */}
+            {/* Lotus / Lay Ornament Badge */}
             {tier !== 4 && (
               <div style={{
                 position: 'absolute', top: -2, right: -2,
@@ -346,7 +475,7 @@
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
               }}>
-                ☸
+                {category === 'committee' ? '🏛️' : '☸'}
               </div>
             )}
           </div>
@@ -469,7 +598,7 @@
     /* ═══════════════════════════════════════════════════════════════════
        ORG CHART — 4-Tier Dynamic SVG Layout
     ═══════════════════════════════════════════════════════════════════ */
-    function OrgChart({ data, onEdit, onDelete }) {
+    function OrgChart({ data, onEdit, onDelete, category = 'monks' }) {
       const containerRef = useRef(null);
       const [lines, setLines] = useState([]);
       const [joints, setJoints] = useState([]);
@@ -507,17 +636,6 @@
         const hasCenterT3 = data.tier3.some(n => n.position === 'center');
 
         if (hasCenterT3) {
-          /* ══════════════════════════════════════════
-             CONDITION 1: 3 roles present in Tier 3 (Default Flow)
-             - Stem down from Abbot (T1) to upperMidY
-             - Horizontal bar across Tier 2
-             - Central trunk continues from upperMidY down to lowerMidY
-             - Lower horizontal bar across Tier 3 (3 nodes)
-             - Central stem from center T3 (ព្រះគ្រូវិន័យធរ) down to t4MidY
-             - Horizontal bus bar across Tier 4 → 5 Mequisi drops
-             ══════════════════════════════════════════ */
-
-          // --- Tier 1 → Tier 2 ---
           if (t2Coords.length >= 2) {
             const upperMidY = t1.by + (t2Coords[0].ty - t1.by) / 2;
             newLines.push({ x1: t1.cx, y1: t1.by, x2: t1.cx, y2: upperMidY });
@@ -531,7 +649,6 @@
             });
           }
 
-          // --- Tier 1 trunk → Tier 3 ---
           if (t3Coords.length > 0 && t2Coords.length >= 2) {
             const trunkTopY = t1.by + (t2Coords[0].ty - t1.by) / 2;
             const lowerMidY = t2Coords[0].by + (t3Coords[0].ty - t2Coords[0].by) / 2;
@@ -546,7 +663,6 @@
             });
           }
 
-          // --- Tier 3 center → Tier 4 ---
           const t3Center = t3Coords.find(c => c.pos === 'center');
           if (t3Center && t4Coords.length > 0) {
             const t4MidY = t3Center.by + (t4Coords[0].ty - t3Center.by) / 2;
@@ -562,18 +678,9 @@
           }
 
         } else {
-          /* ══════════════════════════════════════════
-             CONDITION 2: Tier 3 is not 3 roles (Restructured Flow)
-             - Abbot → Left & Right Reciting Monks
-             - Tier 2 nodes → Tier 3 nodes (direct centered lines)
-             - Every Tier 3 node (គ្រូលេខាធិការ & others) → Mequisi Line
-             - Mequisi Line → Mequisi drops 1-5
-             ══════════════════════════════════════════ */
-
           const t2Left = t2Coords[0];
           const t2Right = t2Coords[1];
 
-          // --- 1. Abbot (ព្រះគ្រូចៅអធិការ) → Left & Right Reciting Monks (ព្រះគ្រូសូត្រឆ្វេង ស្ដាំ) ---
           if (t2Left && t2Right) {
             const upperMidY = t1.by + (t2Left.ty - t1.by) / 2;
             newLines.push({ x1: t1.cx, y1: t1.by, x2: t1.cx, y2: upperMidY });
@@ -585,7 +692,6 @@
             newJoints.push({ cx: t2Right.cx, cy: upperMidY });
           }
 
-          // --- 2. Tier 2 → Tier 3 (Direct Centered Lines) ---
           t3Coords.forEach((t3Node, idx) => {
             const t2Node = t2Coords[idx] || (idx === 0 ? t2Left : t2Right);
             if (t2Node) {
@@ -595,23 +701,19 @@
             }
           });
 
-          // --- 3. Every Tier 3 node (គ្រូលេខាធិការ & others) → Mequisi Line (ខ្សែបន្ទាត់មេកុដិ) ---
           if (t3Coords.length > 0 && t4Coords.length > 0) {
             const busY = t3Coords[0].by + (t4Coords[0].ty - t3Coords[0].by) / 2;
 
-            // Direct line connecting from EVERY Tier 3 node (including គ្រូលេខាធិការ) down to Mequisi line
             t3Coords.forEach(t3Node => {
               newLines.push({ x1: t3Node.cx, y1: t3Node.by, x2: t3Node.cx, y2: busY });
               newJoints.push({ cx: t3Node.cx, cy: busY });
             });
 
-            // Head of Monks' Quarters line (ខ្សែបន្ទាត់មេកុដិ)
             const allX = [...t3Coords.map(c => c.cx), ...t4Coords.map(c => c.cx)];
             const busLeft = Math.min(...allX);
             const busRight = Math.max(...allX);
             newLines.push({ x1: busLeft, y1: busY, x2: busRight, y2: busY });
 
-            // Drops into Head of Monks' Quarters (មេកុដិ 1-5)
             t4Coords.forEach(c => {
               newLines.push({ x1: c.cx, y1: busY, x2: c.cx, y2: c.ty });
               newJoints.push({ cx: c.cx, cy: busY });
@@ -635,7 +737,6 @@
         return () => ro.disconnect();
       }, [recalc]);
 
-      // Tier 3 gap: 60px when 3 roles present (Condition 1), 200px when role removed (Condition 2)
       const t3Gap = hasCenterT3 ? 60 : 200;
 
       return (
@@ -695,21 +796,21 @@
 
             {/* ═══ TIER 1: Head (Top Center) ═══ */}
             <div data-nid={data.tier1.id} style={{ zIndex: 2 }}>
-              <NodeCard node={data.tier1} tier={1} onEdit={onEdit} onDelete={onDelete} />
+              <NodeCard node={data.tier1} tier={1} onEdit={onEdit} onDelete={onDelete} category={category} />
             </div>
 
-            {/* ═══ TIER 2: Recitation Masters (Left & Right of Head) ═══ */}
+            {/* ═══ TIER 2: Recitation Masters / Vice Chairs ═══ */}
             {data.tier2.length > 0 && (
               <div style={{ display: 'flex', gap: 200, justifyContent: 'center', zIndex: 2 }}>
                 {data.tier2.map(dep => (
                   <div key={dep.id} data-nid={dep.id}>
-                    <NodeCard node={dep} tier={2} onEdit={onEdit} onDelete={onDelete} />
+                    <NodeCard node={dep} tier={2} onEdit={onEdit} onDelete={onDelete} category={category} />
                   </div>
                 ))}
               </div>
             )}
 
-            {/* ═══ TIER 3: Secretary / Discipline / Manager ═══ */}
+            {/* ═══ TIER 3: Secretary / Treasurer / Discipline / Manager ═══ */}
             {data.tier3.length > 0 && (
               <div style={{
                 display: 'flex', gap: t3Gap, justifyContent: 'center', zIndex: 2,
@@ -723,13 +824,14 @@
                       onEdit={onEdit}
                       onDelete={onDelete}
                       isHighlighted={off.highlighted}
+                      category={category}
                     />
                   </div>
                 ))}
               </div>
             )}
 
-            {/* ═══ TIER 4: មេកុដិ (Horizontal Row) ═══ */}
+            {/* ═══ TIER 4: មេកុដិ / គណៈកម្មការផ្នែក (Horizontal Row) ═══ */}
             {data.tier4.length > 0 && (
               <div style={{
                 display: 'flex', gap: 18, justifyContent: 'center', zIndex: 2,
@@ -737,7 +839,7 @@
               }}>
                 {data.tier4.map(mk => (
                   <div key={mk.id} data-nid={mk.id}>
-                    <NodeCard node={mk} tier={4} onEdit={onEdit} onDelete={onDelete} />
+                    <NodeCard node={mk} tier={4} onEdit={onEdit} onDelete={onDelete} category={category} />
                   </div>
                 ))}
               </div>
@@ -756,13 +858,23 @@
       ['roleEn',  'Role (English)'],
       ['phone',   'លេខទូរស័ព្ទ'],
       ['carrier', 'Carrier (CELLCARD|METFONE|SMART)'],
-      ['avatar',  'Avatar URL'],
       ['fb',      'Facebook URL'],
       ['ig',      'Instagram URL'],
     ];
 
     function EditModal({ node, onSave, onClose }) {
       const [draft, setDraft] = useState({ ...node });
+
+      const handleFileUpload = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            setDraft(p => ({ ...p, avatar: event.target.result }));
+          };
+          reader.readAsDataURL(file);
+        }
+      };
 
       return (
         <div
@@ -790,11 +902,100 @@
             <h3 style={{ fontWeight: 800, color: '#1a3a5c', marginBottom: 4, fontSize: '1.1rem' }}>
               ✏ កែប្រែ / Edit Node
             </h3>
-            <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginBottom: 18 }}>
+            <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginBottom: 16 }}>
               ID: <code style={{ background: '#f1f5f9', padding: '1px 6px', borderRadius: 4 }}>
                 {node.id}
               </code>
             </p>
+
+            {/* Photo Upload & Avatar Preview Area */}
+            <div style={{
+              background: '#f8fafc',
+              border: '1.5px dashed #d4a843',
+              borderRadius: 14,
+              padding: 14,
+              marginBottom: 16,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 10,
+            }}>
+              <label style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1a3a5c', alignSelf: 'flex-start' }}>
+                🖼️ រូបថត / Photo Image (Upload or URL)
+              </label>
+
+              {/* Avatar Preview */}
+              <div style={{ position: 'relative', width: 72, height: 72 }}>
+                <div style={{
+                  width: '100%', height: '100%', borderRadius: '50%',
+                  border: '2.5px solid #d4a843', overflow: 'hidden',
+                  background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                }}>
+                  {draft.avatar ? (
+                    <img src={draft.avatar} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => e.target.style.display = 'none'} />
+                  ) : (
+                    <span style={{ fontSize: '1.6rem', color: '#b88429' }}>👤</span>
+                  )}
+                </div>
+
+                {draft.avatar && (
+                  <button
+                    type="button"
+                    onClick={() => setDraft(p => ({ ...p, avatar: '' }))}
+                    title="Remove Photo"
+                    style={{
+                      position: 'absolute', top: -4, right: -4,
+                      width: 22, height: 22, borderRadius: '50%',
+                      background: '#ef4444', color: '#fff', border: '2px solid #fff',
+                      fontSize: 10, fontWeight: 700, cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}
+                  >✕</button>
+                )}
+              </div>
+
+              {/* File Upload Button */}
+              <div style={{ width: '100%' }}>
+                <label style={{
+                  width: '100%',
+                  background: 'linear-gradient(135deg, #1a3a5c, #2c5282)',
+                  color: '#f0d48a',
+                  border: 'none',
+                  borderRadius: 10,
+                  padding: '8px 12px',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  boxShadow: '0 2px 6px rgba(26,58,92,0.25)',
+                }}>
+                  <span>📷 ជ្រើសរើសរូបថត (Upload Photo File)</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+              </div>
+
+              {/* Or paste Avatar URL */}
+              <input
+                type="text"
+                placeholder="ឬ បញ្ចូល Avatar URL..."
+                value={draft.avatar || ''}
+                onChange={e => setDraft(p => ({ ...p, avatar: e.target.value }))}
+                style={{
+                  width: '100%', border: '1px solid #cbd5e1',
+                  borderRadius: 8, padding: '6px 10px',
+                  fontSize: '0.76rem', outline: 'none',
+                  fontFamily: 'inherit', color: '#334155',
+                  background: '#fff',
+                }}
+              />
+            </div>
 
             {EDIT_FIELDS.map(([key, label]) => (
               <div key={key} style={{ marginBottom: 12 }}>
@@ -851,7 +1052,7 @@
     /* ═══════════════════════════════════════════════════════════════════
        ADD ROLE MODAL
     ═══════════════════════════════════════════════════════════════════ */
-    function AddRoleModal({ onAdd, onClose }) {
+    function AddRoleModal({ onAdd, onClose, activeTab = 'monks' }) {
       const [tier, setTier] = useState('3');
       const [name, setName] = useState('');
       const [role, setRole] = useState('');
@@ -860,6 +1061,17 @@
       const [carrier, setCarrier] = useState('CELLCARD');
       const [position, setPosition] = useState('center');
       const [avatar, setAvatar] = useState('');
+
+      const handleFileUpload = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            setAvatar(event.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      };
 
       const handleSubmit = (e) => {
         e.preventDefault();
@@ -904,10 +1116,98 @@
             }}
           >
             <h3 style={{ fontWeight: 800, color: '#1a3a5c', marginBottom: 16, fontSize: '1.15rem' }}>
-              ➕ បន្ថែមតួនាទី / សមាជិកថ្មី
+              ➕ បន្ថែមតួនាទី / សមាជិកថ្មី ({activeTab === 'monks' ? 'ព្រះសង្ឃ' : 'អាចារ្យ/គណៈកម្មការ'})
             </h3>
 
             <form onSubmit={handleSubmit}>
+              {/* Photo Upload & Avatar Preview Area */}
+              <div style={{
+                background: '#f8fafc',
+                border: '1.5px dashed #d4a843',
+                borderRadius: 14,
+                padding: 14,
+                marginBottom: 16,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 10,
+              }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1a3a5c', alignSelf: 'flex-start' }}>
+                  🖼️ រូបថត / Photo Image (Upload or URL)
+                </label>
+
+                {/* Avatar Preview */}
+                <div style={{ position: 'relative', width: 72, height: 72 }}>
+                  <div style={{
+                    width: '100%', height: '100%', borderRadius: '50%',
+                    border: '2.5px solid #d4a843', overflow: 'hidden',
+                    background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                  }}>
+                    {avatar ? (
+                      <img src={avatar} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => e.target.style.display = 'none'} />
+                    ) : (
+                      <span style={{ fontSize: '1.6rem', color: '#b88429' }}>{activeTab === 'committee' ? '👤' : '☸'}</span>
+                    )}
+                  </div>
+
+                  {avatar && (
+                    <button
+                      type="button"
+                      onClick={() => setAvatar('')}
+                      title="Remove Photo"
+                      style={{
+                        position: 'absolute', top: -4, right: -4,
+                        width: 22, height: 22, borderRadius: '50%',
+                        background: '#ef4444', color: '#fff', border: '2px solid #fff',
+                        fontSize: 10, fontWeight: 700, cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}
+                    >✕</button>
+                  )}
+                </div>
+
+                {/* File Upload Button */}
+                <div style={{ width: '100%' }}>
+                  <label style={{
+                    width: '100%',
+                    background: 'linear-gradient(135deg, #1a3a5c, #2c5282)',
+                    color: '#f0d48a',
+                    border: 'none',
+                    borderRadius: 10,
+                    padding: '8px 12px',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    textAlign: 'center',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    boxShadow: '0 2px 6px rgba(26,58,92,0.25)',
+                  }}>
+                    <span>📷 ជ្រើសរើសរូបថត (Upload Photo File)</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
+                </div>
+
+                {/* Or paste Avatar URL */}
+                <input
+                  type="text"
+                  placeholder="ឬ បញ្ចូល Avatar URL..."
+                  value={avatar || ''}
+                  onChange={e => setAvatar(e.target.value)}
+                  style={{
+                    width: '100%', border: '1px solid #cbd5e1',
+                    borderRadius: 8, padding: '6px 10px',
+                    fontSize: '0.76rem', outline: 'none',
+                    fontFamily: 'inherit', color: '#334155',
+                    background: '#fff',
+                  }}
+                />
+              </div>
               <div style={{ marginBottom: 12 }}>
                 <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
                   ជ្រើសរើសជួរ/ឋានានុក្រម (Tier / Level)
@@ -922,9 +1222,15 @@
                     fontFamily: 'inherit', color: '#1a3a5c',
                   }}
                 >
-                  <option value="2">Tier 2 — ព្រះគ្រូសូត្រ (Recitation Master)</option>
-                  <option value="3">Tier 3 — មន្ត្រី/លេខា/គ្រប់គ្រង (Officer Level)</option>
-                  <option value="4">Tier 4 — មេកុដិ (Mequisi Level)</option>
+                  <option value="2">
+                    {activeTab === 'committee' ? 'Tier 2 — អនុប្រធាន/អាចារ្យធំ (Vice Chair / Chief Achar)' : 'Tier 2 — ព្រះគ្រូសូត្រ (Recitation Master)'}
+                  </option>
+                  <option value="3">
+                    {activeTab === 'committee' ? 'Tier 3 — លេខា/ហិរញ្ញវត្ថុ/ពិធីការ (Officer / Secretariat)' : 'Tier 3 — មន្ត្រី/លេខា/គ្រប់គ្រង (Officer Level)'}
+                  </option>
+                  <option value="4">
+                    {activeTab === 'committee' ? 'Tier 4 — គណៈកម្មការផ្នែក/សមាជិក (Sub-committee / Member)' : 'Tier 4 — មេកុដិ (Mequisi Level)'}
+                  </option>
                 </select>
               </div>
 
@@ -935,7 +1241,7 @@
                 <input
                   type="text"
                   required
-                  placeholder="ឧ. ព្រះ សីលធម៌"
+                  placeholder={activeTab === 'committee' ? 'ឧ. លោក ឧបាសក ហេង' : 'ឧ. ព្រះ សីលធម៌'}
                   value={name}
                   onChange={e => setName(e.target.value)}
                   style={{
@@ -953,7 +1259,7 @@
                 </label>
                 <input
                   type="text"
-                  placeholder="ឧ. ព្រះវិន័យធរ / មេកុដិទី៦"
+                  placeholder={activeTab === 'committee' ? 'ឧ. អាចារ្យរៀបចំពិធី / គណៈកម្មការចង្ហាន់' : 'ឧ. ព្រះវិន័យធរ / មេកុដិទី៦'}
                   value={role}
                   onChange={e => setRole(e.target.value)}
                   style={{
@@ -971,7 +1277,7 @@
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Officer / Mequisi 6"
+                  placeholder="e.g. Officer / Committee Lead"
                   value={roleEn}
                   onChange={e => setRoleEn(e.target.value)}
                   style={{
@@ -1074,10 +1380,43 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════════
-       APP — Main Application with Authorization
+       APP — Main Application with Authorization & Category Switcher
     ═══════════════════════════════════════════════════════════════════ */
     function App() {
-      const [data,       setData]       = useState(INITIAL_DATA);
+      const [activeTab, setActiveTab] = useState('monks'); // 'monks' | 'committee'
+
+      const [dataMonks, setDataMonks] = useState(() => {
+        try {
+          const saved = localStorage.getItem('khemvoen_orgtree_monks') || localStorage.getItem('khemvoen_orgtree');
+          return saved ? JSON.parse(saved) : INITIAL_DATA;
+        } catch(e) { return INITIAL_DATA; }
+      });
+
+      const [dataCommittee, setDataCommittee] = useState(() => {
+        try {
+          const saved = localStorage.getItem('khemvoen_orgtree_committee');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (!parsed?.tier1?.phone || parsed?.tier1?.phone === '012 888 999') {
+              localStorage.setItem('khemvoen_orgtree_committee', JSON.stringify(INITIAL_COMMITTEE_DATA));
+              return INITIAL_COMMITTEE_DATA;
+            }
+            return parsed;
+          }
+          return INITIAL_COMMITTEE_DATA;
+        } catch(e) { return INITIAL_COMMITTEE_DATA; }
+      });
+
+      const data = activeTab === 'monks' ? dataMonks : dataCommittee;
+
+      const setData = (updater) => {
+        if (activeTab === 'monks') {
+          setDataMonks(updater);
+        } else {
+          setDataCommittee(updater);
+        }
+      };
+
       const [editing,    setEditing]    = useState(null);
       const [addingRole, setAddingRole] = useState(false);
       const [toast,      setToast]      = useState({ msg: '', type: 'info' });
@@ -1113,48 +1452,45 @@
           return;
         }
         try {
-          localStorage.setItem('khemvoen_orgtree', JSON.stringify(data));
+          const storageKey = activeTab === 'monks' ? 'khemvoen_orgtree_monks' : 'khemvoen_orgtree_committee';
+          localStorage.setItem(storageKey, JSON.stringify(data));
+          if (activeTab === 'monks') localStorage.setItem('khemvoen_orgtree', JSON.stringify(data));
           await fetch('/api/content/orgtree', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ orgTree: data }),
+            body: JSON.stringify({ orgTree: data, category: activeTab }),
           });
-          showToast('💾 បានរក្សាទុករចនាសម្ព័ន្ធជោគជ័យ! (Saved Successfully)', 'success');
+          showToast(`💾 បានរក្សាទុករចនាសម្ព័ន្ធ ${activeTab === 'monks' ? 'ព្រះសង្ឃ' : 'អាចារ្យ/គណៈកម្មការ'} ជោគជ័យ!`, 'success');
         } catch (e) {
           showToast('💾 បានរក្សាទុកក្នុង Local Storage!', 'info');
         }
       };
 
       const handleDelete = (node) => {
-        // === Authorization Check ===
         if (userRole !== 'admin' && userRole !== 'owner') {
           showToast('អ្នកគ្មានសិទ្ធិលុបតួនាទីនេះទេ។ មានតែ Admin ឬ Owner ប៉ុណ្ណោះដែលអាចលុបបាន។', 'deny');
           return;
         }
 
-        // Cannot delete Tier 1
         if (node.id === data.tier1.id) {
           showToast('⚠️ មិនអាចលុបថ្នាក់ដឹកនាំកំពូលបានទេ!', 'warn');
           return;
         }
 
-        // Prevent deleting Tier 4 nodes
         if (data.tier4.some(n => n.id === node.id)) {
-          showToast('⚠️ មិនអាចលុបមេកុដិបានទេ!', 'warn');
+          showToast(`⚠️ មិនអាចលុប ${activeTab === 'monks' ? 'មេកុដិ' : 'គណៈកម្មការផ្នែក'} បានទេ!`, 'warn');
           return;
         }
 
         setData(prev => {
           const next = { ...prev };
 
-          // Check Tier 2
           if (prev.tier2.some(n => n.id === node.id)) {
             next.tier2 = prev.tier2.filter(n => n.id !== node.id);
             showToast(`🗑️ បានលុប: ${node.name}`, 'success');
             return next;
           }
 
-          // Check Tier 3
           if (prev.tier3.some(n => n.id === node.id)) {
             next.tier3 = prev.tier3.filter(n => n.id !== node.id);
             showToast(`🗑️ បានលុប: ${node.name} — ខ្សែបន្ទាត់ត្រូវបានរៀបចំឡើងវិញ`, 'success');
@@ -1184,8 +1520,14 @@
       };
 
       const handleReset = () => {
-        setData(INITIAL_DATA);
-        showToast('↺ បានកំណត់ឡើងវិញ / Reset complete', 'info');
+        if (activeTab === 'monks') {
+          setDataMonks(INITIAL_DATA);
+          localStorage.removeItem('khemvoen_orgtree_monks');
+        } else {
+          setDataCommittee(INITIAL_COMMITTEE_DATA);
+          localStorage.removeItem('khemvoen_orgtree_committee');
+        }
+        showToast(`↺ បានកំណត់រចនាសម្ព័ន្ធ ${activeTab === 'monks' ? 'ព្រះសង្ឃ' : 'អាចារ្យ/គណៈកម្មការ'} ឡើងវិញ`, 'info');
       };
 
       const cycleRole = () => {
@@ -1317,38 +1659,52 @@
                   រចនាសម្ព័ន្ធគ្រប់គ្រង
                 </h2>
                 <p style={{ color: '#8a7a68', fontSize: '0.9rem', marginTop: 6 }}>
-                  វត្តខេមវ័ន(បឹងស្នាយ) · ☸️ ឋានានុក្រមព្រះសង្ឃ
+                  វត្តខេមវ័ន(បឹងស្នាយ) · {activeTab === 'monks' ? '☸️ ឋានានុក្រមព្រះសង្ឃ' : '👥 ឋានានុក្រមអាចារ្យ និង គណៈកម្មការវត្ត'}
                 </p>
-                <div style={{
-                  display: 'inline-block', marginTop: 14,
-                  background: 'linear-gradient(135deg, #1a3a5c, #2c5282)',
-                  border: '1.5px solid #d4a843', borderRadius: 25,
-                  color: '#d4a843', padding: '8px 24px',
-                  fontSize: '0.88rem', fontWeight: 700,
-                }}>
-                  ☸ ព្រះសង្ឃ
-                </div>
 
-                {/* Authorization indicator */}
+                {/* Category Switcher Tabs */}
                 <div style={{
-                  marginTop: 12,
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.7)',
-                  border: `1.5px solid ${roleColors[userRole]}`,
-                  borderRadius: 20,
-                  padding: '5px 16px',
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  color: '#374151',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+                  marginTop: 16, flexWrap: 'wrap',
                 }}>
-                  <div style={{
-                    width: 8, height: 8, borderRadius: '50%',
-                    background: roleColors[userRole],
-                  }} />
-                  សិទ្ធិ: {userRole.toUpperCase()}
-                  {(userRole === 'admin' || userRole === 'owner')
-                    ? ' — អាចកែប្រែ/លុបបាន'
-                    : ' — មើលបានតែប៉ុណ្ណោះ'}
+                  <button
+                    onClick={() => setActiveTab('monks')}
+                    style={{
+                      background: activeTab === 'monks'
+                        ? 'linear-gradient(135deg, #1a3a5c, #2c5282)'
+                        : 'rgba(255,255,255,0.7)',
+                      border: activeTab === 'monks' ? '2px solid #d4a843' : '1.5px solid #cbd5e1',
+                      borderRadius: 25,
+                      color: activeTab === 'monks' ? '#d4a843' : '#475569',
+                      padding: '9px 24px',
+                      fontSize: '0.9rem', fontWeight: 800,
+                      cursor: 'pointer',
+                      boxShadow: activeTab === 'monks' ? '0 4px 14px rgba(212,168,67,0.35)' : 'none',
+                      transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
+                      transform: activeTab === 'monks' ? 'scale(1.04)' : 'scale(1)',
+                    }}
+                  >
+                    ☸ ព្រះសង្ឃ (Monks)
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('committee')}
+                    style={{
+                      background: activeTab === 'committee'
+                        ? 'linear-gradient(135deg, #1a3a5c, #2c5282)'
+                        : 'rgba(255,255,255,0.7)',
+                      border: activeTab === 'committee' ? '2px solid #d4a843' : '1.5px solid #cbd5e1',
+                      borderRadius: 25,
+                      color: activeTab === 'committee' ? '#d4a843' : '#475569',
+                      padding: '9px 24px',
+                      fontSize: '0.9rem', fontWeight: 800,
+                      cursor: 'pointer',
+                      boxShadow: activeTab === 'committee' ? '0 4px 14px rgba(212,168,67,0.35)' : 'none',
+                      transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)',
+                      transform: activeTab === 'committee' ? 'scale(1.04)' : 'scale(1)',
+                    }}
+                  >
+                    👥 អាចារ្យ/គណៈកម្មការ (Committee)
+                  </button>
                 </div>
               </div>
 
@@ -1357,6 +1713,7 @@
                 data={data}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                category={activeTab}
               />
             </div>
 
@@ -1415,6 +1772,7 @@ After deleting ព្រះគ្រូវិន័យធរ (center):
             <AddRoleModal
               onAdd={handleAddRole}
               onClose={() => setAddingRole(false)}
+              activeTab={activeTab}
             />
           )}
 
