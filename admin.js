@@ -233,14 +233,57 @@ function switchTab(tab) {
     tab = 'overview';
   }
 
+  let actualTab = tab;
+  let subTab = null;
+
+  if (tab === 'images' || tab === 'gallery' || tab === 'hero' || tab === 'heroslides') {
+    actualTab = 'images';
+    subTab = (tab === 'hero' || tab === 'heroslides') ? 'hero' : 'gallery';
+  }
+
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-  $(`tab-${tab}`).classList.add('active');
-  const navLink = document.querySelector(`.sidebar-nav a[data-tab="${tab}"]`);
+
+  const panel = $(`tab-${actualTab}`);
+  if (panel) panel.classList.add('active');
+
+  const navLink = document.querySelector(`.sidebar-nav a[data-tab="${actualTab}"]`) || document.querySelector(`.sidebar-nav a[data-tab="${tab}"]`);
   if (navLink) navLink.classList.add('active');
+
+  if (subTab) {
+    switchImageSubTab(subTab);
+  }
 
   // Close mobile sidebar
   $('sidebar').classList.remove('open');
+}
+
+function switchImageSubTab(sub) {
+  const gPanel = document.getElementById('subPanelGallery');
+  const hPanel = document.getElementById('subPanelHero');
+  const gBtn = document.getElementById('subBtnGallery');
+  const hBtn = document.getElementById('subBtnHero');
+  const heroBtns = document.getElementById('heroHeaderButtons');
+  const breadcrumb = document.getElementById('imagesHeaderBreadcrumb');
+  const title = document.getElementById('imagesHeaderTitle');
+
+  if (sub === 'gallery') {
+    if (gPanel) gPanel.style.display = 'block';
+    if (hPanel) hPanel.style.display = 'none';
+    if (gBtn) gBtn.classList.add('active');
+    if (hBtn) hBtn.classList.remove('active');
+    if (heroBtns) heroBtns.style.display = 'none';
+    if (title) title.textContent = 'វិចិត្រសាល (Gallery)';
+    if (breadcrumb) breadcrumb.textContent = 'ផ្ទាំងគ្រប់គ្រង / រូបភាព / វិចិត្រសាល';
+  } else {
+    if (gPanel) gPanel.style.display = 'none';
+    if (hPanel) hPanel.style.display = 'block';
+    if (hBtn) hBtn.classList.add('active');
+    if (gBtn) gBtn.classList.remove('active');
+    if (heroBtns) heroBtns.style.display = 'flex';
+    if (title) title.textContent = 'គ្រប់គ្រងរូបភាពស្លាយ (Hero Slides)';
+    if (breadcrumb) breadcrumb.textContent = 'ផ្ទាំងគ្រប់គ្រង / រូបភាព / រូបភាពស្លាយ';
+  }
 }
 
 
