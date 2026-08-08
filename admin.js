@@ -238,7 +238,7 @@ function switchTab(tab) {
 
   if (tab === 'images' || tab === 'gallery' || tab === 'hero' || tab === 'heroslides') {
     actualTab = 'images';
-    subTab = (tab === 'hero' || tab === 'heroslides') ? 'hero' : 'gallery';
+    subTab = (tab === 'gallery') ? 'gallery' : 'hero';
   }
 
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));

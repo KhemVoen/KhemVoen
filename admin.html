@@ -291,27 +291,35 @@
       <div class="tab-panel" id="tab-images">
         <div class="page-header">
           <div>
-            <h2 id="imagesHeaderTitle">គ្រប់គ្រងរូបភាព (Images)</h2>
-            <p class="breadcrumb" id="imagesHeaderBreadcrumb">ផ្ទាំងគ្រប់គ្រង / រូបភាព / វិចិត្រសាល</p>
+            <h2 id="imagesHeaderTitle">គ្រប់គ្រងរូបភាពស្លាយ (Hero Slides)</h2>
+            <p class="breadcrumb" id="imagesHeaderBreadcrumb">ផ្ទាំងគ្រប់គ្រង / រូបភាព / រូបភាពស្លាយ</p>
           </div>
-          <div id="heroHeaderButtons" style="display:none;">
+          <div id="heroHeaderButtons" style="display:flex;">
             <button class="btn btn-outline btn-sm" id="addHeroSlideBtn" style="margin-right:10px;">➕ បន្ថែមស្លាយ (Add Slide)</button>
             <button class="btn btn-gold btn-sm" id="saveHeroSlidesBtn">💾 រក្សាទុកទាំងអស់</button>
           </div>
         </div>
 
-        <!-- Sub-Tab Button Switcher -->
+        <!-- Sub-Tab Button Switcher (Hero Slides First) -->
         <div style="display:flex;justify-content:center;gap:12px;margin-bottom:24px;">
-          <button id="subBtnGallery" class="org-switch-btn active" onclick="switchImageSubTab('gallery')">
-            <span>🖼️</span> <span>វិចិត្រសាល (Gallery)</span>
-          </button>
-          <button id="subBtnHero" class="org-switch-btn" onclick="switchImageSubTab('hero')">
+          <button id="subBtnHero" class="org-switch-btn active" onclick="switchImageSubTab('hero')">
             <span>🌄</span> <span>រូបភាពស្លាយ (Hero Slides)</span>
+          </button>
+          <button id="subBtnGallery" class="org-switch-btn" onclick="switchImageSubTab('gallery')">
+            <span>🖼️</span> <span>វិចិត្រសាល (Gallery)</span>
           </button>
         </div>
 
-        <!-- SUB-PANEL 1: វិចិត្រសាល (Gallery) -->
-        <div id="subPanelGallery">
+        <!-- SUB-PANEL 1: រូបភាពស្លាយ (Hero Slides) -->
+        <div id="subPanelHero">
+          <div class="card" style="margin-bottom:20px;">
+            <p style="color:var(--text-light);margin-bottom:20px;">គ្រប់គ្រងរូបភាពស្លាយនៅលើទំព័រដើម។ អ្នកអាចបន្ថែមស្លាយថ្មី បង្ហោះរូបភាពផ្ទាល់ខ្លួន លុប ឬជ្រើសរើសបង្ហាញ/លាក់អត្ថបទនៅលើស្លាយនីមួយៗបាន។</p>
+            <div id="heroSlidesContainer"></div>
+          </div>
+        </div>
+
+        <!-- SUB-PANEL 2: វិចិត្រសាល (Gallery) -->
+        <div id="subPanelGallery" style="display:none;">
           <div class="card">
             <div class="card-header"><h3>បញ្ចូលរូបភាពថ្មីទៅវិចិត្រសាល</h3></div>
             <div class="upload-zone" id="imageUploadZone">
@@ -331,14 +339,6 @@
             <div class="card-header"><h3>រូបភាពទាំងអស់ក្នុងវិចិត្រសាល</h3></div>
             <div class="file-grid" id="galleryGrid"></div>
             <p id="noImages" style="color:var(--text-light);text-align:center;padding:30px;">មិនទាន់មានរូបភាពទេ</p>
-          </div>
-        </div>
-
-        <!-- SUB-PANEL 2: រូបភាពស្លាយ (Hero Slides) -->
-        <div id="subPanelHero" style="display:none;">
-          <div class="card" style="margin-bottom:20px;">
-            <p style="color:var(--text-light);margin-bottom:20px;">គ្រប់គ្រងរូបភាពស្លាយនៅលើទំព័រដើម។ អ្នកអាចបន្ថែមស្លាយថ្មី បង្ហោះរូបភាពផ្ទាល់ខ្លួន លុប ឬជ្រើសរើសបង្ហាញ/លាក់អត្ថបទនៅលើស្លាយនីមួយៗបាន។</p>
-            <div id="heroSlidesContainer"></div>
           </div>
         </div>
       </div>
