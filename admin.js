@@ -125,26 +125,28 @@ function setupEventListeners() {
   // Video upload zone
   const vidZone = $('videoUploadZone');
   const vidInput = $('videoFileInput');
-  vidZone.addEventListener('click', () => vidInput.click());
-  vidZone.addEventListener('dragover', (e) => { e.preventDefault(); vidZone.classList.add('dragover'); });
-  vidZone.addEventListener('dragleave', () => vidZone.classList.remove('dragover'));
-  vidZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    vidZone.classList.remove('dragover');
-    if (e.dataTransfer.files.length) {
-      selectedVideoFile = e.dataTransfer.files[0];
-      vidZone.querySelector('p').textContent = selectedVideoFile.name;
-      $('uploadVideoBtn').disabled = false;
-    }
-  });
-  vidInput.addEventListener('change', () => {
-    if (vidInput.files.length) {
-      selectedVideoFile = vidInput.files[0];
-      vidZone.querySelector('p').textContent = selectedVideoFile.name;
-      $('uploadVideoBtn').disabled = false;
-    }
-  });
-  $('uploadVideoBtn').addEventListener('click', uploadVideo);
+  if (vidZone && vidInput) {
+    vidZone.addEventListener('click', () => vidInput.click());
+    vidZone.addEventListener('dragover', (e) => { e.preventDefault(); vidZone.classList.add('dragover'); });
+    vidZone.addEventListener('dragleave', () => vidZone.classList.remove('dragover'));
+    vidZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      vidZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) {
+        selectedVideoFile = e.dataTransfer.files[0];
+        vidZone.querySelector('p').textContent = selectedVideoFile.name;
+        if ($('uploadVideoBtn')) $('uploadVideoBtn').disabled = false;
+      }
+    });
+    vidInput.addEventListener('change', () => {
+      if (vidInput.files.length) {
+        selectedVideoFile = vidInput.files[0];
+        vidZone.querySelector('p').textContent = selectedVideoFile.name;
+        if ($('uploadVideoBtn')) $('uploadVideoBtn').disabled = false;
+      }
+    });
+    $('uploadVideoBtn')?.addEventListener('click', uploadVideo);
+  }
 
   // Add event
   $('addEventBtn').addEventListener('click', () => openModal('eventModal'));
@@ -309,9 +311,9 @@ async function loadContent() {
 }
 
 function renderStats() {
-  $('statImages').textContent = contentData.gallery?.length || 0;
-  $('statVideos').textContent = contentData.videos?.length || 0;
-  $('statEvents').textContent = contentData.events?.length || 0;
+  if ($('statImages')) $('statImages').textContent = contentData.gallery?.length || 0;
+  if ($('statVideos')) $('statVideos').textContent = contentData.videos?.length || 0;
+  if ($('statEvents')) $('statEvents').textContent = contentData.events?.length || 0;
 }
 
 // ===== HISTORY & STATS =====
