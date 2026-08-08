@@ -141,10 +141,6 @@
           <svg viewBox="0 0 24 24"><path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/></svg>
           រូបភាព
         </a></li>
-        <li><a href="#" data-tab="videos">
-          <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-          វីដេអូ
-        </a></li>
         <li><a href="#" data-tab="events">
           <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
           ព្រឹត្តិការណ៍
@@ -200,10 +196,6 @@
           <div class="stat-card">
             <div class="icon blue"><svg viewBox="0 0 24 24"><path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4z"/></svg></div>
             <div><div class="value" id="statImages">0</div><div class="label">រូបភាព</div></div>
-          </div>
-          <div class="stat-card">
-            <div class="icon green"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
-            <div><div class="value" id="statVideos">0</div><div class="label">វីដេអូ</div></div>
           </div>
           <div class="stat-card">
             <div class="icon purple"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg></div>
@@ -340,37 +332,6 @@
             <div class="file-grid" id="galleryGrid"></div>
             <p id="noImages" style="color:var(--text-light);text-align:center;padding:30px;">មិនទាន់មានរូបភាពទេ</p>
           </div>
-        </div>
-      </div>
-
-      <!-- VIDEOS TAB -->
-      <div class="tab-panel" id="tab-videos">
-        <div class="page-header">
-          <div><h2>វីដេអូ</h2><p class="breadcrumb">ផ្ទាំងគ្រប់គ្រង / វីដេអូ</p></div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3>បញ្ចូលវីដេអូថ្មី</h3></div>
-          <div class="upload-zone" id="videoUploadZone">
-            <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-            <p>ចុច ឬអូសវីដេអូមកទីនេះ</p>
-            <p class="hint">MP4, WebM, MOV - អតិបរមា 100MB</p>
-          </div>
-          <input type="file" id="videoFileInput" accept="video/*" style="display:none">
-          <div class="form-group">
-            <label>ចំណងជើង</label>
-            <input type="text" id="videoTitle" placeholder="ចំណងជើងវីដេអូ">
-          </div>
-          <div class="form-group">
-            <label>ការពិពណ៌នា</label>
-            <textarea id="videoDesc" rows="3" placeholder="ការពិពណ៌នា..."></textarea>
-          </div>
-          <div class="upload-progress" id="videoProgress"><div class="bar"></div></div>
-          <button class="btn btn-gold" id="uploadVideoBtn" disabled>📤 បញ្ចូលវីដេអូ</button>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3>វីដេអូទាំងអស់</h3></div>
-          <div class="file-grid" id="videosGrid"></div>
-          <p id="noVideos" style="color:var(--text-light);text-align:center;padding:30px;">មិនទាន់មានវីដេអូទេ</p>
         </div>
       </div>
 

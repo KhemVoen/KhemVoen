@@ -141,7 +141,6 @@
           <li><a href="#about">អំពីវត្ត</a></li>
           <li><a href="#services">សកម្មភាព</a></li>
           <li><a href="#gallery">វិចិត្រសាល</a></li>
-          <li><a href="#videos">វីដេអូ</a></li>
           <li><a href="#events">ព្រឹត្តិការណ៍</a></li>
           <li><a href="#contact">ទំនាក់ទំនង</a></li>
         </ul>
@@ -366,30 +365,6 @@
       </div>
     </div>
   </section>
-
-  <!-- VIDEOS -->
-  <section class="section videos-section" id="videos">
-    <div class="container">
-      <div class="section-header animate-on-scroll">
-        <h2>វីដេអូសកម្មភាព</h2>
-        <div class="divider"></div>
-        <p>វីដេអូពិធីបុណ្យ និងសកម្មភាពផ្សេងៗ នៅក្នុងវត្តខេមវ័ន(បឹងស្នាយ)</p>
-      </div>
-
-      <div class="videos-grid" id="dynamicVideosGrid">
-        <div class="video-card animate-on-scroll">
-          <div style="aspect-ratio:16/9;background:#1a3a5c;display:flex;align-items:center;justify-content:center;color:white;font-size:3rem;">
-            🎬
-          </div>
-          <div class="video-info">
-            <h4>ពិធីបុណ្យវត្តខេមវ័ន</h4>
-            <p>វីដេអូសកម្មភាពពិធីបុណ្យ និងការសម្តែងធម៌ទេសនា</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
 
   <!-- EVENTS -->
   <section class="section events-section" id="events">
@@ -1214,21 +1189,7 @@
           }
         }
 
-        // Dynamic Videos
-        if (data.videos && data.videos.length > 0) {
-          const videosGrid = document.getElementById('dynamicVideosGrid');
-          if (videosGrid) {
-            videosGrid.innerHTML = data.videos.map(item => `
-              <div class="video-card animate-on-scroll visible">
-                <video src="${item.url}" controls poster="logo.png"></video>
-                <div class="video-info">
-                  <h4>${item.title || 'វីដេអូសកម្មភាព'}</h4>
-                  <p>${item.description || ''}</p>
-                </div>
-              </div>
-            `).join('');
-          }
-        }
+
 
         // Dynamic Events
         if (data.events && data.events.length > 0) {
