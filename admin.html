@@ -6,11 +6,24 @@
   <link rel="canonical" href="https://khemvoen.org/admin.html">
   <meta property="og:url" content="https://khemvoen.org/admin.html">
   <meta property="og:title" content="គ្រប់គ្រង - វត្តខេមវ័ន(បឹងស្នាយ)">
-  <title>គ្រប់គ្រង - វត្តខេមវ័ន(បឹងស្នាយ)</title>
+  <!-- Google Fonts: Kantumruy Pro, Moul, Battambang, Siemreap -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Moul&family=Siemreap&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css?v=4">
   <link rel="stylesheet" href="admin.css">
   <link rel="icon" href="logo.png" type="image/png">
   <style>
+    body {
+      font-family: 'Kantumruy Pro', 'Siemreap', sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    h1, h2, .sidebar-brand h2 {
+      font-family: 'Moul', cursive;
+      font-weight: normal;
+    }
     .tab-switcher-wrapper {
       display: flex;
       justify-content: center;
@@ -470,10 +483,10 @@
         <!-- Top Button Switcher -->
         <div style="display:flex;justify-content:center;gap:12px;margin-bottom:20px;">
           <button id="btnSwitchMonks" class="org-switch-btn active" onclick="switchOrgChart('monks')">
-            <span>☸</span> <span>រចនាសម្ព័ន្ធព្រះសង្ឃ (Monks)</span>
+            <span>☸</span> <span>រចនាសម្ព័ន្ធព្រះសង្ឃ</span>
           </button>
           <button id="btnSwitchCommittee" class="org-switch-btn" onclick="switchOrgChart('committee')">
-            <span>👥</span> <span>អាចារ្យ & គណៈកម្មការ (Committee)</span>
+            <span>👥</span> <span>អាចារ្យ & គណៈកម្មការ</span>
           </button>
         </div>
 

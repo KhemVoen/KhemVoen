@@ -340,48 +340,39 @@ app.get('/api/content', (req, res) => {
       }
     ];
   }
-  if (!Array.isArray(content.committee)) {
+  if (!Array.isArray(content.committee) || content.committee.length === 0) {
     content.committee = [
-      {
-        id: 'cm-monk-1',
-        category: 'monk',
-        name: 'ព្រះមហាវីរៈ សុខា',
-        title: 'ព្រះចៅអធិការវត្ត',
-        image: 'images/hero.png',
-        phone: '012 345 678',
-        facebook: 'https://facebook.com',
-        telegram: 'https://t.me'
-      },
-      {
-        id: 'cm-monk-2',
-        category: 'monk',
-        name: 'ព្រះគ្រូ ធម្មធរ',
-        title: 'គ្រូសូត្រស្តាំ',
-        image: 'images/buddha.png',
-        phone: '012 888 999',
-        facebook: 'https://facebook.com',
-        telegram: 'https://t.me'
-      },
-      {
-        id: 'cm-lay-1',
-        category: 'layperson',
-        name: 'លោក ជុំ សារិន',
-        title: 'ប្រធានគណៈកម្មការវត្ត',
-        image: 'logo.png',
-        phone: '011 222 333',
-        facebook: 'https://facebook.com',
-        telegram: 'https://t.me'
-      },
-      {
-        id: 'cm-lay-2',
-        category: 'layperson',
-        name: 'លោកស្រី ម៉ៅ សុខា',
-        title: 'អនុប្រធានគណៈកម្មការ / ហិរញ្ញវត្ថុ',
-        image: 'logo.png',
-        phone: '012 444 555',
-        facebook: 'https://facebook.com',
-        telegram: 'https://t.me'
-      }
+      { id: "p1", category: "achar", group: "ព្រឹទ្ធាចារ្យ", level: 1, name: "សាន សន", role: "ព្រឹទ្ធាចារ្យ", age: 77, phone: "097 777 888", carrier: "metfone" },
+      { id: "a1", category: "achar", group: "អាចារ្យ", level: 1, name: "យោធា លាងហូ", role: "អាចារ្យធំ", age: 75, phone: "012 858 080", carrier: "cellcard" },
+      { id: "a2", category: "achar", group: "អាចារ្យ", level: 2, name: "អៀង ហេង", role: "អាចារ្យរងទី១", age: 62, phone: "097 777 800", carrier: "metfone" },
+      { id: "a3", category: "achar", group: "អាចារ្យ", level: 2, name: "ស៊ាន គង់", role: "អាចារ្យរងទី២", age: 65, phone: "097 888 800", carrier: "metfone" },
+      { id: "a4", category: "achar", group: "អាចារ្យ", level: 2, name: "ឡេង មុនីសេដ្ឋា", role: "អាចារ្យរងទី៣", age: 38, phone: "097 999 444", carrier: "metfone" },
+      { id: "a5", category: "achar", group: "អាចារ្យ", level: 3, name: "ជឹម ថុល", role: "អាចារ្យរង", age: 62, phone: "097 555 444", carrier: "metfone" },
+      { id: "a6", category: "achar", group: "អាចារ្យ", level: 3, name: "ឈួន ឈុំ", role: "អាចារ្យរង", age: 74, phone: "088 111 222", carrier: "metfone" },
+      { id: "a7", category: "achar", group: "អាចារ្យ", level: 3, name: "ស៊ីង សិាម", role: "អាចារ្យរង", age: 75, phone: "097 333 222", carrier: "metfone" },
+      { id: "a8", category: "achar", group: "អាចារ្យ", level: 3, name: "ជួន ចាន់", role: "អាចារ្យរង", age: 64, phone: "016 888 777", carrier: "smart" },
+      { id: "a9", category: "achar", group: "អាចារ្យ", level: 3, name: "អ៊ិន ភឿន", role: "អាចារ្យរង", age: 74, phone: "097 444 333", carrier: "metfone" },
+      { id: "a10", category: "achar", group: "អាចារ្យ", level: 3, name: "សែត ផេង", role: "អាចារ្យរង", age: 73, phone: "012 333 555", carrier: "cellcard" },
+      { id: "a11", category: "achar", group: "អាចារ្យ", level: 3, name: "គឹម ធឿន", role: "អាចារ្យរង", age: 85, phone: "097 222 111", carrier: "metfone" },
+      { id: "a12", category: "achar", group: "អាចារ្យ", level: 3, name: "អ៊ិន សុផា", role: "អាចារ្យរង", age: 58, phone: "070 999 888", carrier: "smart" },
+      { id: "a13", category: "achar", group: "អាចារ្យ", level: 3, name: "កើត សាយ", role: "អាចារ្យរង", age: 72, phone: "097 666 555", carrier: "metfone" },
+      { id: "c1", category: "committee", group: "គណៈកម្មការ", level: 1, name: "ជួន សារ៉ាន", role: "ប្រធានគណៈកម្មការ", age: 70, phone: "012 858 080", carrier: "cellcard" },
+      { id: "c2", category: "committee", group: "គណៈកម្មការ", level: 2, name: "ហង្ស ប៊ុនផល", role: "អនុប្រធាន", age: 65, phone: "097 777 888", carrier: "metfone" },
+      { id: "c3", category: "committee", group: "គណៈកម្មការ", level: 2, name: "ជិន ចិន", role: "អនុប្រធាន", age: 70, phone: "016 888 777", carrier: "smart" },
+      { id: "c4", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ព្រុំ សុខលីម", role: "សមាជិកា", age: 63, phone: "097 555 444", carrier: "metfone" },
+      { id: "c5", category: "committee", group: "គណៈកម្មការ", level: 3, name: "មេ សៀម", role: "សមាជិក", age: 69, phone: "012 333 222", carrier: "cellcard" },
+      { id: "c6", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ឡុង ប៊ុន", role: "សមាជិក", age: 63, phone: "088 111 222", carrier: "metfone" },
+      { id: "c7", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ហេង ស្រី", role: "សមាជិកា", age: 27, phone: "096 888 999", carrier: "smart" },
+      { id: "c8", category: "committee", group: "គណៈកម្មការ", level: 3, name: "បុល សុខភា", role: "សមាជិក", age: 43, phone: "097 123 456", carrier: "metfone" },
+      { id: "c9", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ផល កឿន", role: "សមាជិក", age: 25, phone: "070 333 444", carrier: "smart" },
+      { id: "c10", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ភិក ឈុន", role: "សមាជិក", age: 69, phone: "097 654 321", carrier: "metfone" },
+      { id: "c11", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ស៊ាម ម៉េង", role: "សមាជិក", age: 66, phone: "012 987 654", carrier: "cellcard" },
+      { id: "c12", category: "committee", group: "គណៈកម្មការ", level: 3, name: "កែវ សន", role: "សមាជិកា", age: 68, phone: "088 777 666", carrier: "metfone" },
+      { id: "c13", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ចាប ចាន់ថា", role: "សមាជិកា", age: 55, phone: "097 888 111", carrier: "metfone" },
+      { id: "c14", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ហួង សុកី", role: "សមាជិកា", age: 54, phone: "016 555 444", carrier: "smart" },
+      { id: "c15", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ទ្រី នី", role: "សមាជិកា", age: 67, phone: "097 222 333", carrier: "metfone" },
+      { id: "c16", category: "committee", group: "គណៈកម្មការ", level: 3, name: "វ៉ាយ គឹមយាន", role: "សមាជិកា", age: 26, phone: "070 111 222", carrier: "smart" },
+      { id: "c17", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ដួ័រ ផន់សិាន", role: "សមាជិក", age: 59, phone: "012 444 555", carrier: "cellcard" }
     ];
   }
   res.json(content);

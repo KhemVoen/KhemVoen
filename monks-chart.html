@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>រចនាសម្ព័ន្ធគ្រប់គ្រងព្រះសង្ឃ — វត្តខេមវ័ន(បឹងស្នាយ)</title>
 
-  <!-- Google Fonts: Noto Sans Khmer & Outfit -->
+  <!-- Google Fonts: Kantumruy Pro, Moul, Battambang, Siemreap -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Moul&family=Siemreap&display=swap" rel="stylesheet">
 
   <!-- React & Babel CDNs -->
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
@@ -22,14 +22,18 @@
       --gold-dark: #b88429;
       --navy-dark: #1a3a5c;
       --text-dark: #2c1810;
-      --font-khmer: 'Noto Sans Khmer', sans-serif;
+      --font-body: 'Kantumruy Pro', 'Siemreap', sans-serif;
+      --font-title: 'Moul', cursive;
       --font-en: 'Outfit', sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: var(--font-khmer);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
       background: var(--bg-cream);
       color: var(--text-dark);
       min-height: 100vh;
@@ -146,15 +150,19 @@
 
     .header-banner {
       text-align: center;
-      background: linear-gradient(135deg, #1a3a5c, #2c5282);
-      color: #f0d48a;
+      background: linear-gradient(135deg, #0b1a2d 0%, #1e3a5c 100%);
+      color: #fdf5df;
       padding: 14px 28px;
       border-radius: 14px;
-      font-size: 1.6rem;
-      font-weight: 900;
+      font-family: var(--font-title);
+      font-size: 1.25rem;
+      font-weight: normal;
+      letter-spacing: 0.5px;
+      line-height: 1.6;
       border: 2px solid var(--gold-primary);
-      box-shadow: 0 4px 14px rgba(26,58,92,0.25);
+      box-shadow: 0 6px 18px rgba(11,26,45,0.22);
       margin-bottom: 30px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
     }
 
     /* SVG Lines */
@@ -206,12 +214,15 @@
     }
 
     .node-name {
+      font-family: var(--font-body);
       font-size: 0.95rem;
-      font-weight: 800;
-      color: #1a3a5c;
-      margin-bottom: 2px;
+      font-weight: 700;
+      color: #0b1a2d;
+      margin-bottom: 4px;
+      line-height: 1.4;
     }
     .node-role {
+      font-family: var(--font-body);
       font-size: 0.72rem;
       font-weight: 600;
       color: #b88429;
@@ -219,6 +230,7 @@
       border-radius: 20px;
       padding: 2px 10px;
       display: inline-block;
+      line-height: 1.4;
       margin-bottom: 6px;
     }
 
@@ -525,24 +537,6 @@
 
       return (
         <div className="chart-card">
-          {/* Category Switcher Buttons */}
-          <div className="tab-switcher-wrapper">
-            <div className="tab-switcher-nav">
-              <button className="tab-nav-btn active" type="button">
-                <span className="tab-icon">☸</span>
-                <span>រចនាសម្ព័ន្ធព្រះសង្ឃ</span>
-              </button>
-              <button
-                className="tab-nav-btn"
-                type="button"
-                onClick={() => handleTabSwitch('committee-chart.html')}
-              >
-                <span className="tab-icon">👥</span>
-                <span>អាចារ្យ & គណៈកម្មការ</span>
-              </button>
-            </div>
-          </div>
-
           <div className="header-banner">
             ☸ រចនាសម្ព័ន្ធគ្រប់គ្រងព្រះសង្ឃ — វត្តខេមវ័ន(បឹងស្នាយ)
           </div>

@@ -3,1234 +3,1220 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>រចនាសម្ព័ន្ធអាចារ្យ & គណៈកម្មការ — វត្តខេមវ័ន(បឹងស្នាយ)</title>
-
-  <!-- Google Fonts -->
+  <title>រចនាសម្ព័ន្ធអាចារ្យ និងគណៈកម្មការ — វត្តខេមវ័ន (បឹងស្នាយ)</title>
+  
+  <!-- Google Fonts: Kantumruy Pro, Battambang, Moul, Siemreap -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- React 18 + ReactDOM + Babel -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Moul&family=Siemreap&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary-navy: #0b1a2d;
+      --gold-primary: #d4af37;
+      --gold-dark: #b38728;
+      --gold-light: #fdf5df;
+      --gold-border: #e6ca65;
+      --gold-banner: linear-gradient(180deg, #d8ad3b 0%, #ba8b1b 100%);
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --font-body: 'Kantumruy Pro', sans-serif;
+      --font-title: 'Moul', cursive;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
-      font-family: 'Inter', 'Noto Sans Khmer', sans-serif;
-      background: #faf5eb;
+      font-family: var(--font-body);
+      background-color: #f1f5f9;
+      color: var(--text-dark);
+      padding: 20px;
       min-height: 100vh;
-      color: #334155;
-      display: flex;
-    }
-
-    /* ── Sidebar Layout ── */
-    .admin-sidebar {
-      width: 250px;
-      background: #112236;
-      border-right: 1px solid rgba(255,255,255,0.08);
       display: flex;
       flex-direction: column;
-      flex-shrink: 0;
-      color: #94a3b8;
-    }
-
-    .sidebar-brand {
-      padding: 18px 20px;
-      display: flex;
       align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .sidebar-brand h2 {
-      font-size: 1rem;
-      font-weight: 800;
-      color: #fff;
-      margin: 0;
-      line-height: 1.2;
-    }
-    .sidebar-brand span {
-      font-size: 0.72rem;
-      color: #d4a843;
     }
 
-    .sidebar-menu {
-      padding: 14px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-    }
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #94a3b8;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-    .menu-item:hover {
-      background: rgba(255,255,255,0.06);
-      color: #f1f5f9;
-    }
-    .menu-item.active {
-      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(29,78,216,0.3);
+    /* Embedded Mode Override */
+    body.is-embedded {
+      padding: 10px;
+      background: transparent;
     }
 
-    /* ── Main Content Area ── */
-    .admin-main {
-      flex: 1;
-      background: #f1f5f9;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      height: 100vh;
-      overflow-y: auto;
+    body.is-embedded .top-nav-bar {
+      display: none !important;
     }
 
-    .top-header {
-      background: #fff;
-      padding: 16px 28px;
+    /* Navigation & Control Bar */
+    .top-nav-bar {
+      width: 100%;
+      max-width: 1550px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #e2e8f0;
-      flex-shrink: 0;
-    }
-    .header-title h1 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin: 0;
-    }
-    .header-title p {
-      font-size: 0.75rem;
-      color: #64748b;
-      margin-top: 2px;
+      gap: 16px;
+      margin-bottom: 20px;
+      background: #ffffff;
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      flex-wrap: wrap;
     }
 
-    .fullscreen-btn {
+    .brand-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon-emblem {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--gold-banner);
+      color: #3b2800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 3px 8px rgba(212, 175, 55, 0.3);
+    }
+
+    .brand-title-text h1 {
+      font-family: var(--font-title);
+      font-size: 15px;
+      color: var(--primary-navy);
+      font-weight: normal;
+      line-height: 1.3;
+    }
+
+    .brand-title-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .control-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-input-box {
+      position: relative;
+      min-width: 220px;
+    }
+
+    .search-input-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .search-input-box input {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 12px;
+      font-family: var(--font-body);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input-box input:focus {
+      border-color: var(--gold-dark);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    }
+
+    .tab-nav-link {
       background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 7px 14px;
-      font-size: 0.78rem;
-      font-weight: 700;
+      border: 1.5px solid #cbd5e1;
       color: #475569;
-      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
       display: flex;
       align-items: center;
       gap: 6px;
       transition: all 0.2s ease;
+      cursor: pointer;
     }
-    .fullscreen-btn:hover {
+
+    .tab-nav-link:hover {
       background: #f1f5f9;
       border-color: #94a3b8;
+      color: #0f172a;
     }
 
-    /* ── Dual Panel Parchment Frame ── */
-    .tree-wrapper {
-      padding: 20px 24px 40px;
-      max-width: 1650px;
-      margin: 0 auto;
-      width: 100%;
+    .tab-nav-link.active {
+      background: linear-gradient(135deg, #0b1a2d 0%, #1e3a5c 100%);
+      color: #fdf5df;
+      border-color: var(--gold-primary);
+      box-shadow: 0 4px 10px rgba(11, 26, 45, 0.2);
     }
 
-    .gold-card-container {
-      background: linear-gradient(135deg, #fdfbf7 0%, #f7efdf 50%, #fdfbf7 100%);
-      border: 2.5px solid #d4a843;
-      border-radius: 24px;
-      padding: 30px 20px 40px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.06), 0 4px 16px rgba(212,168,67,0.12), inset 0 0 0 4px rgba(212,168,67,0.15);
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Khmer Motif Background Watermarks */
-    .bg-watermark-left, .bg-watermark-right {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 160px;
-      opacity: 0.06;
-      pointer-events: none;
-      background-image: radial-gradient(#b88429 2px, transparent 2px);
-      background-size: 16px 16px;
-    }
-    .bg-watermark-left { left: 0; }
-    .bg-watermark-right { right: 0; }
-
-    .top-lotus-emblem {
-      position: absolute;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 2.2rem;
-      color: #d4a843;
-      z-index: 10;
-      filter: drop-shadow(0 2px 5px rgba(212,168,67,0.35));
-    }
-
-    .dual-grid {
+    .btn-add-member {
+      background: linear-gradient(135deg, #d8ad3b 0%, #ba8b1b 100%);
+      color: #3b2800;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 12px;
+      font-family: var(--font-body);
+      cursor: pointer;
       display: flex;
-      gap: 24px;
-      margin-top: 16px;
-      position: relative;
-      z-index: 2;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 10px rgba(186, 139, 27, 0.25);
+      transition: all 0.2s ease;
     }
 
-    .panel-box {
+    .btn-add-member:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(186, 139, 27, 0.35);
+    }
+
+    /* Main Container Frame */
+    .gold-framed-container {
+      background: #fffdf9;
+      border: 2px solid var(--gold-border);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(184, 134, 11, 0.08);
+      width: 100%;
+      max-width: 1550px;
+      margin: 0 auto;
+    }
+
+    /* Dual Hierarchy Columns (Achar Left, Committee Right) */
+    .dual-hierarchy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1150px) {
+      .dual-hierarchy-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hierarchy-column {
+      background: #ffffff;
+      border: 1.5px solid #ebd99f;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .column-banner {
+      background: var(--gold-banner);
+      color: #3b2800;
+      padding: 14px 18px;
+      text-align: center;
+      font-family: var(--font-title);
+      font-size: 15px;
+      font-weight: normal;
+      box-shadow: 0 3px 8px rgba(184, 134, 11, 0.25);
+      border-bottom: 2px solid #a87912;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .column-tree-body {
+      padding: 24px 16px;
       flex: 1;
-      background: linear-gradient(180deg, #fffdf8 0%, #faf2e3 100%);
-      border: 2px solid #c99a32;
-      border-radius: 20px;
-      padding: 18px 12px 28px;
+      background: radial-gradient(circle at center, #fffdf8 0%, #fff 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
-      box-shadow: 0 8px 24px rgba(180,130,40,0.08), inset 0 0 0 3.5px rgba(255,255,255,0.8);
     }
 
-    .panel-header-banner {
-      width: 100%;
-      text-align: center;
-      background: linear-gradient(135deg, #e7cb82 0%, #d4a843 50%, #c59628 100%);
-      color: #2c1810;
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-size: 1.55rem;
-      font-weight: 900;
-      font-family: 'Noto Sans Khmer', sans-serif;
-      border: 1.5px solid #b88429;
-      box-shadow: 0 4px 12px rgba(212,168,67,0.28);
-      margin-bottom: 22px;
-      text-shadow: 0 1px 1px rgba(255,255,255,0.5);
-      position: relative;
-    }
-
-    /* ── CARD AESTHETICS ── */
-    .oc-card {
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .oc-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 16px 40px rgba(180,130,40,0.18), 0 0 0 2.5px rgba(212,168,67,0.6) !important;
-    }
-
-    .oc-btn {
-      border: none; cursor: pointer; border-radius: 6px;
-      padding: 4px 10px; font-size: 0.72rem; font-weight: 700;
-      display: inline-flex; align-items: center; gap: 4px;
-      transition: all 0.2s ease;
-    }
-    .oc-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
-
-    /* ── ANIMATED RUNNING LINE STYLE ── */
-    @keyframes dashRun {
-      from { stroke-dashoffset: 0; }
-      to   { stroke-dashoffset: -20; }
-    }
-    .running-line-bg {
-      stroke: rgba(212,168,67,0.35);
-      stroke-width: 4;
-      stroke-linecap: round;
-    }
-    .running-line-fg {
-      stroke: #b88429;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-dasharray: 6 4;
-      animation: dashRun 0.9s linear infinite;
-    }
-
-    /* Pulsing joints */
-    @keyframes ocPulse {
-      0%, 100% { r: 4; opacity: 0.85; }
-      50% { r: 6; opacity: 1; }
-    }
-    .oc-joint { animation: ocPulse 2.5s ease-in-out infinite; }
-
-    @media (max-width: 1200px) {
-      .dual-grid { flex-direction: column; }
-      .admin-sidebar { display: none; }
-    }
-
-    /* ── IFRAME EMBEDDING CLEANUP ── */
-    body.is-public .oc-btn {
-      display: none !important;
-    }
-    body.is-embedded {
-      background: transparent !important;
-    }
-    body.is-embedded .admin-sidebar,
-    body.is-embedded .top-header {
-      display: none !important;
-    }
-    body.is-embedded .admin-main {
-      height: auto !important;
-      background: transparent !important;
-    }
-    body.is-embedded .tree-wrapper {
-      padding: 10px !important;
-    }
-
-    /* Segmented Tab Switcher */
-    .tab-switcher-wrapper {
+    /* ZERO-OFFSET ZOOM-RESISTANT TREE */
+    .tree-row-flex {
       display: flex;
       justify-content: center;
-      margin-bottom: 24px;
+      width: 100%;
+      position: relative;
     }
 
-    .tab-switcher-nav {
-      display: inline-flex;
+    .tree-col-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      padding: 0 5px;
+      max-width: 100%;
+    }
+
+    .tree-col-item.max-w-200 {
+      max-width: 200px;
+    }
+
+    .stem-down {
+      width: 2px;
+      height: 18px;
+      background: #d4af37;
+      margin: 0 auto;
+      flex-shrink: 0;
+    }
+
+    .stem-up {
+      width: 2px;
+      height: 18px;
+      background: #d4af37;
+      margin: 0 auto;
+      flex-shrink: 0;
+    }
+
+    .tree-crossbar-row {
+      display: flex;
+      width: 100%;
+      height: 2px;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .crossbar-seg {
+      flex: 1;
+      height: 2px;
+    }
+
+    .crossbar-seg.seg-first {
+      background: linear-gradient(to right, transparent 50%, #d4af37 50%);
+    }
+
+    .crossbar-seg.seg-mid {
+      background: #d4af37;
+    }
+
+    .crossbar-seg.seg-last {
+      background: linear-gradient(to right, #d4af37 50%, transparent 50%);
+    }
+
+    .tree-track-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* Member Card Node */
+    .member-node-card {
+      background: #ffffff;
+      border: 1.5px solid #d4af37;
+      border-radius: 12px;
+      padding: 12px 8px 10px 8px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 3px 8px rgba(212, 175, 55, 0.1);
+      transition: all 0.25s ease;
+    }
+
+    .member-node-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(184, 134, 11, 0.22);
+      border-color: #b8860b;
+    }
+
+    .member-node-card.leader-node {
+      border-width: 2px;
+      background: linear-gradient(180deg, #fffefa 0%, #ffffff 100%);
+      box-shadow: 0 6px 16px rgba(184, 134, 11, 0.18);
+      max-width: 180px;
+    }
+
+    .member-node-card.elder-node {
+      border-color: #b8860b;
+      background: linear-gradient(180deg, #fdf8eb 0%, #ffffff 100%);
+      max-width: 180px;
+    }
+
+    .node-avatar-wrap {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 6px auto;
+      position: relative;
+    }
+
+    .node-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #fdf5df;
+      border: 2px solid #d4af37;
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1.5px solid rgba(212, 168, 67, 0.45);
-      border-radius: 20px;
-      padding: 6px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(212, 168, 67, 0.15);
-      position: relative;
-      z-index: 10;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
-    .tab-nav-btn {
-      background: transparent;
-      color: #475569;
-      border: 1.5px solid transparent;
-      border-radius: 14px;
-      padding: 10px 22px;
-      font-size: 0.9rem;
-      font-weight: 800;
-      font-family: inherit;
-      cursor: pointer;
+    .node-avatar i {
+      font-size: 22px;
+      color: #b8860b;
+    }
+
+    .badge-icon-tag {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 18px;
+      height: 18px;
+      background: #d4af37;
+      color: #0b1a2d;
+      border-radius: 50%;
+      font-size: 9.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid #fff;
+      font-weight: bold;
+    }
+
+    .node-name {
+      font-family: var(--font-title);
+      font-size: 11.5px;
+      color: #0f172a;
+      font-weight: normal;
+      margin-bottom: 2px;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .node-role-sub {
+      font-size: 10px;
+      color: #64748b;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .node-phone-chip {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 2px 5px;
+      border-radius: 10px;
+      font-size: 9px;
+      color: #334155;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      gap: 3px;
+      margin-bottom: 6px;
+      font-weight: 500;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .phone-provider {
+      font-size: 8px;
+      padding: 1px 3px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .provider-metfone { background: #fee2e2; color: #dc2626; }
+    .provider-smart { background: #dcfce7; color: #16a34a; }
+    .provider-cellcard { background: #ffedd5; color: #ea580c; }
+
+    .node-card-actions {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 5px;
+    }
+
+    .btn-node-edit {
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-family: var(--font-body);
+      transition: background 0.15s ease;
+    }
+
+    .btn-node-edit:hover {
+      background: #059669;
+    }
+
+    .btn-node-delete {
+      background: #ef4444;
+      color: #ffffff;
+      border: none;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-family: var(--font-body);
+      transition: background 0.15s ease;
+    }
+
+    .btn-node-delete:hover {
+      background: #dc2626;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(11, 26, 45, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border: 2px solid var(--gold-border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+      transform: translateY(20px);
+      transition: transform 0.25s ease;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      background: var(--gold-banner);
+      color: #3b2800;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #a87912;
+    }
+
+    .modal-header h3 {
+      font-family: var(--font-title);
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      color: #3b2800;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .form-group input, .form-group select {
+      padding: 8px 10px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: var(--font-body);
       outline: none;
-      user-select: none;
     }
 
-    .tab-nav-btn:hover {
-      color: #1a3a5c;
-      background: rgba(212, 168, 67, 0.12);
-      transform: translateY(-2px);
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--gold-dark);
     }
 
-    .tab-nav-btn.active {
-      background: linear-gradient(135deg, #1a3a5c 0%, #2c5282 100%);
-      color: #f0d48a;
-      border-color: #d4a843;
-      box-shadow: 0 6px 18px rgba(26, 58, 92, 0.35);
-      transform: scale(1.02);
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
 
-    .tab-nav-btn:active {
-      transform: scale(0.96);
+    .modal-footer {
+      padding: 12px 20px 18px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      border-top: 1px solid #f1f5f9;
     }
 
-    .tab-nav-btn .tab-icon {
-      font-size: 1.05rem;
-      transition: transform 0.3s ease;
+    .btn-cancel {
+      background: #e2e8f0;
+      color: #334155;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 600;
     }
 
-    .tab-nav-btn.active .tab-icon {
-      transform: scale(1.2) rotate(-6deg);
+    .btn-save {
+      background: linear-gradient(135deg, #0b1a2d 0%, #1e3a5c 100%);
+      color: #fdf5df;
+      border: 1px solid var(--gold-primary);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 700;
     }
 
-    /* Animated entrance and exit transitions */
-    @keyframes chartPageEnter {
-      from {
-        opacity: 0;
-        transform: translateY(18px) scale(0.985);
-        filter: blur(4px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0);
-      }
+    /* Toast Notification */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0b1a2d;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1.5px solid #d4af37;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      z-index: 99999;
+      opacity: 0;
+      transition: all 0.3s ease;
     }
 
-    .gold-card-container {
-      animation: chartPageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      will-change: opacity, transform, filter;
-      transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
-    }
-
-    .page-transition-exit {
-      opacity: 0 !important;
-      transform: translateY(-12px) scale(0.98) !important;
-      filter: blur(4px) !important;
+    .toast-msg.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
   </style>
 </head>
-
 <body>
-  <div id="root" style="width: 100%; display: flex;"></div>
 
-  <script type="text/babel">
-    const { useState, useRef, useEffect, useCallback } = React;
+  <!-- Top Navigation & Controls Bar -->
+  <div class="top-nav-bar">
+    <div class="brand-title-wrap">
+      <div class="brand-icon-emblem">
+        <i class="fa-solid fa-hands-praying"></i>
+      </div>
+      <div class="brand-title-text">
+        <h1>រចនាសម្ព័ន្ធអាចារ្យ និងគណៈកម្មការ</h1>
+        <p>វត្តខេមវ័ន (បឹងស្នាយ) — រចនាសម្ព័ន្ធគ្រប់គ្រងសាសនា និងវត្តអារាម</p>
+      </div>
+    </div>
 
-    /* ═══════════════════════════════════════════════════════════════════
-       INITIAL DATA — Lay Officiants (អាចារ្យ) & Committee (គណៈកម្មការ)
-    ═══════════════════════════════════════════════════════════════════ */
-    const INITIAL_ACHAR_DATA = {
-      tier1: {
-        id: 'achar-head',
-        name: 'ប្រធានអាចារ្យ',
-        role: 'Achar Leader',
-        avatar: '',
-        phone: '057 777 886',
-        carrier: 'CELLCARD',
-        fb: '#',
-      },
-      tier2: [
-        {
-          id: 'achar-dep-1',
-          name: 'អាចារ្យរងទី១',
-          role: '1st Vice Achar',
-          avatar: '',
-          phone: '097 777 800',
-          carrier: 'METFONE',
-          fb: '#',
-          position: 'left',
-        },
-        {
-          id: 'achar-dep-2',
-          name: 'អាចារ្យរងទី២',
-          role: '2nd Vice Achar',
-          avatar: '',
-          phone: '097 555 600',
-          carrier: 'METFONE',
-          fb: '#',
-          position: 'center',
-        },
-        {
-          id: 'achar-dep-3',
-          name: 'អាចារ្យរងទី៣',
-          role: '3rd Vice Achar',
-          avatar: '',
-          phone: '097 555 444',
-          carrier: 'METFONE',
-          fb: '#',
-          position: 'right',
-        },
-      ],
-      tier3: [
-        {
-          id: 'achar-sub-1',
-          name: 'សមាជិក',
-          role: 'Member',
-          avatar: '',
-          phone: '097 533 444',
-          carrier: 'METFONE',
-          fb: '#',
-          position: 'center',
-          parentId: 'achar-dep-2',
-        },
-      ],
-    };
+    <div class="control-actions-group">
+      <!-- Search Input -->
+      <div class="search-input-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="ស្វែងរកឈ្មោះ, មុខតំណែង, ឬ លេខ..." oninput="handleSearch()">
+      </div>
 
-    const INITIAL_COMMITTEE_DATA = {
-      tier1: {
-        id: 'com-head',
-        name: 'លោកតា ឧបាសក ម៉េង ហួរ',
-        role: 'ប្រធានគណៈកម្មការវត្ត',
-        roleEn: 'Committee Chairman',
-        avatar: '',
-        phone: '012 888 000',
-        carrier: 'CELLCARD',
-        sticker: '👑',
-        fb: '#',
-      },
-      tier2: [
-        {
-          id: 'com-dep-1',
-          name: 'លោក ឧបាសក សុខ ផន',
-          role: 'អនុប្រធានគណៈកម្មការ',
-          roleEn: 'Vice Chairman',
-          avatar: '',
-          phone: '097 777 888',
-          carrier: 'METFONE',
-          sticker: '🐍',
-          fb: '#',
-          position: 'left',
-        },
-        {
-          id: 'com-dep-2',
-          name: 'លោក អាចារ្យ សែម វ៉ន',
-          role: 'អាចារ្យធំ / ពិធីការ',
-          roleEn: 'Chief Ceremonial Master',
-          avatar: '',
-          phone: '016 666 777',
-          carrier: 'SMART',
-          sticker: '📜',
-          fb: '#',
-          position: 'right',
-        },
-      ],
-      tier3: [
-        {
-          id: 'com-sub-1',
-          name: 'លោក លី ឃាង',
-          role: 'លេខាធិការគណៈកម្មការ',
-          roleEn: 'Chief Secretary',
-          avatar: '',
-          phone: '097 555 444',
-          carrier: 'METFONE',
-          sticker: '🛡️',
-          fb: '#',
-          position: 'left',
-          parentId: 'com-dep-1',
-        },
-        {
-          id: 'com-sub-2',
-          name: 'លោកស្រី ឧបាសិកា ចាន់ ធី',
-          role: 'បេឡាធិការ / ហិរញ្ញវត្ថុ',
-          roleEn: 'Chief Treasurer',
-          avatar: '',
-          phone: '012 333 222',
-          carrier: 'CELLCARD',
-          sticker: '🪷',
-          fb: '#',
-          position: 'center',
-          parentId: 'com-dep-1',
-        },
-        {
-          id: 'com-sub-3',
-          name: 'លោក អាចារ្យ ហេង ស៊ាង',
-          role: 'អាចារ្យរៀបចំពិធី',
-          roleEn: 'Ritual Coordinator',
-          avatar: '',
-          phone: '088 111 222',
-          carrier: 'METFONE',
-          sticker: '📿',
-          fb: '#',
-          position: 'right',
-          parentId: 'com-dep-2',
-        },
-      ],
-    };
+      <!-- Tab Navigation Links -->
+      <a href="monks-chart.html" class="tab-nav-link">
+        <i class="fa-solid fa-dharmachakra"></i>
+        <span>រចនាសម្ព័ន្ធព្រះសង្ឃ</span>
+      </a>
+      <div class="tab-nav-link active">
+        <i class="fa-solid fa-users"></i>
+        <span>អាចារ្យ & គណៈកម្មការ</span>
+      </div>
 
-    const CARRIER = {
-      CELLCARD: { bg: '#fff0e6', fg: '#c85a00', border: '#ffb380' },
-      METFONE:  { bg: '#fee2e2', fg: '#991b1b', border: '#fca5a5' },
-      SMART:    { bg: '#dcfce7', fg: '#166534', border: '#86efac' },
-    };
-    const carrierStyle = (c) => CARRIER[String(c).toUpperCase()] ?? { bg: '#f3f4f6', fg: '#374151', border: '#d1d5db' };
+      <!-- Add Member Button -->
+      <button class="btn-add-member" onclick="openAddModal()">
+        <i class="fa-solid fa-user-plus"></i>
+        <span>បន្ថែមសមាជិក</span>
+      </button>
+    </div>
+  </div>
 
-    /* ═══════════════════════════════════════════════════════════════════
-       NODE CARD COMPONENT — With Decorative Corner Cutouts & Frame
-    ═══════════════════════════════════════════════════════════════════ */
-    function NodeCard({ node, tier = 1, onEdit, onDelete, section = 'achar' }) {
-      const cs1 = node.carrier ? carrierStyle(node.carrier) : null;
+  <!-- Pure Standalone Org Chart Frame -->
+  <div class="gold-framed-container">
+    <div class="dual-hierarchy-grid">
+      
+      <!-- 1. LEFT COLUMN: រចនាសម្ព័ន្ធអាចារ្យ -->
+      <div class="hierarchy-column">
+        <div class="column-banner">
+          <i class="fa-solid fa-hands-praying"></i>
+          <span>រចនាសម្ព័ន្ធអាចារ្យ</span>
+        </div>
+        <div class="column-tree-body" id="acharTreeBody"></div>
+      </div>
 
-      const sizing = {
-        1: { cardW: 190, avatarSz: 64, nameSz: '1.02rem', roleSz: '0.68rem' },
-        2: { cardW: 175, avatarSz: 56, nameSz: '0.9rem',  roleSz: '0.64rem' },
-        3: { cardW: 165, avatarSz: 50, nameSz: '0.86rem', roleSz: '0.62rem' },
-      };
-      const s = sizing[tier] || sizing[2];
-      const borderColor = '#c99a32';
+      <!-- 2. RIGHT COLUMN: រចនាសម្ព័ន្ធគណៈកម្មការ -->
+      <div class="hierarchy-column">
+        <div class="column-banner">
+          <i class="fa-solid fa-users"></i>
+          <span>រចនាសម្ព័ន្ធគណៈកម្មការ</span>
+        </div>
+        <div class="column-tree-body" id="commTreeBody"></div>
+      </div>
 
-      return (
-        <div
-          className="oc-card"
-          style={{
-            width: s.cardW,
-            background: 'linear-gradient(180deg, #fffdfa 0%, #faf2e4 100%)',
-            borderRadius: 16,
-            border: `2px solid ${borderColor}`,
-            boxShadow: `0 6px 20px rgba(180,130,40,0.1), inset 0 0 0 2.5px rgba(255,255,255,0.7)`,
-            padding: '14px 10px 12px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 5,
-            position: 'relative',
-          }}
-        >
-          {/* Khmer Gold Corner Motifs */}
-          <div style={{ position: 'absolute', top: 3, left: 3, width: 7, height: 7, borderTop: '2px solid #b88429', borderLeft: '2px solid #b88429' }} />
-          <div style={{ position: 'absolute', top: 3, right: 3, width: 7, height: 7, borderTop: '2px solid #b88429', borderRight: '2px solid #b88429' }} />
-          <div style={{ position: 'absolute', bottom: 3, left: 3, width: 7, height: 7, borderBottom: '2px solid #b88429', borderLeft: '2px solid #b88429' }} />
-          <div style={{ position: 'absolute', bottom: 3, right: 3, width: 7, height: 7, borderBottom: '2px solid #b88429', borderRight: '2px solid #b88429' }} />
+    </div>
+  </div>
 
-          {/* Top Decorative Notch */}
-          <div style={{
-            position: 'absolute', top: -1, left: '50%', transform: 'translateX(-50%)',
-            width: 32, height: 3, background: borderColor, borderRadius: '0 0 4px 4px',
-          }} />
+  <!-- EDIT / ADD MEMBER MODAL -->
+  <div class="modal-overlay" id="memberModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">កែប្រែព័ត៌មានសមាជិក</h3>
+        <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editId">
+        
+        <div class="form-group">
+          <label for="editName">ឈ្មោះពេញ</label>
+          <input type="text" id="editName" placeholder="បញ្ជូលឈ្មោះសមាជិក">
+        </div>
 
-          {/* Avatar Area */}
-          <div style={{ position: 'relative', width: s.avatarSz, height: s.avatarSz, flexShrink: 0 }}>
-            <div style={{
-              width: '100%', height: '100%',
-              borderRadius: '50%',
-              border: `2.5px solid ${borderColor}`,
-              outline: `2px solid rgba(212,168,67,0.25)`,
-              outlineOffset: 2,
-              overflow: 'hidden',
-              background: '#fef3c7',
-              boxShadow: `0 3px 10px rgba(0,0,0,0.1)`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              {node.avatar ? (
-                <img
-                  src={node.avatar}
-                  alt={node.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  onError={e => { e.currentTarget.style.display = 'none'; }}
-                />
-              ) : (
-                <span style={{ fontSize: tier === 1 ? '1.7rem' : '1.3rem', color: '#b88429' }}>
-                  {section === 'achar' ? '👤' : (node.name.includes('សមាជិកា') ? '👩' : '👤')}
-                </span>
-              )}
-            </div>
-
-            {/* Top Right Ornament Badge */}
-            <div style={{
-              position: 'absolute', top: -2, right: -2,
-              width: 20, height: 20, borderRadius: '50%',
-              background: `linear-gradient(135deg, ${borderColor}, #b88429)`,
-              border: '1.5px solid #ffffff',
-              color: '#fff', fontSize: 10, fontWeight: 700,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.18)',
-            }}>
-              {node.sticker || (section === 'achar' ? '🖐️' : '🐍')}
-            </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="editCategory">ផ្នែក / Group</label>
+            <select id="editCategory">
+              <option value="achar">អាចារ្យ (Achar)</option>
+              <option value="committee">គណៈកម្មការ (Committee)</option>
+            </select>
           </div>
-
-          {/* Info Section */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: '100%' }}>
-            <h3 style={{
-              fontWeight: 800, color: '#2c1810', fontSize: s.nameSz,
-              textAlign: 'center', lineHeight: 1.25, margin: 0,
-              fontFamily: "'Noto Sans Khmer', sans-serif",
-            }}>
-              {node.name}
-            </h3>
-
-            {node.role && (
-              <div style={{
-                background: 'rgba(212,168,67,0.16)',
-                border: '1px solid rgba(212,168,67,0.35)',
-                borderRadius: 10,
-                padding: '2px 8px',
-                fontSize: s.roleSz,
-                fontWeight: 700,
-                color: '#4a3625',
-                textAlign: 'center',
-              }}>
-                {node.role}
-              </div>
-            )}
-
-            {node.phone && (
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: 4,
-                fontSize: '0.67rem', fontWeight: 700, color: '#2c1810', marginTop: 1,
-              }}>
-                <span style={{ fontSize: '0.72rem', color: '#b88429' }}>📞</span>
-                <span>{node.phone}</span>
-                {cs1 && (
-                  <span style={{
-                    background: cs1.bg, color: cs1.fg, border: `1px solid ${cs1.border}`,
-                    fontSize: '0.54rem', fontWeight: 800, padding: '1px 4px', borderRadius: 6,
-                    textTransform: 'lowercase',
-                  }}>
-                    {node.carrier.toLowerCase()}
-                  </span>
-                )}
-              </div>
-            )}
-
-            {/* Social Link (Facebook) */}
-            {tier === 1 && node.fb && (
-              <div style={{ display: 'flex', gap: 6, marginTop: 1 }}>
-                <a href={node.fb} target="_blank" rel="noopener noreferrer" style={{
-                  width: 20, height: 20, borderRadius: '50%',
-                  border: '1.5px solid rgba(44,24,16,0.35)',
-                  color: '#2c1810', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 10, textDecoration: 'none', fontWeight: 800,
-                }}>f</a>
-              </div>
-            )}
-          </div>
-
-          {/* Action Buttons */}
-          <div style={{ display: 'flex', gap: 6, marginTop: 4 }}>
-            <button
-              className="oc-btn"
-              onClick={() => onEdit?.(node, section)}
-              style={{ background: '#10b981', color: '#fff' }}
-            >✏ Edit</button>
-            <button
-              className="oc-btn"
-              onClick={() => onDelete?.(node, section)}
-              style={{ background: '#ef4444', color: '#fff' }}
-            >✕ Delete</button>
+          <div class="form-group">
+            <label for="editLevel">ជាន់ថ្នាក់ / Level</label>
+            <select id="editLevel">
+              <option value="1">ថ្នាក់ទី១ (ប្រធាន / ធំ)</option>
+              <option value="2">ថ្នាក់ទី២ (អនុប្រធាន / អាចារ្យរងទី១-៣)</option>
+              <option value="3">ថ្នាក់ទី៣ (សមាជិក / អាចារ្យរង)</option>
+            </select>
           </div>
         </div>
-      );
-    }
 
-    /* ═══════════════════════════════════════════════════════════════════
-       TREE PANEL COMPONENT — Animated Running Lines
-    ═══════════════════════════════════════════════════════════════════ */
-    function TreePanel({ title, data, onEdit, onDelete, section }) {
-      const containerRef = useRef(null);
-      const [lines, setLines] = useState([]);
-      const [joints, setJoints] = useState([]);
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="editRole">មុខតំណែង</label>
+            <input type="text" id="editRole" placeholder="ឧ. អាចារ្យធំ, ប្រធាន...">
+          </div>
+          <div class="form-group">
+            <label for="editAge">អាយុ (ឆ្នាំ)</label>
+            <input type="number" id="editAge" placeholder="ឧ. 65">
+          </div>
+        </div>
 
-      const recalc = useCallback(() => {
-        const container = containerRef.current;
-        if (!container) return;
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="editPhone">លេខទូរស័ព្ទ</label>
+            <input type="text" id="editPhone" placeholder="097 777 888">
+          </div>
+          <div class="form-group">
+            <label for="editCarrier">ក្រុមហ៊ុនទូរស័ព្ទ</label>
+            <select id="editCarrier">
+              <option value="metfone">Metfone</option>
+              <option value="smart">Smart</option>
+              <option value="cellcard">Cellcard</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal()">បោះបង់</button>
+        <button class="btn-save" onclick="saveMemberData()">រក្សាទុក</button>
+      </div>
+    </div>
+  </div>
 
-        const cRect = container.getBoundingClientRect();
-        const getCoord = (id) => {
-          const el = container.querySelector(`[data-nid="${id}"]`);
-          if (!el) return null;
-          const r = el.getBoundingClientRect();
-          return {
-            cx: r.left - cRect.left + r.width / 2,
-            ty: r.top - cRect.top,
-            by: r.bottom - cRect.top,
-          };
-        };
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-msg" id="toastMsg">បានរក្សាទុកទិន្នន័យជោគជ័យ!</div>
 
-        const t1 = getCoord(data.tier1.id);
-        if (!t1) return;
+  <!-- JavaScript Rendering Logic -->
+  <script>
+    const INITIAL_MEMBERS_DATA = [
+      { id: "p1", category: "achar", group: "ព្រឹទ្ធាចារ្យ", level: 1, name: "សាន សន", role: "ព្រឹទ្ធាចារ្យ", age: 77, phone: "097 777 888", carrier: "metfone" },
+      { id: "a1", category: "achar", group: "អាចារ្យ", level: 1, name: "យោធា លាងហូ", role: "អាចារ្យធំ", age: 75, phone: "012 858 080", carrier: "cellcard" },
+      { id: "a2", category: "achar", group: "អាចារ្យ", level: 2, name: "អៀង ហេង", role: "អាចារ្យរងទី១", age: 62, phone: "097 777 800", carrier: "metfone" },
+      { id: "a3", category: "achar", group: "អាចារ្យ", level: 2, name: "ស៊ាន គង់", role: "អាចារ្យរងទី២", age: 65, phone: "097 888 800", carrier: "metfone" },
+      { id: "a4", category: "achar", group: "អាចារ្យ", level: 2, name: "ឡេង មុនីសេដ្ឋា", role: "អាចារ្យរងទី៣", age: 38, phone: "097 999 444", carrier: "metfone" },
+      { id: "a5", category: "achar", group: "អាចារ្យ", level: 3, name: "ជឹម ថុល", role: "អាចារ្យរង", age: 62, phone: "097 555 444", carrier: "metfone" },
+      { id: "a6", category: "achar", group: "អាចារ្យ", level: 3, name: "ឈួន ឈុំ", role: "អាចារ្យរង", age: 74, phone: "088 111 222", carrier: "metfone" },
+      { id: "a7", category: "achar", group: "អាចារ្យ", level: 3, name: "ស៊ីង សិាម", role: "អាចារ្យរង", age: 75, phone: "097 333 222", carrier: "metfone" },
+      { id: "a8", category: "achar", group: "អាចារ្យ", level: 3, name: "ជួន ចាន់", role: "អាចារ្យរង", age: 64, phone: "016 888 777", carrier: "smart" },
+      { id: "a9", category: "achar", group: "អាចារ្យ", level: 3, name: "អ៊ិន ភឿន", role: "អាចារ្យរង", age: 74, phone: "097 444 333", carrier: "metfone" },
+      { id: "a10", category: "achar", group: "អាចារ្យ", level: 3, name: "សែត ផេង", role: "អាចារ្យរង", age: 73, phone: "012 333 555", carrier: "cellcard" },
+      { id: "a11", category: "achar", group: "អាចារ្យ", level: 3, name: "គឹម ធឿន", role: "អាចារ្យរង", age: 85, phone: "097 222 111", carrier: "metfone" },
+      { id: "a12", category: "achar", group: "អាចារ្យ", level: 3, name: "អ៊ិន សុផា", role: "អាចារ្យរង", age: 58, phone: "070 999 888", carrier: "smart" },
+      { id: "a13", category: "achar", group: "អាចារ្យ", level: 3, name: "កើត សាយ", role: "អាចារ្យរង", age: 72, phone: "097 666 555", carrier: "metfone" },
+      { id: "c1", category: "committee", group: "គណៈកម្មការ", level: 1, name: "ជួន សារ៉ាន", role: "ប្រធានគណៈកម្មការ", age: 70, phone: "012 858 080", carrier: "cellcard" },
+      { id: "c2", category: "committee", group: "គណៈកម្មការ", level: 2, name: "ហង្ស ប៊ុនផល", role: "អនុប្រធាន", age: 65, phone: "097 777 888", carrier: "metfone" },
+      { id: "c3", category: "committee", group: "គណៈកម្មការ", level: 2, name: "ជិន ចិន", role: "អនុប្រធាន", age: 70, phone: "016 888 777", carrier: "smart" },
+      { id: "c4", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ព្រុំ សុខលីម", role: "សមាជិកា", age: 63, phone: "097 555 444", carrier: "metfone" },
+      { id: "c5", category: "committee", group: "គណៈកម្មការ", level: 3, name: "មេ សៀម", role: "សមាជិក", age: 69, phone: "012 333 222", carrier: "cellcard" },
+      { id: "c6", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ឡុង ប៊ុន", role: "សមាជិក", age: 63, phone: "088 111 222", carrier: "metfone" },
+      { id: "c7", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ហេង ស្រី", role: "សមាជិកា", age: 27, phone: "096 888 999", carrier: "smart" },
+      { id: "c8", category: "committee", group: "គណៈកម្មការ", level: 3, name: "បុល សុខភា", role: "សមាជិក", age: 43, phone: "097 123 456", carrier: "metfone" },
+      { id: "c9", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ផល កឿន", role: "សមាជិក", age: 25, phone: "070 333 444", carrier: "smart" },
+      { id: "c10", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ភិក ឈុន", role: "សមាជិក", age: 69, phone: "097 654 321", carrier: "metfone" },
+      { id: "c11", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ស៊ាម ម៉េង", role: "សមាជិក", age: 66, phone: "012 987 654", carrier: "cellcard" },
+      { id: "c12", category: "committee", group: "គណៈកម្មការ", level: 3, name: "កែវ សន", role: "សមាជិកា", age: 68, phone: "088 777 666", carrier: "metfone" },
+      { id: "c13", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ចាប ចាន់ថា", role: "សមាជិកា", age: 55, phone: "097 888 111", carrier: "metfone" },
+      { id: "c14", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ហួង សុកី", role: "សមាជិកា", age: 54, phone: "016 555 444", carrier: "smart" },
+      { id: "c15", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ទ្រី នី", role: "សមាជិកា", age: 67, phone: "097 222 333", carrier: "metfone" },
+      { id: "c16", category: "committee", group: "គណៈកម្មការ", level: 3, name: "វ៉ាយ គឹមយាន", role: "សមាជិកា", age: 26, phone: "070 111 222", carrier: "smart" },
+      { id: "c17", category: "committee", group: "គណៈកម្មការ", level: 3, name: "ដួ័រ ផន់សិាន", role: "សមាជិក", age: 59, phone: "012 444 555", carrier: "cellcard" }
+    ];
 
-        const t2Coords = data.tier2.map(n => ({ ...getCoord(n.id), id: n.id })).filter(c => c.cx != null);
-        const t3Coords = data.tier3.map(n => ({ ...getCoord(n.id), id: n.id, parentId: n.parentId })).filter(c => c.cx != null);
+    let membersData = [];
 
-        const newLines = [];
-        const newJoints = [];
+    async function init() {
+      // Check embedded mode
+      if (window.location.search.includes('mode=public') || window.location.search.includes('mode=embedded') || window !== window.top) {
+        document.body.classList.add('is-embedded');
+      }
 
-        // Tier 1 → Tier 2 Horizontal Bus
-        if (t2Coords.length > 0) {
-          const upperMidY = t1.by + (t2Coords[0].ty - t1.by) / 2;
-          newLines.push({ x1: t1.cx, y1: t1.by, x2: t1.cx, y2: upperMidY });
-          newJoints.push({ cx: t1.cx, cy: upperMidY });
-
-          const leftX = Math.min(...t2Coords.map(c => c.cx));
-          const rightX = Math.max(...t2Coords.map(c => c.cx));
-
-          if (t2Coords.length > 1) {
-            newLines.push({ x1: leftX, y1: upperMidY, x2: rightX, y2: upperMidY });
+      // Load data from server or fallback to INITIAL_MEMBERS_DATA
+      try {
+        const res = await fetch('/api/committee');
+        if (res.ok) {
+          const apiData = await res.json();
+          const validItems = Array.isArray(apiData) ? apiData.filter(m => m.category === 'achar' || m.category === 'committee') : [];
+          if (validItems.length > 0) {
+            membersData = validItems;
+          } else {
+            loadLocalData();
           }
-
-          t2Coords.forEach(c => {
-            newLines.push({ x1: c.cx, y1: upperMidY, x2: c.cx, y2: c.ty });
-            newJoints.push({ cx: c.cx, cy: upperMidY });
-          });
-        }
-
-        // Tier 2 → Tier 3 Direct Drops
-        t3Coords.forEach(t3Node => {
-          const parentCoord = t2Coords.find(c => c.id === t3Node.parentId) || t2Coords[0];
-          if (parentCoord) {
-            newLines.push({ x1: parentCoord.cx, y1: parentCoord.by, x2: t3Node.cx, y2: t3Node.ty });
-            const midY = parentCoord.by + (t3Node.ty - parentCoord.by) / 2;
-            newJoints.push({ cx: parentCoord.cx, cy: midY });
-          }
-        });
-
-        setLines(newLines);
-        setJoints(newJoints);
-      }, [data]);
-
-      useEffect(() => {
-        const t = setTimeout(recalc, 120);
-        return () => clearTimeout(t);
-      }, [recalc, data]);
-
-      useEffect(() => {
-        if (!containerRef.current) return;
-        const ro = new ResizeObserver(() => setTimeout(recalc, 50));
-        ro.observe(containerRef.current);
-        return () => ro.disconnect();
-      }, [recalc]);
-
-      return (
-        <div className="panel-box">
-          {/* Panel Corner Motifs */}
-          <div style={{ position: 'absolute', top: 6, left: 6, fontSize: '0.85rem', color: '#b88429' }}>❖</div>
-          <div style={{ position: 'absolute', top: 6, right: 6, fontSize: '0.85rem', color: '#b88429' }}>❖</div>
-          <div style={{ position: 'absolute', bottom: 6, left: 6, fontSize: '0.85rem', color: '#b88429' }}>❖</div>
-          <div style={{ position: 'absolute', bottom: 6, right: 6, fontSize: '0.85rem', color: '#b88429' }}>❖</div>
-
-          <h2 className="panel-header-banner">{title}</h2>
-
-          <div style={{ width: '100%', overflowX: 'auto' }}>
-            <div
-              ref={containerRef}
-              style={{
-                position: 'relative',
-                padding: '20px 14px 30px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 48,
-                minWidth: 'max-content',
-                margin: '0 auto',
-              }}
-            >
-              {/* SVG Connectors with Running Line Effect */}
-              <svg
-                aria-hidden="true"
-                style={{
-                  position: 'absolute', top: 0, left: 0,
-                  width: '100%', height: '100%',
-                  pointerEvents: 'none', zIndex: 1,
-                }}
-              >
-                {/* Layer 1: Solid Background Line */}
-                {lines.map((l, i) => (
-                  <line
-                    key={`line-bg-${i}`}
-                    x1={l.x1} y1={l.y1}
-                    x2={l.x2} y2={l.y2}
-                    className="running-line-bg"
-                  />
-                ))}
-
-                {/* Layer 2: Animated Running Beaded Line */}
-                {lines.map((l, i) => (
-                  <line
-                    key={`line-fg-${i}`}
-                    x1={l.x1} y1={l.y1}
-                    x2={l.x2} y2={l.y2}
-                    className="running-line-fg"
-                  />
-                ))}
-
-                {/* Layer 3: Pulsing Joint Dots */}
-                {joints.map((j, i) => (
-                  <circle
-                    key={`joint-${i}-${j.cx}-${j.cy}`}
-                    cx={j.cx} cy={j.cy}
-                    r="4.5"
-                    fill="#d4a843"
-                    stroke="#fff"
-                    strokeWidth="2"
-                    className="oc-joint"
-                  />
-                ))}
-              </svg>
-
-              {/* TIER 1 */}
-              <div data-nid={data.tier1.id} style={{ zIndex: 2 }}>
-                <NodeCard node={data.tier1} tier={1} onEdit={onEdit} onDelete={onDelete} section={section} />
-              </div>
-
-              {/* TIER 2 */}
-              {data.tier2.length > 0 && (
-                <div style={{ display: 'flex', gap: section === 'achar' ? 36 : 70, justifyContent: 'center', zIndex: 2 }}>
-                  {data.tier2.map(node => (
-                    <div key={node.id} data-nid={node.id}>
-                      <NodeCard node={node} tier={2} onEdit={onEdit} onDelete={onDelete} section={section} />
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* TIER 3 */}
-              {data.tier3.length > 0 && (
-                <div style={{ display: 'flex', gap: section === 'achar' ? 36 : 60, justifyContent: 'center', zIndex: 2 }}>
-                  {data.tier3.map(node => (
-                    <div key={node.id} data-nid={node.id}>
-                      <NodeCard node={node} tier={3} onEdit={onEdit} onDelete={onDelete} section={section} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    /* ═══════════════════════════════════════════════════════════════════
-       EDIT MODAL
-    ═══════════════════════════════════════════════════════════════════ */
-    function EditModal({ item, onSave, onClose }) {
-      const [draft, setDraft] = useState({ ...item.node });
-
-      const handleFileUpload = (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (event) => setDraft(p => ({ ...p, avatar: event.target.result }));
-          reader.readAsDataURL(file);
-        }
-      };
-
-      return (
-        <div
-          className="oc-modal-backdrop"
-          onClick={onClose}
-          style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 9999, padding: 20,
-          }}
-        >
-          <div
-            onClick={e => e.stopPropagation()}
-            style={{
-              background: '#fff', borderRadius: 22, padding: '24px 22px',
-              width: '100%', maxWidth: 440, border: '2px solid rgba(212,168,67,0.3)',
-              boxShadow: '0 24px 64px rgba(0,0,0,0.22)', maxHeight: '90vh', overflowY: 'auto',
-            }}
-          >
-            <h3 style={{ fontWeight: 800, color: '#1a3a5c', marginBottom: 14, fontSize: '1.1rem' }}>
-              ✏ កែប្រែសមាជិក / Edit Member ({item.section === 'achar' ? 'អាចារ្យ' : 'គណៈកម្មការ'})
-            </h3>
-
-            {/* Avatar Upload */}
-            <div style={{
-              background: '#f8fafc', border: '1.5px dashed #d4a843',
-              borderRadius: 14, padding: 12, marginBottom: 14,
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-            }}>
-              <div style={{ position: 'relative', width: 64, height: 64 }}>
-                <div style={{
-                  width: '100%', height: '100%', borderRadius: '50%',
-                  border: '2px solid #d4a843', overflow: 'hidden', background: '#fef3c7',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {draft.avatar ? (
-                    <img src={draft.avatar} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  ) : (
-                    <span style={{ fontSize: '1.5rem' }}>👤</span>
-                  )}
-                </div>
-              </div>
-              <label style={{
-                background: 'linear-gradient(135deg, #1a3a5c, #2c5282)', color: '#f0d48a',
-                borderRadius: 8, padding: '6px 14px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer',
-              }}>
-                📷 Upload Photo File
-                <input type="file" accept="image/*" onChange={handleFileUpload} style={{ display: 'none' }} />
-              </label>
-            </div>
-
-            {/* Sticker Customization Picker */}
-            <div style={{ marginBottom: 14 }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1a3a5c', display: 'block', marginBottom: 6 }}>
-                🏷️ ជ្រើសរើស Sticker (Badge Icon: 🐍, 🖐️, 📿, 📜...)
-              </label>
-
-              {/* Quick Preset Buttons */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
-                {['🐍', '🖐️', '📿', '📜', '☸', '🪷', '👑', '🛡️', '⭐️', '🏛️'].map(st => (
-                  <button
-                    key={st}
-                    type="button"
-                    onClick={() => setDraft(p => ({ ...p, sticker: st }))}
-                    style={{
-                      width: 34, height: 34, borderRadius: 8,
-                      border: (draft.sticker || (item.section === 'achar' ? '🖐️' : '🐍')) === st ? '2px solid #b88429' : '1px solid #cbd5e1',
-                      background: (draft.sticker || (item.section === 'achar' ? '🖐️' : '🐍')) === st ? '#fef3c7' : '#fff',
-                      fontSize: '1.15rem', cursor: 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      boxShadow: (draft.sticker || (item.section === 'achar' ? '🖐️' : '🐍')) === st ? '0 2px 6px rgba(184,132,41,0.25)' : 'none',
-                    }}
-                  >
-                    {st}
-                  </button>
-                ))}
-              </div>
-
-              {/* Custom Sticker Input */}
-              <input
-                type="text"
-                placeholder="ឬ បញ្ចូល Emoji/Sticker ផ្ទាល់ខ្លួន..."
-                value={draft.sticker || ''}
-                onChange={e => setDraft(p => ({ ...p, sticker: e.target.value }))}
-                style={{
-                  width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
-                  borderRadius: 10, padding: '8px 12px', fontSize: '0.85rem', outline: 'none',
-                }}
-              />
-            </div>
-
-            {[
-              ['name', 'ឈ្មោះ (Name)'],
-              ['role', 'តួនាទី (Role)'],
-              ['phone', 'លេខទូរស័ព្ទ (Phone)'],
-              ['carrier', 'ប្រព័ន្ធ (Carrier: CELLCARD|METFONE|SMART)'],
-            ].map(([k, label]) => (
-              <div key={k} style={{ marginBottom: 12 }}>
-                <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#374151', display: 'block', marginBottom: 3 }}>
-                  {label}
-                </label>
-                <input
-                  type="text"
-                  value={draft[k] || ''}
-                  onChange={e => setDraft(p => ({ ...p, [k]: e.target.value }))}
-                  style={{
-                    width: '100%', border: '1.5px solid rgba(212,168,67,0.5)',
-                    borderRadius: 10, padding: '8px 12px', fontSize: '0.85rem', outline: 'none',
-                  }}
-                />
-              </div>
-            ))}
-
-            <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
-              <button
-                onClick={() => onSave(draft, item.section)}
-                style={{
-                  flex: 1, background: 'linear-gradient(135deg, #d4a843, #b88429)',
-                  border: 'none', borderRadius: 12, color: '#fff', padding: '10px 0',
-                  fontWeight: 700, cursor: 'pointer',
-                }}
-              >💾 រក្សាទុក</button>
-              <button
-                onClick={onClose}
-                style={{
-                  flex: 1, background: '#f1f5f9', border: '1px solid #cbd5e1',
-                  borderRadius: 12, color: '#334155', padding: '10px 0', fontWeight: 600, cursor: 'pointer',
-                }}
-              >បោះបង់</button>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    /* ═══════════════════════════════════════════════════════════════════
-       APP MAIN WITH FULL ADMIN LAYOUT
-    ═══════════════════════════════════════════════════════════════════ */
-    function App() {
-      const [acharTree, setAcharTree]         = useState(INITIAL_ACHAR_DATA);
-      const [committeeTree, setCommitteeTree] = useState(INITIAL_COMMITTEE_DATA);
-      const [editing, setEditing]             = useState(null);
-      const [toast, setToast]                 = useState('');
-
-      useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('mode') === 'public') {
-          document.body.classList.add('is-public');
-        }
-        if (window.self !== window.top) {
-          document.body.classList.add('is-embedded');
-        }
-      }, []);
-
-      const showToast = (msg) => {
-        setToast(msg);
-        setTimeout(() => setToast(''), 3500);
-      };
-
-      const handleTabSwitch = (targetUrl) => {
-        const card = document.querySelector('.gold-card-container');
-        if (card) card.classList.add('page-transition-exit');
-        setTimeout(() => {
-          const search = window.location.search;
-          window.location.href = targetUrl + search;
-        }, 180);
-      };
-
-      const handleEdit = (node, section) => setEditing({ node, section });
-
-      const handleDelete = (node, section) => {
-        const isAchar = section === 'achar';
-        const data = isAchar ? acharTree : committeeTree;
-        const setData = isAchar ? setAcharTree : setCommitteeTree;
-
-        if (node.id === data.tier1.id) {
-          showToast('⚠️ មិនអាចលុបប្រធានបានទេ!');
-          return;
-        }
-
-        setData(prev => ({
-          ...prev,
-          tier2: prev.tier2.filter(n => n.id !== node.id),
-          tier3: prev.tier3.filter(n => n.id !== node.id),
-        }));
-        showToast(`🗑️ បានលុបសមាជិក: ${node.name}`);
-      };
-
-      const handleSave = (updated, section) => {
-        const isAchar = section === 'achar';
-        const setData = isAchar ? setAcharTree : setCommitteeTree;
-
-        setData(prev => {
-          if (prev.tier1.id === updated.id) return { ...prev, tier1: updated };
-          return {
-            ...prev,
-            tier2: prev.tier2.map(n => n.id === updated.id ? updated : n),
-            tier3: prev.tier3.map(n => n.id === updated.id ? updated : n),
-          };
-        });
-
-        showToast(`✅ បានកែប្រែ: ${updated.name}`);
-        setEditing(null);
-      };
-
-      const toggleFullScreen = () => {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen?.();
         } else {
-          document.exitFullscreen?.();
+          loadLocalData();
         }
-      };
+      } catch (e) {
+        loadLocalData();
+      }
 
-      const menuItems = [
-        { icon: '📊', label: 'ផ្ទាំងគ្រប់គ្រង' },
-        { icon: '☸️', label: 'ព្រះសង្ឃ' },
-        { icon: '📜', label: 'រចនាសម្ព័ន្ធ' },
-        { icon: '🎥', label: 'វីដេអូ' },
-        { icon: '📅', label: 'ព្រឹត្តិការណ៍' },
-        { icon: '🗓️', label: 'ប្រតិទិន' },
-        { icon: '📰', label: 'ព័ត៌មាន' },
-        { icon: '🎁', label: 'ម្ចាស់ទាន/សប្បុរសជន' },
-        { icon: '🏛️', label: 'រចនាសម្ព័ន្ធគ្រប់គ្រង', active: true },
-        { icon: '💬', label: 'ទំនាក់ទំនង និង យោបល់' },
-        { icon: '👥', label: 'គ្រប់គ្រងអ្នកប្រើ' },
-      ];
+      if (!membersData || membersData.length === 0) {
+        membersData = [...INITIAL_MEMBERS_DATA];
+      }
 
-      return (
-        <React.Fragment>
-          {/* Admin Sidebar */}
-          <aside className="admin-sidebar">
-            <div className="sidebar-brand">
-              <div style={{
-                width: 36, height: 36, borderRadius: '50%', background: '#d4a843',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#fff'
-              }}>☸</div>
-              <div>
-                <h2>វត្តខេមវ័ន</h2>
-                <span>បឹងស្នាយ</span>
-              </div>
-            </div>
-
-            <div className="sidebar-menu">
-              {menuItems.map((item, idx) => (
-                <div key={idx} className={`menu-item ${item.active ? 'active' : ''}`}>
-                  <span>{item.icon}</span>
-                  <span>{item.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.08)', fontSize: '0.78rem', color: '#64748b' }}>
-              ☸ ADMIN v2.6
-            </div>
-          </aside>
-
-          {/* Admin Main Content */}
-          <main className="admin-main">
-            {/* Top Bar */}
-            <div className="top-header">
-              <div className="header-title">
-                <h1>រចនាសម្ព័ន្ធអាចារ្យ & គណៈកម្មការ</h1>
-                <p>ផ្ទាំងគ្រប់គ្រង / រចនាសម្ព័ន្ធអាចារ្យ និង គណៈកម្មការ</p>
-              </div>
-
-              <button className="fullscreen-btn" onClick={toggleFullScreen}>
-                <span>🔗</span>
-                <span>មើលពេញអេក្រង់ (Full Screen)</span>
-              </button>
-            </div>
-
-            {/* Tree Workspace */}
-            <div className="tree-wrapper">
-              <div className="gold-card-container">
-                {/* Background Pattern Watermarks */}
-                <div className="bg-watermark-left" />
-                <div className="bg-watermark-right" />
-
-                {/* Center Lotus Emblem */}
-                <div className="top-lotus-emblem" title="Wat Khemvoen Lotus Emblem">
-                  🪷
-                </div>
-
-                {/* Category Tab Buttons */}
-                <div className="tab-switcher-wrapper">
-                  <div className="tab-switcher-nav">
-                    <button
-                      className="tab-nav-btn"
-                      type="button"
-                      onClick={() => handleTabSwitch('monks-chart.html')}
-                    >
-                      <span className="tab-icon">☸</span>
-                      <span>រចនាសម្ព័ន្ធព្រះសង្ឃ</span>
-                    </button>
-                    <button className="tab-nav-btn active" type="button">
-                      <span className="tab-icon">👥</span>
-                      <span>អាចារ្យ & គណៈកម្មការ</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="dual-grid">
-                  {/* LEFT PANEL: ផ្នែកអាចារ្យ */}
-                  <TreePanel
-                    title="រចនាសម្ព័ន្ធអាចារ្យ"
-                    data={acharTree}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    section="achar"
-                  />
-
-                  {/* RIGHT PANEL: ផ្នែកគណៈកម្មការ */}
-                  <TreePanel
-                    title="រចនាសម្ព័ន្ធគណៈកម្មការ"
-                    data={committeeTree}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    section="committee"
-                  />
-                </div>
-              </div>
-            </div>
-          </main>
-
-          {/* EDIT MODAL */}
-          {editing && (
-            <EditModal
-              item={editing}
-              onSave={handleSave}
-              onClose={() => setEditing(null)}
-            />
-          )}
-
-          {/* TOAST */}
-          {toast && (
-            <div style={{
-              position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)',
-              background: '#1a3a5c', color: '#fff', padding: '10px 22px', borderRadius: 12,
-              fontSize: '0.85rem', fontWeight: 700, border: '1.5px solid #d4a843',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.25)', zIndex: 99999,
-            }}>
-              {toast}
-            </div>
-          )}
-        </React.Fragment>
-      );
+      renderAllTrees();
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    function loadLocalData() {
+      const saved = localStorage.getItem('wat_khemvoen_committee');
+      if (saved) {
+        try { 
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            membersData = parsed;
+            return;
+          }
+        } catch (e) {}
+      }
+      membersData = [...INITIAL_MEMBERS_DATA];
+    }
+
+    function saveLocalData() {
+      localStorage.setItem('wat_khemvoen_committee', JSON.stringify(membersData));
+    }
+
+    function renderAllTrees(filterQuery = "") {
+      const acharBody = document.getElementById('acharTreeBody');
+      const commBody = document.getElementById('commTreeBody');
+      acharBody.innerHTML = '';
+      commBody.innerHTML = '';
+
+      let filtered = membersData;
+      if (filterQuery) {
+        const q = filterQuery.toLowerCase().trim();
+        filtered = membersData.filter(m => 
+          (m.name && m.name.toLowerCase().includes(q)) ||
+          (m.role && m.role.toLowerCase().includes(q)) ||
+          (m.phone && m.phone.toLowerCase().includes(q))
+        );
+      }
+
+      const achars = filtered.filter(m => m.category === 'achar');
+      const committees = filtered.filter(m => m.category === 'committee');
+
+      renderAcharTree(acharBody, achars);
+      renderCommitteeTree(commBody, committees);
+    }
+
+    function handleSearch() {
+      const q = document.getElementById('searchInput').value;
+      renderAllTrees(q);
+    }
+
+    function renderAcharTree(body, achars) {
+      if (achars.length === 0) {
+        body.innerHTML = '<div style="padding: 30px; color: #94a3b8; font-size: 13px;">មិនមានទិន្នន័យអាចារ្យឡើយ</div>';
+        return;
+      }
+
+      const topLeaders = achars.filter(m => Number(m.level) === 1);
+      const topLeaderIds = new Set(topLeaders.map(m => m.id));
+      const level2Achars = achars.filter(m => !topLeaderIds.has(m.id) && Number(m.level) === 2);
+      const level2Ids = new Set(level2Achars.map(m => m.id));
+      const level3Achars = achars.filter(m => !topLeaderIds.has(m.id) && !level2Ids.has(m.id));
+
+      if (topLeaders.length > 0) {
+        const l1Row = document.createElement('div');
+        l1Row.className = 'tree-row-flex';
+        topLeaders.forEach(m => {
+          const col = document.createElement('div');
+          col.className = 'tree-col-item max-w-200';
+          col.appendChild(createMemberNodeCard(m, true, m.role && m.role.includes('ព្រឹទ្ធាចារ្យ')));
+          const stem = document.createElement('div');
+          stem.className = 'stem-down';
+          col.appendChild(stem);
+          l1Row.appendChild(col);
+        });
+        body.appendChild(l1Row);
+      }
+
+      if (level2Achars.length > 0) {
+        const crossbar = document.createElement('div');
+        crossbar.className = 'tree-crossbar-row';
+        crossbar.innerHTML = `
+          <div class="crossbar-seg seg-first"></div>
+          <div class="crossbar-seg seg-mid"></div>
+          <div class="crossbar-seg seg-last"></div>
+        `;
+        body.appendChild(crossbar);
+
+        const l2And3Row = document.createElement('div');
+        l2And3Row.className = 'tree-row-flex';
+
+        level2Achars.forEach((l2Member, colIdx) => {
+          const col = document.createElement('div');
+          col.className = 'tree-col-item';
+
+          const stemU = document.createElement('div');
+          stemU.className = 'stem-up';
+          col.appendChild(stemU);
+
+          col.appendChild(createMemberNodeCard(l2Member));
+
+          if (level3Achars.length > 0) {
+            const stemD = document.createElement('div');
+            stemD.className = 'stem-down';
+            stemD.style.height = '22px';
+            col.appendChild(stemD);
+
+            const stack = document.createElement('div');
+            stack.className = 'tree-track-stack';
+
+            for (let rowIdx = 0; rowIdx < level3Achars.length; rowIdx++) {
+              if (rowIdx % Math.max(1, level2Achars.length) === colIdx) {
+                stack.appendChild(createMemberNodeCard(level3Achars[rowIdx]));
+              }
+            }
+            col.appendChild(stack);
+          }
+
+          l2And3Row.appendChild(col);
+        });
+
+        body.appendChild(l2And3Row);
+      } else if (level3Achars.length > 0) {
+        const l3Row = document.createElement('div');
+        l3Row.className = 'tree-row-flex';
+        level3Achars.forEach(m => {
+          const col = document.createElement('div');
+          col.className = 'tree-col-item';
+          col.appendChild(createMemberNodeCard(m));
+          l3Row.appendChild(col);
+        });
+        body.appendChild(l3Row);
+      }
+    }
+
+    function renderCommitteeTree(body, committees) {
+      if (committees.length === 0) {
+        body.innerHTML = '<div style="padding: 30px; color: #94a3b8; font-size: 13px;">មិនមានទិន្នន័យគណៈកម្មការឡើយ</div>';
+        return;
+      }
+
+      const president = committees.find(m => Number(m.level) === 1) || committees[0];
+      const vicePresidents = committees.filter(m => m.id !== (president ? president.id : '') && Number(m.level) === 2);
+      const members = committees.filter(m => m.id !== (president ? president.id : '') && !vicePresidents.some(v => v.id === m.id));
+
+      if (president) {
+        const l1Row = document.createElement('div');
+        l1Row.className = 'tree-row-flex';
+        const col = document.createElement('div');
+        col.className = 'tree-col-item max-w-200';
+        col.appendChild(createMemberNodeCard(president, true, false));
+
+        const stem = document.createElement('div');
+        stem.className = 'stem-down';
+        col.appendChild(stem);
+        l1Row.appendChild(col);
+        body.appendChild(l1Row);
+      }
+
+      if (vicePresidents.length > 0) {
+        const crossbar = document.createElement('div');
+        crossbar.className = 'tree-crossbar-row';
+        crossbar.style.maxWidth = '400px';
+        crossbar.innerHTML = `
+          <div class="crossbar-seg seg-first"></div>
+          <div class="crossbar-seg seg-last"></div>
+        `;
+        body.appendChild(crossbar);
+
+        const l2Row = document.createElement('div');
+        l2Row.className = 'tree-row-flex';
+        l2Row.style.maxWidth = '400px';
+        l2Row.style.margin = '0 auto';
+
+        vicePresidents.forEach(m => {
+          const col = document.createElement('div');
+          col.className = 'tree-col-item';
+
+          const stemU = document.createElement('div');
+          stemU.className = 'stem-up';
+          col.appendChild(stemU);
+
+          col.appendChild(createMemberNodeCard(m));
+
+          const stemD = document.createElement('div');
+          stemD.className = 'stem-down';
+          col.appendChild(stemD);
+
+          l2Row.appendChild(col);
+        });
+        body.appendChild(l2Row);
+      }
+
+      if (members.length > 0) {
+        const crossbar3 = document.createElement('div');
+        crossbar3.className = 'tree-crossbar-row';
+        crossbar3.innerHTML = `
+          <div class="crossbar-seg seg-first"></div>
+          <div class="crossbar-seg seg-mid"></div>
+          <div class="crossbar-seg seg-last"></div>
+        `;
+        body.appendChild(crossbar3);
+
+        const l3Row = document.createElement('div');
+        l3Row.className = 'tree-row-flex';
+
+        const colsCount = 3;
+        for (let colIdx = 0; colIdx < colsCount; colIdx++) {
+          const col = document.createElement('div');
+          col.className = 'tree-col-item';
+
+          const stemU = document.createElement('div');
+          stemU.className = 'stem-up';
+          col.appendChild(stemU);
+
+          const stack = document.createElement('div');
+          stack.className = 'tree-track-stack';
+
+          for (let rowIdx = 0; rowIdx < members.length; rowIdx++) {
+            if (rowIdx % colsCount === colIdx) {
+              stack.appendChild(createMemberNodeCard(members[rowIdx]));
+            }
+          }
+          col.appendChild(stack);
+          l3Row.appendChild(col);
+        }
+        body.appendChild(l3Row);
+      }
+    }
+
+    function createMemberNodeCard(member, isLeader = false, isElder = false) {
+      const card = document.createElement('div');
+      card.className = `member-node-card ${isLeader ? 'leader-node' : ''} ${isElder ? 'elder-node' : ''}`;
+
+      const carrierClass = `provider-${member.carrier || 'metfone'}`;
+      const carrierName = member.carrier ? (member.carrier.charAt(0).toUpperCase() + member.carrier.slice(1)) : 'Metfone';
+
+      card.innerHTML = `
+        <div class="node-avatar-wrap">
+          <div class="node-avatar">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <span class="badge-icon-tag">${member.age ? member.age : '★'}</span>
+        </div>
+
+        <div class="node-name" title="${member.name}">${member.name}</div>
+        <div class="node-role-sub">${member.role || 'សមាជិក'}</div>
+
+        <div class="node-phone-chip">
+          <i class="fa-solid fa-phone" style="font-size: 8.5px; color: #b8860b;"></i>
+          <span>${member.phone || '097 777 888'}</span>
+          <span class="phone-provider ${carrierClass}">${carrierName}</span>
+        </div>
+
+        <div class="node-card-actions">
+          <button class="btn-node-edit" onclick="openEditModal('${member.id}')">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>Edit</span>
+          </button>
+          <button class="btn-node-delete" onclick="confirmDeleteMember('${member.id}')">
+            <i class="fa-solid fa-xmark"></i>
+            <span>Delete</span>
+          </button>
+        </div>
+      `;
+
+      return card;
+    }
+
+    /* Modal Dialog Handlers */
+    function openAddModal() {
+      document.getElementById('modalTitle').innerText = 'បន្ថែមសមាជិកថ្មី';
+      document.getElementById('editId').value = '';
+      document.getElementById('editName').value = '';
+      document.getElementById('editCategory').value = 'achar';
+      document.getElementById('editLevel').value = '3';
+      document.getElementById('editRole').value = '';
+      document.getElementById('editAge').value = '';
+      document.getElementById('editPhone').value = '';
+      document.getElementById('editCarrier').value = 'metfone';
+      document.getElementById('memberModal').classList.add('active');
+    }
+
+    function openEditModal(id) {
+      const m = membersData.find(item => item.id === id);
+      if (!m) return;
+
+      document.getElementById('modalTitle').innerText = 'កែប្រែព័ត៌មានសមាជិក';
+      document.getElementById('editId').value = m.id;
+      document.getElementById('editName').value = m.name || '';
+      document.getElementById('editCategory').value = m.category || 'achar';
+      document.getElementById('editLevel').value = m.level || '3';
+      document.getElementById('editRole').value = m.role || '';
+      document.getElementById('editAge').value = m.age || '';
+      document.getElementById('editPhone').value = m.phone || '';
+      document.getElementById('editCarrier').value = m.carrier || 'metfone';
+      document.getElementById('memberModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('memberModal').classList.remove('active');
+    }
+
+    async function saveMemberData() {
+      const id = document.getElementById('editId').value;
+      const name = document.getElementById('editName').value.trim();
+      const category = document.getElementById('editCategory').value;
+      const level = parseInt(document.getElementById('editLevel').value, 10);
+      const role = document.getElementById('editRole').value.trim();
+      const age = parseInt(document.getElementById('editAge').value, 10) || 0;
+      const phone = document.getElementById('editPhone').value.trim();
+      const carrier = document.getElementById('editCarrier').value;
+
+      if (!name) {
+        alert('សូមបញ្ជូលឈ្មោះសមាជិក!');
+        return;
+      }
+
+      if (id) {
+        // Edit existing
+        const idx = membersData.findIndex(m => m.id === id);
+        if (idx !== -1) {
+          membersData[idx] = { ...membersData[idx], name, category, level, role, age, phone, carrier };
+        }
+        // Sync with API
+        try {
+          await fetch(`/api/committee/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, category, level, role, age, phone, carrier })
+          });
+        } catch (e) {}
+      } else {
+        // Add new
+        const newId = 'm_' + Date.now();
+        const newMember = { id: newId, category, group: category === 'achar' ? 'អាចារ្យ' : 'គណៈកម្មការ', level, name, role, age, phone, carrier };
+        membersData.push(newMember);
+
+        try {
+          await fetch('/api/committee', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newMember)
+          });
+        } catch (e) {}
+      }
+
+      saveLocalData();
+      closeModal();
+      renderAllTrees(document.getElementById('searchInput').value);
+      showToast(id ? 'បានកែប្រែទិន្នន័យជោគជ័យ!' : 'បានបន្ថែមសមាជិកថ្មីជោគជ័យ!');
+    }
+
+    async function confirmDeleteMember(id) {
+      const m = membersData.find(item => item.id === id);
+      if (!m) return;
+
+      if (confirm(`តើអ្នកពិតជាចង់លុបសមាជិក "${m.name}" មែនទេ?`)) {
+        membersData = membersData.filter(item => item.id !== id);
+        try {
+          await fetch(`/api/committee/${id}`, { method: 'DELETE' });
+        } catch (e) {}
+        saveLocalData();
+        renderAllTrees(document.getElementById('searchInput').value);
+        showToast('បានលុបសមាជិកជោគជ័យ!');
+      }
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById('toastMsg');
+      toast.innerText = text;
+      toast.classList.add('show');
+      setTimeout(() => { toast.classList.remove('show'); }, 3000);
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
