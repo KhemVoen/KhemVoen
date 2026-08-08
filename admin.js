@@ -299,13 +299,13 @@ async function loadContent() {
     renderContact();
     renderHeroSlides();
     renderGallery();
-    renderVideos();
     renderEvents();
     renderPlaylists();
     renderCounselors();
     renderCommittee();
-    if (currentUser.role === 'owner') loadUsers();
+    if (currentUser && currentUser.role === 'owner') loadUsers();
   } catch (err) {
+    console.error('loadContent error:', err);
     showToast('កំហុសក្នុងការផ្ទុកទិន្នន័យ', 'error');
   }
 }
@@ -733,11 +733,12 @@ async function deleteGalleryItem(id) {
 function renderVideos() {
   const grid = $('videosGrid');
   const noMsg = $('noVideos');
+  if (!grid || !contentData) return;
   const items = contentData.videos || [];
 
   if (!items.length) {
     grid.innerHTML = '';
-    noMsg.style.display = '';
+    if (noMsg) noMsg.style.display = '';
     return;
   }
 
