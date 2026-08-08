@@ -35,14 +35,12 @@
     }
   ],
   "gallery": [
-    {
-      "id": "3dab395b-75fe-45a3-90de-cd13dc5b699a",
-      "filename": "img-1785669776204-9fae8f0d.jpg",
-      "url": "/uploads/images/img-1785669776204-9fae8f0d.jpg",
-      "caption": "Uploaded Image",
-      "uploadedBy": "owner",
-      "uploadedAt": "2026-08-02T11:22:56.208Z"
-    }
+    { "id": "g-1", "url": "images/hero.png", "caption": "វត្តខេមវ័ន" },
+    { "id": "g-2", "url": "images/ceremony.png", "caption": "ពិធីបុណ្យសាសនា" },
+    { "id": "g-3", "url": "images/buddha.png", "caption": "ព្រះពុទ្ធរូប" },
+    { "id": "g-4", "url": "images/garden.png", "caption": "ឧទ្យានវត្ត" },
+    { "id": "g-5", "url": "images/meditation.png", "caption": "សាលាធម៌" },
+    { "id": "g-6", "url": "images/community.png", "caption": "សកម្មភាពសហគមន៍" }
   ],
   "videos": [],
   "events": [

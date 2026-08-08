@@ -1202,16 +1202,15 @@
         }
 
         // Dynamic Gallery
-        if (data.gallery && data.gallery.length > 0) {
+        if (data.gallery && Array.isArray(data.gallery) && data.gallery.length > 0) {
           const galleryGrid = document.querySelector('.gallery-grid');
           if (galleryGrid) {
-            const uploadedItems = data.gallery.map(item => `
+            galleryGrid.innerHTML = data.gallery.map(item => `
               <div class="gallery-item animate-on-scroll visible">
                 <img src="${item.url}" alt="${item.caption || 'វត្តខេមវ័ន'}">
                 <div class="overlay"><span>${item.caption || 'វត្តខេមវ័ន'}</span></div>
               </div>
             `).join('');
-            galleryGrid.innerHTML = uploadedItems + galleryGrid.innerHTML;
           }
         }
 
