@@ -124,21 +124,37 @@
   },
   "playlists": [
     {
-      "id": "3c988360-83a7-426c-88ca-cc550e0fd49a",
+      "id": "pl-001",
       "category": "religious-festivals",
-      "title": "កម្មវិធីបុណ្យសាលាធម្មសាភា",
-      "description": "",
-      "coverImage": "/uploads/images/img-1785671944203-442258ac.jpg",
-      "items": [],
+      "title": "កម្មវិធីបុណ្យសាសនា និងប្រពៃណី",
+      "description": "បណ្តុំធម៌ទេសនា និងរូបភាពសកម្មភាពបុណ្យសាសនានៅវត្តខេមវ័ន(បឹងស្នាយ)",
+      "coverImage": "images/ceremony.png",
+      "items": [
+        {
+          "id": "pli-001",
+          "type": "article",
+          "title": "ប្រវត្តិ និងអត្ថន័យនៃពិធីបុណ្យភ្ជុំបិណ្ឌ",
+          "description": "អត្ថបទអប់រំអំពីបុណ្យភ្ជុំបិណ្ឌ និងការរំលឹកគុណូបការៈមាតាបិតា",
+          "content": "ពិធីបុណ្យភ្ជុំបិណ្ឌជាពិធីបុណ្យប្រពៃណីសាសនាធំបំផុតមួយរបស់ខ្មែរ..."
+        }
+      ],
       "createdAt": "2026-08-02T11:59:04.208Z"
     },
     {
-      "id": "b2c77883-51e2-4705-aacf-d1baf9ec80c7",
+      "id": "pl-002",
       "category": "dhamma-teachings",
-      "title": "",
-      "description": "",
-      "coverImage": "",
-      "items": [],
+      "title": "សម្តែងធម៌ទេសនាអប់រំចិត្ត",
+      "description": "បណ្តុំធម៌ទេសនាអប់រំការរស់នៅ សមាធិ និងសន្តិភាពផ្លូវចិត្ត",
+      "coverImage": "images/buddha.png",
+      "items": [
+        {
+          "id": "pli-002",
+          "type": "article",
+          "title": "ការរស់នៅក្នុងបច្ចុប្បន្នភាពដោយសតិ",
+          "description": "ធម៌ទេសនាអប់រំសតិ និងសមាធិ",
+          "content": "ការចម្រើនសតិនាំមកនូវសេចក្តីស្ងប់ក្នុងចិត្ត..."
+        }
+      ],
       "createdAt": "2026-08-02T12:29:51.544Z"
     }
   ],
